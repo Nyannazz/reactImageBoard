@@ -1,0 +1,472 @@
+/* $blue: #3490dc;
+$indigo: #6574cd;
+$purple: #9561e2;
+$pink: #f66d9b;
+$red: #e3342f;
+$orange: #f6993f;
+$yellow: #ffed4a;
+$green: #38c172;
+$teal: #4dc0b5;
+$cyan: #6cb2eb; */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+#example {
+  height: 100%;
+}
+
+.App {
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  color: white;
+}
+
+.App .App-header {
+  background-color: #805acb;
+  height: 3rem;
+  width: 100%;
+}
+
+.App main {
+  /* background-color: #fff; */
+  background-color: #2e3035;
+  width: 100%;
+  margin: 0 auto;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  overflow: auto;
+}
+
+.centerAll {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.centerAll * {
+  margin: 0 auto;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+/* #imageBoard{
+    height: 100%;
+    width: 100%;
+    max-width: 90rem;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(15rem, 1fr));
+    grid-auto-flow: row;
+    grid-auto-rows: repeat(auto-fill,minmax(15rem, 1fr));
+    grid-gap: 0.1rem;
+
+    div{
+        background-color: white;
+        height: 15rem;
+        align-self: center;
+    }
+} */
+#imageBoard {
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
+.imageGrid {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  margin: 0 auto;
+  padding-bottom: 3rem;
+}
+
+.imageGrid .postItem {
+  width: calc(80rem / 5) !important;
+  height: calc( ((80rem / 5) / 16) * 9) !important;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 0.1rem;
+}
+
+.postItem {
+  max-height: 8rem;
+  width: 16rem;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  /* margin: 0.1rem; */
+  overflow: hidden;
+  position: relative;
+}
+
+.postItem .selectedArrow {
+  background-color: black;
+  height: 1rem;
+  width: 1rem;
+  position: absolute;
+  bottom: 0;
+  left: calc(50% - 0.5rem);
+}
+
+.postItem img {
+  width: 100%;
+}
+
+.postRow {
+  width: 100%;
+  margin: 0.2rem auto;
+}
+
+.postRow .postRowFlex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.postView {
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+}
+
+.postView img {
+  max-width: 100%;
+  max-height: 100vh;
+  display: block;
+  margin: 0 auto;
+}
+
+.postView p {
+  margin: 0;
+}
+
+.postView .postNav {
+  position: absolute;
+  top: 35vh;
+  font-size: 4rem;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.postView .postNav i {
+  font-size: 6rem;
+  color: rgba(200, 200, 200, 0.6);
+}
+
+.postView .postNav i:hover {
+  color: white;
+}
+
+.postView .navForward {
+  right: 0;
+}
+
+.postView .navBack {
+  left: 0;
+}
+
+.ratings {
+  min-height: 2rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.ratings section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 4rem;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  font-size: 3rem;
+  padding: 0.5rem;
+}
+
+.ratings section p {
+  text-align: center;
+}
+
+.ratings .ratingP {
+  font-size: 4rem;
+  width: 12rem;
+  font-weight: bold;
+}
+
+.ratings .postTags {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 0 0 0 0rem;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.ratings .postTags .tag {
+  margin: 0.5rem 0.4rem;
+  border-radius: 2rem;
+  padding: 0.2rem 1rem;
+  border: 1px solid #ff4081;
+  background-color: #ff79b0;
+  font-size: 0.8rem;
+}
+
+.comments {
+  max-height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+/* NAVBAR STYLING */
+.mainNavBar {
+  max-width: 80rem;
+  width: 100%;
+}
+
+.searchComp {
+  width: 14rem;
+  padding: 0.2rem 0.6rem;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 2rem;
+  overflow: hidden;
+  border: 1px solid transparent;
+}
+
+.searchComp .searchInput {
+  width: 190%;
+  background-color: transparent;
+  border: none;
+}
+
+.searchComp .searchInput:focus {
+  outline: none;
+}
+
+.searchComp .searchSubmit {
+  width: 10%;
+  -webkit-transform: translateX(2rem);
+          transform: translateX(2rem);
+  display: none !important;
+}
+
+.searchComp .searchSubmit + label {
+  width: 10%;
+  -webkit-transform: translateX(2rem);
+          transform: translateX(2rem);
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
+.searchComp:focus-within {
+  border: 1px solid #ff79b0;
+}
+
+.searchComp:focus-within label {
+  -webkit-transform: translateX(0rem);
+          transform: translateX(0rem);
+}
+
+.searchActive {
+  border: 1px solid #ff79b0;
+}
+
+.searchActive label {
+  -webkit-transform: translateX(0rem) !important;
+          transform: translateX(0rem) !important;
+}
+
+#userPage {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 80rem;
+  height: 100%;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[4];
+      grid-template-columns: repeat(4, 1fr);
+  /* grid-template-rows: repeat(auto-fill, minmax(10rem, 1fr)); */
+  -ms-grid-rows: (1fr)[6];
+      grid-template-rows: repeat(6, 1fr);
+}
+
+#userPage .postBoardProfile {
+  grid-column: 1/-1;
+}
+
+.userBanner {
+  grid-column: 1/-1;
+  height: 14rem;
+  margin-top: 2rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  /* h1,p{
+        text-align: center;
+    } */
+}
+
+.userBanner .personalSection {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.userBanner .badgeSection {
+  width: 20rem;
+}
+
+.userBanner .badgeSection h1 {
+  text-align: center;
+}
+
+.uploadComp {
+  grid-column: 1/-1;
+  display: -ms-grid;
+  display: grid;
+  padding-bottom: 3rem;
+  -ms-grid-columns: (1fr)[8];
+      grid-template-columns: repeat(8, 1fr);
+}
+
+.uploadComp .uploadForm {
+  width: 100%;
+  /* background-color: $secondary-light; */
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 3;
+  grid-column: 1/4;
+  min-height: 14rem;
+}
+
+.uploadComp .uploadForm input, .uploadComp .uploadForm textarea {
+  width: 90%;
+  display: block;
+  margin: 1rem auto 0 auto;
+}
+
+.uploadComp .uploadForm textarea {
+  min-height: 12rem;
+}
+
+.uploadComp .imageContainer {
+  -ms-grid-column: 4;
+  -ms-grid-column-span: 5;
+  grid-column: 4/9;
+  width: 100%;
+}
+
+.uploadComp .imageContainer img {
+  margin: 0 auto;
+  display: block;
+  max-width: 100%;
+  max-height: 70vh;
+}
+
+/* #uploadInput{
+    display: none !important;
+}
+#uploadInput + #uploadInputLabel{
+    width: 90%;
+    margin: 1rem auto 0 auto;
+    display: block;
+    height: 8rem;
+    background-color: orange;
+    border-radius: 2rem;
+} */
+.commentCell {
+  height: 10rem;
+  width: 100%;
+}
+
+.commentCell .commentRow {
+  padding: 1rem 0;
+  border-bottom: 1px solid green;
+}
+
+.commentCell .answerCell {
+  margin-left: 4rem;
+}
+
+.commentForm {
+  width: 100%;
+  max-width: 50rem;
+  height: 10rem;
+  border-radius: 1rem;
+  background-color: rgba(200, 200, 200, 0.4);
+  overflow: hidden;
+  border: 2px solid black;
+  position: relative;
+}
+
+.commentForm .commentText {
+  height: 100%;
+  margin: 0.5rem 1rem 0 1rem;
+  background-color: transparent;
+  border: none;
+  font-size: 1.4rem;
+}
+
+.commentForm .commentText:focus {
+  outline: none;
+}
+
+.commentForm .commentText::-webkit-input-placeholder {
+  color: #e7b9ff;
+}
+
+.commentForm .commentText:-ms-input-placeholder {
+  color: #e7b9ff;
+}
+
+.commentForm .commentText::-ms-input-placeholder {
+  color: #e7b9ff;
+}
+
+.commentForm .commentText::placeholder {
+  color: #e7b9ff;
+}
+
+.commentForm .submitComment {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  float: right;
+  padding: 0.2rem 1rem;
+}
+/*# sourceMappingURL=customStyles.css.map */

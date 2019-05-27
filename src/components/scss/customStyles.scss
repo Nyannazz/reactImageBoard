@@ -279,6 +279,10 @@ html,body{
     display: grid;
     padding-bottom: 3rem;
     grid-template-columns: repeat(8,1fr);
+    .postSucces{
+        height: 10rem;
+        font-size: 1.4rem;
+    }
     .uploadForm{
         width: 100%;
         /* background-color: $secondary-light; */
@@ -354,6 +358,7 @@ html,body{
     position: relative;
     .commentText{
         height: 100%;
+        width: 90%;
         margin: 0.5rem 1rem 0 1rem;
         background-color: transparent;
         border: none;

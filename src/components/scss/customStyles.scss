@@ -4,9 +4,7 @@ html,body{
     height: 100%;
     margin: 0;
 }
-#example{
-    height: 100%;
-}
+
 .App{
     height: 100%;
     display: flex;
@@ -34,6 +32,10 @@ html,body{
     *{
         margin: 0 auto;
     }
+}
+.undecoratedLink{
+    text-decoration: none;
+    color: white;
 }
 .pointer{
     cursor: pointer;
@@ -192,6 +194,8 @@ html,body{
 .mainNavBar{
     max-width: $containerWidth;
     width: 100%;
+    display: flex;
+    align-items: center;
 }
 
 
@@ -275,19 +279,30 @@ html,body{
     display: grid;
     padding-bottom: 3rem;
     grid-template-columns: repeat(8,1fr);
-
     .uploadForm{
         width: 100%;
         /* background-color: $secondary-light; */
         grid-column: 1/4;
         min-height: 14rem;
+
         input, textarea{
+            color: white;
             width: 90%;
             display: block;
             margin: 1rem auto 0 auto;
+            background-color: transparent;
+            border: 1px solid $primary-dark;
         }
         textarea{
             min-height: 12rem;
+        }
+  
+        .dragAndDrop{
+            width: 90%;
+            margin: 0 auto;
+            height: 10rem;
+            border: 1px solid $primary-dark;
+            border-radius: 1.4rem;
         }
     }
     .imageContainer{
@@ -356,5 +371,21 @@ html,body{
         bottom: 0.5rem;
         float: right;
         padding: 0.2rem 1rem;
+        font-size: 1.2rem;
+        border: 1px solid $primary-dark;
+        border-radius: 0.4rem;
+    }
+}
+
+.submitButtonMain{
+    background-color: $primary-dark !important;
+    border: none;
+    padding: 0.2rem;
+    color: white;
+    font-size: 1.4rem;
+    border-radius: 0.4rem;
+    &:hover{
+        background-color: white !important;
+        color: black !important;
     }
 }

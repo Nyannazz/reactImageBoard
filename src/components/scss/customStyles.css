@@ -13,10 +13,6 @@ html, body {
   margin: 0;
 }
 
-#example {
-  height: 100%;
-}
-
 .App {
   height: 100%;
   display: -webkit-box;
@@ -62,6 +58,11 @@ html, body {
 
 .centerAll * {
   margin: 0 auto;
+}
+
+.undecoratedLink {
+  text-decoration: none;
+  color: white;
 }
 
 .pointer {
@@ -258,6 +259,12 @@ html, body {
 .mainNavBar {
   max-width: 80rem;
   width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .searchComp {
@@ -375,13 +382,24 @@ html, body {
 }
 
 .uploadComp .uploadForm input, .uploadComp .uploadForm textarea {
+  color: white;
   width: 90%;
   display: block;
   margin: 1rem auto 0 auto;
+  background-color: transparent;
+  border: 1px solid #805acb;
 }
 
 .uploadComp .uploadForm textarea {
   min-height: 12rem;
+}
+
+.uploadComp .uploadForm .dragAndDrop {
+  width: 90%;
+  margin: 0 auto;
+  height: 10rem;
+  border: 1px solid #805acb;
+  border-radius: 1.4rem;
 }
 
 .uploadComp .imageContainer {
@@ -468,5 +486,22 @@ html, body {
   bottom: 0.5rem;
   float: right;
   padding: 0.2rem 1rem;
+  font-size: 1.2rem;
+  border: 1px solid #805acb;
+  border-radius: 0.4rem;
+}
+
+.submitButtonMain {
+  background-color: #805acb !important;
+  border: none;
+  padding: 0.2rem;
+  color: white;
+  font-size: 1.4rem;
+  border-radius: 0.4rem;
+}
+
+.submitButtonMain:hover {
+  background-color: white !important;
+  color: black !important;
 }
 /*# sourceMappingURL=customStyles.css.map */

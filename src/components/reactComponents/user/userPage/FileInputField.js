@@ -1,14 +1,20 @@
-import React from 'react'
+import React, {useCallback} from 'react'
+import {useDropzone} from 'react-dropzone'
 
-export default function FileInputField() {
+export default function FileInputField({onFileSelect}) {
+  const onDrop = useCallback(acceptedFiles => {
+    onFileSelect(acceptedFiles)
+  }, [])
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+
   return (
-    <div>
-      <input onChange={this.props.changeFile} name='uploadInput' id='uploadInput' type='file'></input>
-{/*         <input onChange={this.changeFile} name='uploadInput' id='uploadInput' type='file'></input>
- */}
-        {/* <label id='uploadInputLabel' htmlFor='uploadInput'>
-          drag and drop
-        </label> */}
+    <div className={'dragAndDrop centerAll'} {...getRootProps()}>
+      <input {...getInputProps()} />
+      {
+        isDragActive ?
+          <p>Drop the files here ...</p> :
+          <p>Drag 'n' drop some files here, or click to select files</p>
+      }
     </div>
   )
 }

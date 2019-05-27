@@ -77,7 +77,7 @@ export default class ImageBoard extends Component {
             <AppConsumer>
               {context=>
                 <PostView 
-                  post={this.state.posts[this.state.postOpen-1]} 
+                  postId={this.state.posts[this.state.postOpen-1].id} 
                   provContext={context}
                   simpleMode={this.props.simpleMode}
                 />}

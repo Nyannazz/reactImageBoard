@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {Link} from 'react-router-dom'
 
 export default class PostItem extends Component {
     constructor(props) {
@@ -12,10 +13,10 @@ export default class PostItem extends Component {
   render() {
     const{post, postOpen,index}=this.props;
     return (
-        <div onClick={()=>this.props.openPost(index)} className={`centerAll postItem pointer`}>
+        <Link to={`/post/${post.id || 0}`} className={`centerAll postItem pointer`}>
             <img alt="" src={post.thumbnail}></img>
             {post.id===postOpen&&<div className="selectedArrow"/>}
-        </div>
+        </Link>
     )
   }
 }

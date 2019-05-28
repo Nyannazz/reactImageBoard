@@ -135,6 +135,14 @@ html, body {
   display: flex;
 }
 
+#postFeedSmall {
+  overflow: hidden;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
 #postViewModal {
   position: absolute;
   top: 3rem;

@@ -18,7 +18,7 @@ export default class NavBar extends Component {
         <div>POPULAR</div>
         <div>NEW</div>
         <Search/>
-        <Link className={'undecoratedLink'} to='./profile'>PROFILE</Link>
+        <Link className={'undecoratedLink'} to='/profile'>PROFILE</Link>
         <div>SETTINGS</div>
       </nav>
     )

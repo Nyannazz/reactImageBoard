@@ -99,6 +99,13 @@ html,body{
     
 }
 
+#postFeedSmall{
+    overflow: hidden;
+    display: grid;
+    //height: 12rem;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
 #postViewModal{
     position: absolute;
     top: 3rem;

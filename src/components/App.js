@@ -4,7 +4,7 @@ import ImageBoard from './reactComponents/ImageBoard.js'
 import UserPage from './reactComponents/user/UserPage.js'
 import NavBar from './reactComponents/NavBar.js'
 import {AppProvider} from './AppContext.js'
-import {BrowserRouter, Route} from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import PostView from './reactComponents/posts/PostView'
 import './scss/customStyles.css';
 
@@ -31,18 +31,14 @@ export default class ComponentName extends Component {
                     <NavBar/>
                 </header>
                 <main ref={this.scrollRef}>
+                  <Switch>
                   <Route path='/profile' render={({history})=>
                   <UserPage>
                       <ImageBoard simpleMode={true} history={history}/>
                   </UserPage>}/>
-                  <Route path='/post/:postId' 
-                    render={(props)=>
-                        <div className={"innerContent"}>
-                            <PostView {...props}/>
-                        </div>}
-                  />
-                  <Route path='/' component={ImageBoard}/>
                   
+                  <Route path='/' component={ImageBoard}/>
+                  </Switch>
                 </main>
             </div>
         </BrowserRouter>

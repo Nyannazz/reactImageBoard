@@ -33,7 +33,7 @@ export default class ImageBoard extends Component {
     openPost(postId){
       if(postId>=0 && postId<this.state.posts.length){
         this.setState({postOpenId: this.state.posts[postId].id,postOpen:postId},
-          this.props.history.push(`/view/${this.state.posts[postId].id}`))
+          this.props.history.push(`/post/${this.state.posts[postId].id}`))
       }
     }
     /* createRows(rowLen){
@@ -107,17 +107,18 @@ export default class ImageBoard extends Component {
             )
           }
         </div>
-        <Route path='/view/:postId' render={(props)=>    
+        {<Route path='/post/:postId' render={(props)=>    
           <PostViewModal>
             <PostView 
               postId={this.state.postOpenId} 
               postOpen={this.state.postOpen}
               openPost={this.openPost}
               simpleMode={this.props.simpleMode}
+              postList={this.state.posts}
               {...props}
             />
           </PostViewModal>}
-          />
+          />}
       </BoardProvider>
     )
   }

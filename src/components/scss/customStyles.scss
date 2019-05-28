@@ -103,6 +103,7 @@ html,body{
     overflow: hidden;
     display: grid;
     //height: 12rem;
+    //grid-auto-flow: column;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }
 

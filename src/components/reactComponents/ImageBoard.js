@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import PostItem from './posts/PostItem.js'
-import PostRow from './posts/PostRow.js'
 import PostView from './posts/PostView.js'
 import {BoardProvider} from './imageBoardContext.js'
 import {AppConsumer} from '../AppContext.js'
 import axios from 'axios'
+import PostViewModal from './posts/postViewModal.js';
+import {Route} from 'react-router-dom';
 
 
 export default class ImageBoard extends Component {
@@ -17,22 +18,22 @@ export default class ImageBoard extends Component {
       this.postWidth=5;
       this.state = {
          posts:[],
-         postOpen: 1
+         postOpen: 2,
+         postOpenId: 20,
       }
     }
     componentDidMount(){
       axios.get('http://image-board.local/posts').then(res=>{
-        this.setState({posts:res.data}/* ,()=>console.log(this.state.posts) */)
+        this.setState({posts:res.data} ,()=>console.log(this.state.posts))
       }).catch(err=>{
         console.log(err)
       })
       //this.props.history.push('/top/?id=23423')
     }
     openPost(postId){
-      if(postId<=this.state.posts.length){
-        this.setState({postOpen: postId})
-      }else{
-
+      if(postId>=0 && postId<this.state.posts.length){
+        this.setState({postOpenId: this.state.posts[postId].id,postOpen:postId},
+          this.props.history.push(`/view/${this.state.posts[postId].id}`))
       }
     }
     /* createRows(rowLen){
@@ -99,11 +100,24 @@ export default class ImageBoard extends Component {
       <BoardProvider value={{state:this.state,openPost:this.openPost}}>
         <div id='imageBoard' className={'imageGrid'}>
           {this.state.posts.map((post, index)=>
-              this.createPostGrid(post,index,this.postWidth)
+              <PostItem index={index} key={index} 
+              openPost={this.openPost} 
+              postOpen={this.state.postOpenId} 
+              post={post}/>
             )
           }
-          {/* this.createRows(6) */}  
         </div>
+        <Route path='/view/:postId' render={(props)=>    
+          <PostViewModal>
+            <PostView 
+              postId={this.state.postOpenId} 
+              postOpen={this.state.postOpen}
+              openPost={this.openPost}
+              simpleMode={this.props.simpleMode}
+              {...props}
+            />
+          </PostViewModal>}
+          />
       </BoardProvider>
     )
   }

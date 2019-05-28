@@ -5,75 +5,78 @@ import CommentForm from './postView/CommentForm.js'
 import axios from 'axios';
 
 
-import {BoardConsumer} from '../imageBoardContext.js'
 
 
 export default class PostView extends Component {
   
   constructor(props) {
     super(props)
+    console.log(this.props.match.params.postId)
     this.scrollRef=React.createRef();
     this.img_url='https://img.pr0gramm.com/2019/05/15/159cd1cb97de3843.png'
     this.state = {
       post: {},
-      postId: this.props.postId
+      postId: this.props.match.params.postId || 0
     }
   }
-  /* static getDerivedStateFromProps(props,state){
-    if(state.postId!==props.postId){
-      return {
-        postId: props.postId
-      }
-    }
-    return null
-  } */
+
   componentDidUpdate=()=>{
-    if(this.props.postId!==this.state.postId){
-      this.getPost(this.props.postId)
+    if(this.props.match.params.postId!==this.state.postId){
+      this.getPost(this.props.match.params.postId  || 0)
     }
   }
   componentDidMount(){
-    this.getPost(this.props.postId);
+    this.getPost(this.state.postId);
     if(!this.props.simpleMode){
-      this.props.provContext.setScroll(this.scrollRef.current.getBoundingClientRect().y)  
+      //this.props.provContext.setScroll(this.scrollRef.current.getBoundingClientRect().y)  
     }
     console.log(this.props.simpleMode)
   }
   getPost=(id)=>{
-    axios(`http://image-board.local/posts/${id}`).then(
-      res=>{this.setState({post:res.data[0],postId:this.props.postId})}
+    if(id){
+      axios(`http://image-board.local/posts/${id}`).then(
+      res=>{
+        if(res.data.length>0){
+          this.setState({
+            post:res.data[0],
+            postId:this.props.match.params.postId})}
+        }
+        
       ).catch(error=>console.log(error))
+    }
+    
   }
 
     
   render() {
+    const {postOpen,openPost}=this.props;
+    const currentImage=this.state.post?this.state.post.resourceurl:"";
     return (
-      <BoardConsumer>
-        {context=>
-          (<div ref={this.scrollRef} className={`postView`}>
-
-          <img alt='no img' src={this.state.post.resourceurl}>
+  
+        <div ref={this.scrollRef} className={`postView`}>
+          <div className={'imageWrapper'}>
+            <img alt='no img' src={currentImage}/>
             
-          </img>
-
+            {[<div onClick={()=>openPost(postOpen+1)} className={'postNav navForward centerAll'}>
+              <i class="material-icons">
+                keyboard_arrow_right
+              </i>
+            </div>,
+            <div onClick={()=>openPost(postOpen-1)} className={'postNav navBack centerAll'}>
+              <i class="material-icons">
+                keyboard_arrow_left
+              </i>
+            </div>]}
+          </div>
+          
           <PostRating/>
           
-          <div onClick={()=>context.openPost(context.state.postOpen+1)} className={'postNav navForward centerAll'}>
-            <i class="material-icons">
-              keyboard_arrow_right
-            </i>
-          </div>
-          <div onClick={()=>context.openPost(context.state.postOpen-1)} className={'postNav navBack centerAll'}>
-            <i class="material-icons">
-              keyboard_arrow_left
-            </i>
-          </div>
+          
           <CommentForm></CommentForm>
           <PostComments/>
 
-        </div>)       
-        }
-      </BoardConsumer>
+        </div>     
+ 
         
     )
   }

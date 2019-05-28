@@ -5,6 +5,7 @@ import UserPage from './reactComponents/user/UserPage.js'
 import NavBar from './reactComponents/NavBar.js'
 import {AppProvider} from './AppContext.js'
 import {BrowserRouter, Route} from 'react-router-dom';
+import PostView from './reactComponents/posts/PostView'
 import './scss/customStyles.css';
 
 
@@ -25,7 +26,6 @@ export default class ComponentName extends Component {
     render() {
         return (
         <BrowserRouter>
-            <AppProvider value={{state:this.state,setScroll:this.setScroll}}>
             <div className="App">
                 <header className="App-header centerAll">
                     <NavBar/>
@@ -35,10 +35,16 @@ export default class ComponentName extends Component {
                   <UserPage>
                       <ImageBoard simpleMode={true} history={history}/>
                   </UserPage>}/>
-                  <Route exact path='/' component={ImageBoard}/>
+                  <Route path='/post/:postId' 
+                    render={(props)=>
+                        <div className={"innerContent"}>
+                            <PostView {...props}/>
+                        </div>}
+                  />
+                  <Route path='/' component={ImageBoard}/>
+                  
                 </main>
             </div>
-            </AppProvider>
         </BrowserRouter>
         );
     }

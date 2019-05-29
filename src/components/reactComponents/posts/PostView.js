@@ -35,10 +35,11 @@ export default class PostView extends Component {
     if(id){
       axios(`http://image-board.local/posts/${id}`).then(
       res=>{
-        if(res.data.length>0){
+        if(res.data.id || res.data.length>0){
           this.setState({
-            post:res.data[0],
+            post:res.data[0] || res.data,
             postId:this.props.match.params.postId})
+            console.log(res.data)
           }else{
             this.props.history.push('/notfound')
 
@@ -108,7 +109,7 @@ export default class PostView extends Component {
             </Link>
           </div>}
           
-          <PostRating/>
+          <PostRating {...this.state.post}/>
           
           
           <CommentForm></CommentForm>

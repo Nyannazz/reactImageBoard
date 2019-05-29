@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PostItem from './posts/PostItem.js'
 import PostView from './posts/PostView.js'
 import {BoardProvider} from './imageBoardContext.js'
-import {AppConsumer} from '../AppContext.js'
 import axios from 'axios'
 import PostViewModal from './posts/postViewModal.js';
 import {Route} from 'react-router-dom';

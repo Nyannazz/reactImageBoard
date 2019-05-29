@@ -35,15 +35,16 @@ export default class CreatePost extends Component {
     console.dir(val)
     
   }
+
   sendFiles(event){
     event.preventDefault()
-
+    const tagArrString=JSON.stringify(this.state.tags.split(";"));
     let formData=new FormData()
     formData.append('file',this.state.file)
     formData.append('title',this.state.title)
     formData.append('createdBy','1')
     formData.append('body',this.state.body)
-    formData.append('tags',this.state.tags)
+    formData.append('tags',tagArrString)
     axios.post('http://image-board.local/posts',
             formData, {
                 headers: {
@@ -79,7 +80,7 @@ export default class CreatePost extends Component {
         {this.state.postCreated&&<div className={'postSucces centerAll'}>{this.state.postCreated}</div>}
       </form>
       <div className={'imageContainer centerAll'}>
-        <img src={this.state.upload}></img>
+        <img alt='' src={this.state.upload}></img>
       </div>
       </div>
     )

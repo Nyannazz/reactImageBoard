@@ -29,6 +29,7 @@ html, body {
   background-color: #805acb;
   height: 3rem;
   width: 100%;
+  z-index: 2;
 }
 
 .App main {
@@ -240,18 +241,27 @@ html, body {
       justify-content: space-around;
   -ms-flex-line-pack: center;
       align-content: center;
-  font-size: 3rem;
+  font-size: 2rem;
   padding: 0.5rem;
 }
 
-.ratings section p {
+.ratings section div {
   text-align: center;
+  border-radius: 50%;
+  border: 1px solid #e7b9ff;
+  margin: 0.2rem;
+  width: 3rem;
+  height: 3rem;
+}
+
+.ratings section div:hover {
+  background-color: #805acb;
 }
 
 .ratings .ratingP {
   font-size: 4rem;
-  width: 12rem;
   font-weight: bold;
+  margin-right: 4rem;
 }
 
 .ratings .postTags {
@@ -390,6 +400,28 @@ html, body {
   text-align: center;
 }
 
+@-webkit-keyframes slideInFromTop {
+  0% {
+    -webkit-transform: translateY(-100vh) scale(0);
+            transform: translateY(-100vh) scale(0);
+  }
+  100% {
+    -webkit-transform: translateY(0) scale(1);
+            transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideInFromTop {
+  0% {
+    -webkit-transform: translateY(-100vh) scale(0);
+            transform: translateY(-100vh) scale(0);
+  }
+  100% {
+    -webkit-transform: translateY(0) scale(1);
+            transform: translateY(0) scale(1);
+  }
+}
+
 .uploadModal {
   position: fixed;
   width: 100%;
@@ -398,7 +430,10 @@ html, body {
 }
 
 .uploadModal .innerContent {
+  -webkit-animation: slideInFromTop 1s ease-in-out;
+          animation: slideInFromTop 1s ease-in-out;
   max-width: 84rem !important;
+  margin-bottom: 20%;
   border-radius: 1rem;
   border: 1px solid #e7b9ff;
   background-color: #2e3035;
@@ -467,6 +502,11 @@ html, body {
   height: 10rem;
   border: 1px solid #805acb;
   border-radius: 1.4rem;
+}
+
+.uploadComp .uploadForm .dragAndDrop p {
+  margin: 1rem;
+  text-align: center;
 }
 
 .uploadComp .imageContainer {

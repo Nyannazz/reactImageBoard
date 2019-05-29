@@ -14,6 +14,8 @@ html,body{
         background-color: $primary-dark;
         height: 3rem;
         width: 100%;
+        z-index: 2;
+
     }
     main{
         /* background-color: #fff; */
@@ -176,16 +178,24 @@ html,body{
         flex-direction: column;
         justify-content: space-around;
         align-content: center;
-        font-size: 3rem;
+        font-size: 2rem;
         padding: 0.5rem;
-        p{
+        div{
             text-align: center;
+            border-radius: 50%;
+            border: 1px solid $primary-light;
+            margin: 0.2rem;
+            width: 3rem;
+            height: 3rem;
+            &:hover{
+                background-color: $primary-dark;
+            }
         }
     }
     .ratingP{
         font-size: 4rem;
-        width: 12rem;
-        font-weight: bold;    
+        font-weight: bold; 
+        margin-right: 4rem;   
     }
     .postTags{
         display: flex;
@@ -294,6 +304,15 @@ html,body{
     }
 }
 
+@keyframes slideInFromTop{
+    0%{
+        transform: translateY(-100vh) scale(0);
+
+    }
+    100%{
+        transform: translateY(0) scale(1);
+    }
+}
 
 .uploadModal{
     position: fixed;
@@ -301,7 +320,9 @@ html,body{
     height: 100%;
     z-index: 1;
     .innerContent{
+        animation: slideInFromTop 1s ease-in-out;
         max-width: 84rem !important;
+        margin-bottom: 20%;
         border-radius: 1rem;
         border: 1px solid $primary-light;
         background-color: $bgColor;
@@ -359,6 +380,11 @@ html,body{
             height: 10rem;
             border: 1px solid $primary-dark;
             border-radius: 1.4rem;
+            p{
+                margin: 1rem;
+                text-align: center;
+                
+            }
         }
     }
     .imageContainer{

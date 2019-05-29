@@ -69,6 +69,13 @@ html, body {
   cursor: pointer;
 }
 
+.noSelect {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
 #imageBoard {
   width: 100%;
   max-width: 80rem;
@@ -381,6 +388,40 @@ html, body {
 
 .userBanner .badgeSection h1 {
   text-align: center;
+}
+
+.uploadModal {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.uploadModal .innerContent {
+  max-width: 84rem !important;
+  border-radius: 1rem;
+  border: 1px solid #e7b9ff;
+  background-color: #2e3035;
+  padding: 2rem;
+  position: relative;
+}
+
+.uploadModal .closeButton {
+  cursor: pointer;
+  background-color: #805acb;
+  padding: 0.6rem;
+  border-radius: 50%;
+  font-size: 2.2rem;
+  position: absolute;
+  right: -1.4rem;
+  top: -1.4rem;
+  border: 1px solid #e7b9ff;
+}
+
+.uploadModal .closeButton:hover {
+  font-weight: bold;
+  -webkit-transform: scale(1.4);
+          transform: scale(1.4);
 }
 
 .uploadComp {

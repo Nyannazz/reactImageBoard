@@ -7,7 +7,7 @@ import {AppProvider} from './AppContext.js'
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import PostView from './reactComponents/posts/PostView'
 import './scss/customStyles.css';
-
+import CreatePost from './reactComponents/user/CreatePost.js'
 
 export default class ComponentName extends Component {
     constructor(props) {
@@ -15,6 +15,7 @@ export default class ComponentName extends Component {
       this.scrollRef=React.createRef();
       this.setScroll=this.setScroll.bind(this)
       this.state = {
+          uploadOpen: false
          
       }
     }
@@ -28,9 +29,17 @@ export default class ComponentName extends Component {
         <BrowserRouter>
             <div className="App">
                 <header className="App-header centerAll">
-                    <NavBar/>
+                    <NavBar openUpload={()=>this.setState({uploadOpen:!this.state.uploadOpen})}/>
                 </header>
                 <main ref={this.scrollRef}>
+                  {this.state.uploadOpen&&<div className={"uploadModal centerAll"}>
+                    <div className={"innerContent"}>
+                        <i onClick={()=>this.setState({uploadOpen: false})} className="material-icons closeButton">
+                            close
+                        </i>
+                        <CreatePost/>
+                    </div>
+                  </div>}
                   <Switch>
                   <Route path='/profile' render={({history})=>
                   <UserPage>

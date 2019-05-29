@@ -13,8 +13,8 @@ export default class NavBar extends Component {
     
   render() {
     return (
-      <nav className={'mainNavBar'}> 
-        <Link className={'undecoratedLink'} to='/'>HOME</Link>
+      <nav className={'mainNavBar noSelect'}> 
+        <div className={'undecoratedLink pointer'} onClick={this.props.openUpload}>UPLOAD</div>
         <div>POPULAR</div>
         <div>NEW</div>
         <Search/>

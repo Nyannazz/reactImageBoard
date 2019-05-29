@@ -13,7 +13,7 @@ export default class UserPage extends Component {
   
   openUpload(event){
     event.preventDefault();
-    this.setState({openUpload:true})
+    this.setState({openUpload:!this.state.openUpload})
   }
 
   render() {

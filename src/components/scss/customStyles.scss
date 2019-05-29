@@ -40,6 +40,9 @@ html,body{
 .pointer{
     cursor: pointer;
 }
+.noSelect{
+    user-select: none;
+}
 
 #imageBoard{
     width: 100%;
@@ -290,6 +293,38 @@ html,body{
         }
     }
 }
+
+
+.uploadModal{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    .innerContent{
+        max-width: 84rem !important;
+        border-radius: 1rem;
+        border: 1px solid $primary-light;
+        background-color: $bgColor;
+        padding: 2rem;
+        position: relative;
+    }
+    .closeButton{
+        cursor: pointer;
+        background-color: $primary-dark;
+        padding: 0.6rem;
+        border-radius: 50%;
+        font-size: 2.2rem;
+        position: absolute;
+        right: -1.4rem;
+        top: -1.4rem;
+        border: 1px solid $primary-light;
+        &:hover{
+            font-weight: bold;
+            transform: scale(1.4)
+        }
+    }
+}
+
 .uploadComp{
     grid-column: 1/-1;
     display: grid;

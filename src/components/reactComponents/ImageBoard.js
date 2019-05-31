@@ -4,29 +4,51 @@ import PostView from './posts/PostView.js'
 import {BoardProvider} from './imageBoardContext.js'
 import axios from 'axios'
 import PostViewModal from './posts/postViewModal.js';
-import {Route} from 'react-router-dom';
-
+import {Route, Switch} from 'react-router-dom';
+const BASEURL='http://image-board.local/posts';
 
 export default class ImageBoard extends Component {
     constructor(props) {
       super(props)
       //console.log(this.props.location.search)
       //this.createRows=this.createRows.bind(this)
+      this.imageFeed={};
+      this.loadingMore=false;
       this.postWidth=5;
       this.state = {
          posts:[],
          postOpen: 2,
          postOpenId: 20,
-         postPreview: []
+         endReached: false
+         
       }
     }
     componentDidMount(){
-      axios.get('http://image-board.local/posts').then(res=>{
-        this.setState({posts:res.data,postPreview:res.data} ,()=>console.log(this.state.posts))
-      }).catch(err=>{
-        console.log(err)
-      })
+      this.getPosts(BASEURL);
       //this.props.history.push('/top/?id=23423')
+    }
+    getPosts=(url,unlock)=>{
+      if(url){
+        this.loadingMore=true;
+        axios.get(url).then(res=>{
+          this.setState({posts:[...this.state.posts,...res.data.data]} ,()=>this.loadingMore=false)
+          console.log(res.data)
+          this.imageFeed=res.data;
+        }).catch(err=>{
+          console.log(err)
+        })
+      }
+      if(this.imageFeed.current_page===this.imageFeed.last_page && this.state.endReached===false){
+        this.setState({endReached:true})
+      }
+      
+    }
+    loadMore=()=>{
+      console.log(this.imageFeed.next_page_url)
+      if(!this.loadingMore){
+        this.getPosts(this.imageFeed.next_page_url)
+
+      }
     }
 /*     openPost(postId){
       if(postId>=0 && postId<this.state.posts.length){
@@ -40,26 +62,28 @@ export default class ImageBoard extends Component {
   render() {
     return (
       <BoardProvider value={{state:this.state,openPost:this.openPost}}>
-        <div id='imageBoard' className={'imageGrid'}>
-          {this.state.posts.map((post, index)=>
+        <Switch>
+        
+        <Route path='/post/:postId' render={(props)=>    
+          this.state.posts.length>0&&<PostViewModal>
+            <PostView 
+              postId={this.state.postOpenId} 
+              posts={this.state.posts}
+              loadMore={this.loadMore}
+              {...props}
+            />
+          </PostViewModal>}
+          />
+          <Route path='/' render={(props)=>
+          <div id='imageBoard' className={'imageGrid'}>
+          {this.state.posts.length>0&&this.state.posts.map((post, index)=>
               <PostItem index={index} key={index} 
               postOpen={this.state.postOpenId} 
               post={post}/>
             )
           }
-        </div>
-        {<Route path='/post/:postId' render={(props)=>    
-          this.state.posts.length>0&&<PostViewModal>
-            <PostView 
-              postId={this.state.postOpenId} 
-              posts={this.state.posts}
-              createPreview={this.createPreview}
-              
-
-              {...props}
-            />
-          </PostViewModal>}
-          />}
+        </div>}/>
+          </Switch>
       </BoardProvider>
     )
   }

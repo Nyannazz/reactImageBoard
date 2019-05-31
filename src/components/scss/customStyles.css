@@ -170,6 +170,7 @@ html, body {
   width: 100%;
   margin: 0 auto;
   position: relative;
+  padding-bottom: 4rem;
 }
 
 .postView img {
@@ -283,7 +284,6 @@ html, body {
 }
 
 .comments {
-  max-height: 100vh;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -433,7 +433,6 @@ html, body {
   -webkit-animation: slideInFromTop 1s ease-in-out;
           animation: slideInFromTop 1s ease-in-out;
   max-width: 84rem !important;
-  margin-bottom: 20%;
   border-radius: 1rem;
   border: 1px solid #e7b9ff;
   background-color: #2e3035;
@@ -535,13 +534,16 @@ html, body {
     border-radius: 2rem;
 } */
 .commentCell {
-  height: 10rem;
   width: 100%;
+  border: 1px solid #e7b9ff;
+  border-radius: 0.4rem;
+  padding: 0 2rem;
+  font-size: 1.2rem;
 }
 
 .commentCell .commentRow {
   padding: 1rem 0;
-  border-bottom: 1px solid green;
+  /* border-bottom: 1px solid green; */
 }
 
 .commentCell .answerCell {

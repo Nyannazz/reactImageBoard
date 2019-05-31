@@ -131,6 +131,7 @@ html,body{
     width: 100%;
     margin: 0 auto;
     position: relative;
+    padding-bottom: 4rem;
     img{
         max-width: 100%;
         max-height: 100vh;
@@ -212,7 +213,6 @@ html,body{
     }
 }
 .comments{
-    max-height: 100vh;
     display: flex;
     align-items: center;
 }
@@ -322,7 +322,6 @@ html,body{
     .innerContent{
         animation: slideInFromTop 1s ease-in-out;
         max-width: 84rem !important;
-        margin-bottom: 20%;
         border-radius: 1rem;
         border: 1px solid $primary-light;
         background-color: $bgColor;
@@ -414,11 +413,15 @@ html,body{
 
 
 .commentCell{
-    height: 10rem;
+    //height: 10rem;
     width: 100%;
+    border: 1px solid $primary-light;
+    border-radius: 0.4rem;
+    padding: 0 2rem;
+    font-size: 1.2rem;
     .commentRow{
         padding: 1rem 0;
-        border-bottom: 1px solid green;
+        /* border-bottom: 1px solid green; */
     }
     .answerCell{
         margin-left: 4rem;

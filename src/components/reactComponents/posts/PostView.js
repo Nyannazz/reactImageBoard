@@ -26,6 +26,9 @@ export default class PostView extends Component {
       this.getPost(this.props.match.params.postId  || 0)
 
     }
+    if(this.props.match.params.postId==this.props.posts[this.props.posts.length-1].id){
+      this.props.loadMore()
+    }
   }
   componentDidMount(){
     this.getPost(this.state.postId);
@@ -85,6 +88,7 @@ export default class PostView extends Component {
     const currentImage=this.state.post?this.state.post.resourceurl:"";
     const postPreview=this.getPreview()
     const postIndex=postPreview[1];
+    console.log(postIndex)
     return (
         <div ref={this.scrollRef} className={`postView`}>
           <section id='postFeedSmall'>
@@ -102,7 +106,7 @@ export default class PostView extends Component {
                 keyboard_arrow_right
               </i>
             </Link>
-            <Link to={`/post/${postIndex===0?posts[postIndex].id:posts[postIndex-1].id}`} className={'undecoratedLink postNav navBack centerAll'}>
+            <Link to={`/post/${postIndex>=1?posts[postIndex-1].id:posts[0].id}`} className={'undecoratedLink postNav navBack centerAll'}>
               <i class="material-icons">
                 keyboard_arrow_left
               </i>

@@ -3,8 +3,9 @@ import Comment from './Comment'
 
 const PostComments = () => {
     return (
-        <div>
-            <Comment><Comment></Comment></Comment>
+        <div className={'commentSection'}>
+            <h1>COMMENTS</h1>
+            <Comment/>
         </div>
     )
 }

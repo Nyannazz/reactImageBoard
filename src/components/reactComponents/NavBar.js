@@ -15,7 +15,7 @@ export default class NavBar extends Component {
     return (
       <nav className={'mainNavBar noSelect'}> 
         <div className={'undecoratedLink pointer'} onClick={this.props.openUpload}>UPLOAD</div>
-        <div>POPULAR</div>
+        <Link className={'undecoratedLink'} to='/'>POPULAR</Link>
         <div>NEW</div>
         <Search/>
         <Link className={'undecoratedLink'} to='/profile'>PROFILE</Link>

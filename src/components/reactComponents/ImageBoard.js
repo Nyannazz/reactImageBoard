@@ -6,6 +6,7 @@ import axios from 'axios'
 import PostViewModal from './posts/postViewModal.js';
 import {Route, Switch} from 'react-router-dom';
 const BASEURL='http://image-board.local/posts';
+//const BASEURL="http://192.168.178.21/image-board/public/posts"
 
 export default class ImageBoard extends Component {
     constructor(props) {
@@ -70,6 +71,7 @@ export default class ImageBoard extends Component {
               postId={this.state.postOpenId} 
               posts={this.state.posts}
               loadMore={this.loadMore}
+              openFull={this.props.openFull}
               {...props}
             />
           }

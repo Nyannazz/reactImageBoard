@@ -161,6 +161,22 @@ html, body {
   background-color: #2e3035;
 }
 
+.fullScreenModal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  background-color: #2e3035;
+  z-index: 4;
+}
+
+.fullScreenModal .closeButton {
+  top: 2rem;
+  right: 2rem;
+}
+
 .innerContent {
   max-width: 80rem;
   margin: 0 auto;
@@ -191,6 +207,17 @@ html, body {
       -ms-user-select: none;
           user-select: none;
   position: relative;
+}
+
+.postView .imageWrapper .fullScreenButton {
+  position: absolute;
+  right: 2rem;
+  top: 2rem;
+}
+
+.postView .imageWrapper .fullScreenButton:hover {
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
 }
 
 .postView .imageWrapper .postNav {
@@ -423,6 +450,22 @@ html, body {
   }
 }
 
+.closeButton {
+  cursor: pointer;
+  background-color: #805acb;
+  padding: 0.6rem;
+  border-radius: 50%;
+  font-size: 2.2rem;
+  position: absolute;
+  border: 1px solid #e7b9ff;
+}
+
+.closeButton:hover {
+  font-weight: bold;
+  -webkit-transform: scale(1.4);
+          transform: scale(1.4);
+}
+
 .uploadModal {
   position: fixed;
   width: 100%;
@@ -442,21 +485,8 @@ html, body {
 }
 
 .uploadModal .closeButton {
-  cursor: pointer;
-  background-color: #805acb;
-  padding: 0.6rem;
-  border-radius: 50%;
-  font-size: 2.2rem;
-  position: absolute;
   right: -1.4rem;
   top: -1.4rem;
-  border: 1px solid #e7b9ff;
-}
-
-.uploadModal .closeButton:hover {
-  font-weight: bold;
-  -webkit-transform: scale(1.4);
-          transform: scale(1.4);
 }
 
 .uploadComp {

@@ -122,6 +122,20 @@ html,body{
     background-color: $bgColor;
     
 }
+.fullScreenModal{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    background-color: $bgColor;
+    z-index: 4;
+    .closeButton{
+        top: 2rem;
+        right: 2rem;
+    }
+}
 .innerContent{
     max-width: $containerWidth;
     margin: 0 auto;
@@ -145,6 +159,14 @@ html,body{
     .imageWrapper{
         user-select: none;
         position: relative;
+        .fullScreenButton{
+            position: absolute;
+            right: 2rem;
+            top: 2rem;
+            &:hover{
+                transform: scale(1.2);
+            }
+        }
         .postNav{
             position: absolute;
             top: calc(50% - 3rem);
@@ -314,7 +336,19 @@ html,body{
         transform: translateY(0) scale(1);
     }
 }
-
+.closeButton{
+    cursor: pointer;
+    background-color: $primary-dark;
+    padding: 0.6rem;
+    border-radius: 50%;
+    font-size: 2.2rem;
+    position: absolute;
+    border: 1px solid $primary-light;
+    &:hover{
+        font-weight: bold;
+        transform: scale(1.4)
+    }
+}
 .uploadModal{
     position: fixed;
     width: 100%;
@@ -330,19 +364,10 @@ html,body{
         position: relative;
     }
     .closeButton{
-        cursor: pointer;
-        background-color: $primary-dark;
-        padding: 0.6rem;
-        border-radius: 50%;
-        font-size: 2.2rem;
-        position: absolute;
+        
         right: -1.4rem;
         top: -1.4rem;
-        border: 1px solid $primary-light;
-        &:hover{
-            font-weight: bold;
-            transform: scale(1.4)
-        }
+        
     }
 }
 

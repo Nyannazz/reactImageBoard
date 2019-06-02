@@ -5,6 +5,7 @@ import PostItem from './PostItem.js';
 import CommentForm from './postView/CommentForm.js'
 import axios from 'axios';
 import {Link} from 'react-router-dom'
+const BASEURL='http://image-board.local/posts';
 
 
 
@@ -36,7 +37,7 @@ export default class PostView extends Component {
   }
   getPost=(id)=>{
     if(id){
-      axios(`http://image-board.local/posts/${id}`).then(
+      axios(`${BASEURL}/${id}`).then(
       res=>{
         if(res.data.id || res.data.length>0){
           this.setState({
@@ -84,7 +85,7 @@ export default class PostView extends Component {
 
     
   render() {
-    const {nextPost,prevPost,posts}=this.props;
+    const {nextPost,prevPost,posts,openFull}=this.props;
     const currentImage=this.state.post?this.state.post.resourceurl:"";
     const postPreview=this.getPreview()
     const postIndex=postPreview[1];
@@ -100,7 +101,9 @@ export default class PostView extends Component {
           </section>
           {this.state.post.id&&<div className={'imageWrapper'}>
             <img alt='no img' src={currentImage}/>
-            
+            <div onClick={()=>openFull(currentImage)} className={'fullScreenButton'}>
+              X
+            </div>
             <Link to={`/post/${postIndex===posts.length-1?posts[postIndex].id:posts[postIndex+1].id}`} className={'undecoratedLink postNav navForward centerAll'}>
               <i class="material-icons">
                 keyboard_arrow_right

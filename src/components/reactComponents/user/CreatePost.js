@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import FileInputField from './userPage/FileInputField.js'
+//const BASEURL="http://192.168.178.21/image-board/public/posts"
+const BASEURL='http://image-board.local/posts';
 
 
 
@@ -45,7 +47,7 @@ export default class CreatePost extends Component {
     formData.append('createdBy','1')
     formData.append('body',this.state.body)
     formData.append('tags',tagArrString)
-    axios.post('http://image-board.local/posts',
+    axios.post(`${BASEURL}`,
             formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',

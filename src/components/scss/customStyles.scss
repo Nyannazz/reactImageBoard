@@ -131,10 +131,51 @@ html,body{
     overflow: auto;
     background-color: $bgColor;
     z-index: 4;
+
     .closeButton{
+        position: fixed !important;
         top: 2rem;
         right: 2rem;
     }
+}
+@keyframes comeFromTop{
+    0%{
+        transform: translateY(-10rem);
+    }
+    100%{
+        transform: translateY(0);
+    }
+
+}
+@keyframes fadeOut{
+    0%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+        display: none;
+    }
+
+}
+.shortInfo{
+    position: fixed;
+    width: 100%;
+    top: 1rem;
+    animation: comeFromTop 1s,fadeOut 2s forwards ease-in 2s;
+
+    p{
+      padding: 2rem;
+      border-radius: 1rem;
+      border: 1px solid $primary-light;
+      background-color: $bgColor;  
+    }
+}
+
+
+.fullScreenImage{
+    margin: 0 auto;
+    padding: 0;
+    width: 100%;
 }
 .innerContent{
     max-width: $containerWidth;
@@ -161,8 +202,11 @@ html,body{
         position: relative;
         .fullScreenButton{
             position: absolute;
-            right: 2rem;
-            top: 2rem;
+            right: 1rem;
+            top: 1rem;
+            i{
+                font-size: 3rem;
+            }
             &:hover{
                 transform: scale(1.2);
             }

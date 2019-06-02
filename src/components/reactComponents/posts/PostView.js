@@ -102,7 +102,9 @@ export default class PostView extends Component {
           {this.state.post.id&&<div className={'imageWrapper'}>
             <img alt='no img' src={currentImage}/>
             <div onClick={()=>openFull(currentImage)} className={'fullScreenButton'}>
-              X
+              <i className="material-icons">
+                crop_free
+              </i>
             </div>
             <Link to={`/post/${postIndex===posts.length-1?posts[postIndex].id:posts[postIndex+1].id}`} className={'undecoratedLink postNav navForward centerAll'}>
               <i class="material-icons">

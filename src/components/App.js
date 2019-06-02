@@ -13,7 +13,8 @@ export default class ComponentName extends Component {
       super(props)
       this.scrollRef=React.createRef();
       this.state = {
-          uploadOpen: false
+          uploadOpen: false,
+          zoom: false
          
       }
     }
@@ -52,7 +53,16 @@ export default class ComponentName extends Component {
                 </main>
                 {this.state.fullScreenImage&&
                 <FullScreenModal>
-                    <img src={this.state.fullScreenImage}></img>
+                    <img 
+                        onClick={()=>this.setState({zoom:!this.state.zoom})} 
+                        alt='' 
+                        class="fullScreenImage" 
+                        src={this.state.fullScreenImage}
+                        style={this.state.zoom?{objectFit:"cover"}:{objectFit:"contain",height: "99.6%"}}
+                    />
+                    <div className={"centerAll shortInfo"}>
+                        <p>CLICK THE PICTURE AGAIN TO ZOOM IN!</p>
+                    </div>
                     <i onClick={()=>this.setState({fullScreenImage:""})} className="material-icons closeButton">
                         close
                     </i>

@@ -171,6 +171,7 @@ html, body {
   margin: 0 auto;
   position: relative;
   padding-bottom: 4rem;
+  max-width: 80rem;
 }
 
 .postView img {

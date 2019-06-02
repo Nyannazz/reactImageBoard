@@ -65,14 +65,14 @@ export default class ImageBoard extends Component {
         <Switch>
         
         <Route path='/post/:postId' render={(props)=>    
-          this.state.posts.length>0&&<PostViewModal>
+          this.state.posts.length>0&&
             <PostView 
               postId={this.state.postOpenId} 
               posts={this.state.posts}
               loadMore={this.loadMore}
               {...props}
             />
-          </PostViewModal>}
+          }
           />
           <Route path='/' render={(props)=>
           <div id='imageBoard' className={'imageGrid'}>

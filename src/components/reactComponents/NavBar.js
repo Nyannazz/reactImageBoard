@@ -15,12 +15,12 @@ export default class NavBar extends Component {
     const location=this.props.location.pathname;
     return (
       <nav className={'mainNavBar noSelect'}> 
-        <div className={'undecoratedLink pointer'} onClick={this.props.openUpload}>UPLOAD</div>
-        <Link className={`undecoratedLink ${location==="/popular"?"active":""}`} to='/popular'>POPULAR</Link>
-        <Link className={`undecoratedLink ${location==="/new"?"active":""}`} to='/new'>NEW</Link>
+        <div className={'undecoratedLink centerAll pointer navItem'} onClick={this.props.openUpload}>UPLOAD</div>
+        <div className={`navItem centerAll ${location==="/popular"?"active":""}`}><Link className={`undecoratedLink`} to='/popular'>POPULAR</Link></div>
+        <div className={`navItem centerAll ${location==="/new"?"active":""}`}><Link className={`undecoratedLink`} to='/new'>NEW</Link></div>
         <Search/>
-        <Link className={`undecoratedLink ${location==="/profile"?"active":""}`} to='/profile'>PROFILE</Link>
-        <div>SETTINGS</div>
+        <div className={`navItem centerAll ${location==="/profile"?"active":""}`}><Link className={`undecoratedLink`} to='/profile'>PROFILE</Link></div>
+        {/* <div>SETTINGS</div> */}
       </nav>
     )
   }

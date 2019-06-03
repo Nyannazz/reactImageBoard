@@ -24,6 +24,7 @@ export default class UserPage extends Component {
         </WelcomeBanner>
         {this.state.openUpload&&<CreatePost/>}
         <section className={'postBoardProfile'}>
+          <h1>YOUR POSTS</h1>
           {this.props.children}
         </section>
       </div>

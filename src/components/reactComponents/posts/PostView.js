@@ -21,6 +21,7 @@ export default class PostView extends Component {
       postId: this.props.match.params.postId || 0,
     }
   }
+  
 
   componentDidUpdate=()=>{
     if(this.props.match.params.postId!==this.state.postId){
@@ -122,7 +123,7 @@ export default class PostView extends Component {
           
           
           <CommentForm currentPost={this.state.post.id}/>
-          <PostComments/>
+          <PostComments comments={this.state.post.comments}/>
 
         </div>     
  

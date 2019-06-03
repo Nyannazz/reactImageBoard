@@ -12,13 +12,14 @@ export default class NavBar extends Component {
     }
     
   render() {
+    const location=this.props.location.pathname;
     return (
       <nav className={'mainNavBar noSelect'}> 
         <div className={'undecoratedLink pointer'} onClick={this.props.openUpload}>UPLOAD</div>
-        <Link className={'undecoratedLink'} to='/'>POPULAR</Link>
-        <div>NEW</div>
+        <Link className={`undecoratedLink ${location==="/popular"?"active":""}`} to='/popular'>POPULAR</Link>
+        <Link className={`undecoratedLink ${location==="/new"?"active":""}`} to='/new'>NEW</Link>
         <Search/>
-        <Link className={'undecoratedLink'} to='/profile'>PROFILE</Link>
+        <Link className={`undecoratedLink ${location==="/profile"?"active":""}`} to='/profile'>PROFILE</Link>
         <div>SETTINGS</div>
       </nav>
     )

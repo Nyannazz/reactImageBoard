@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import ImageBoard from './reactComponents/ImageBoard.js'
 import UserPage from './reactComponents/user/UserPage.js'
 import NavBar from './reactComponents/NavBar.js'
@@ -31,7 +30,9 @@ export default class ComponentName extends Component {
         <BrowserRouter>
             <div className="App">
                 <header className="App-header centerAll">
-                    <NavBar openUpload={()=>this.setState({uploadOpen:!this.state.uploadOpen})}/>
+                <Route path="" render={(props)=>
+                    <NavBar openUpload={()=>this.setState({uploadOpen:!this.state.uploadOpen})} {...props}/>
+                }/>    
                 </header>
                 <main ref={this.scrollRef}>
                   {this.state.uploadOpen&&<div className={"uploadModal centerAll"}>

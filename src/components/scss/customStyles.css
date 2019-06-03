@@ -400,6 +400,11 @@ html, body {
           align-items: center;
 }
 
+.mainNavBar .active {
+  font-size: 1.1rem;
+  border-bottom: 0.2rem solid white;
+}
+
 .searchComp {
   width: 14rem;
   padding: 0.2rem 0.6rem;

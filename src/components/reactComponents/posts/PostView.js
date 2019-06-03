@@ -121,7 +121,7 @@ export default class PostView extends Component {
           <PostRating {...this.state.post}/>
           
           
-          <CommentForm></CommentForm>
+          <CommentForm currentPost={this.state.post.id}/>
           <PostComments/>
 
         </div>     

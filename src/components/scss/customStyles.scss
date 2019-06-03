@@ -35,6 +35,7 @@ html,body{
         margin: 0 auto;
     }
 }
+
 .undecoratedLink{
     text-decoration: none;
     color: white;
@@ -528,7 +529,13 @@ html,body{
     overflow: hidden;
     border: 2px solid black;
     position: relative;
+    .commentInfo{
+        text-align: center;
+        border-bottom: 1px solid white;
+        font-size: 1.4rem;
+    }
     .commentText{
+        color: white;
         height: 100%;
         width: 90%;
         margin: 0.5rem 1rem 0 1rem;

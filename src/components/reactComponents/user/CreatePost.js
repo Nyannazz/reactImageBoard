@@ -57,7 +57,7 @@ export default class CreatePost extends Component {
         ).then(response=> {
             this.setState({postCreated:"POST SUCCESFULLY CREATED"})
         })
-        .catch(function (error) {
+        .catch((error)=> {
             console.log(error);
             window.alert('failure')
         });

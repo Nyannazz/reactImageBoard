@@ -5,14 +5,17 @@ import {BoardProvider} from './imageBoardContext.js'
 import axios from 'axios'
 import PostViewModal from './posts/postViewModal.js';
 import {Route, Switch} from 'react-router-dom';
-const BASEURL='http://image-board.local/posts';
-//const BASEURL="http://192.168.178.21/image-board/public/posts"
+const BASEURL=`${process.env.REACT_APP_BE_URL}`
 
 export default class ImageBoard extends Component {
     constructor(props) {
       super(props)
       //console.log(this.props.location.search)
       //this.createRows=this.createRows.bind(this)
+      this.requestModes={
+        new: '/posts',
+        user: '/posts/user/'
+      }
       this.imageFeed={};
       this.loadingMore=false;
       this.postWidth=5;
@@ -25,7 +28,7 @@ export default class ImageBoard extends Component {
       }
     }
     componentDidMount(){
-      this.getPosts(BASEURL);
+      this.getPosts(BASEURL+this.requestModes["new"]);
       //this.props.history.push('/top/?id=23423')
     }
     getPosts=(url,unlock)=>{

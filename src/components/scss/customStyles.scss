@@ -574,3 +574,17 @@ html,body{
         color: black !important;
     }
 }
+
+.logSignForm{
+    padding: 2rem;
+    border: 1px solid $primary-light;
+    width: 100%;
+    input{
+        color: white;
+        width: 100%;
+        display: block;
+        margin: 1rem 0 0 0;
+        background-color: transparent;
+        border: 1px solid $primary-dark;
+    }
+}

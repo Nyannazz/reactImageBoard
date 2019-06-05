@@ -5,7 +5,7 @@ import PostItem from './PostItem.js';
 import CommentForm from './postView/CommentForm.js'
 import axios from 'axios';
 import {Link} from 'react-router-dom'
-const BASEURL='http://image-board.local/posts';
+const BASEURL=`${process.env.REACT_APP_BE_URL}`
 
 
 
@@ -38,7 +38,7 @@ export default class PostView extends Component {
   }
   getPost=(id)=>{
     if(id){
-      axios(`${BASEURL}/${id}`).then(
+      axios(`${BASEURL}/posts/${id}`).then(
       res=>{
         if(res.data.id || res.data.length>0){
           this.setState({

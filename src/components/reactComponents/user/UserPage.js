@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import WelcomeBanner from './userPage/WelcomeBanner.js'
 import CreatePost from './CreatePost.js'
+import SignUp from './SignUp.js';
 
 export default class UserPage extends Component {
   constructor(props) {
@@ -19,6 +20,7 @@ export default class UserPage extends Component {
   render() {
     return (
       <div id='userPage'>
+        <SignUp></SignUp>
         <WelcomeBanner>
           <button className={'submitButtonMain'} onClick={this.openUpload}>upload something</button>
         </WelcomeBanner>

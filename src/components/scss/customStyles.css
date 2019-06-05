@@ -746,4 +746,19 @@ html, body {
   background-color: white !important;
   color: black !important;
 }
+
+.logSignForm {
+  padding: 2rem;
+  border: 1px solid #e7b9ff;
+  width: 100%;
+}
+
+.logSignForm input {
+  color: white;
+  width: 100%;
+  display: block;
+  margin: 1rem 0 0 0;
+  background-color: transparent;
+  border: 1px solid #805acb;
+}
 /*# sourceMappingURL=customStyles.css.map */

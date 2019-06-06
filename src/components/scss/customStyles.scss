@@ -576,8 +576,8 @@ html,body{
 }
 
 .logSignForm{
-    padding: 2rem;
-    border: 1px solid $primary-light;
+    /* padding: 2rem; */
+    /* border: 1px solid $primary-light; */
     width: 100%;
     input{
         color: white;
@@ -586,5 +586,30 @@ html,body{
         margin: 1rem 0 0 0;
         background-color: transparent;
         border: 1px solid $primary-dark;
+    }
+}
+.logSignContainer{
+    width: 100%;
+    min-width: 24rem;
+    /* border: 1px solid $primary-light;
+    border-radius: 1rem; */
+
+    .logSignSwitch{
+        display: flex;
+        margin-bottom: 2rem;
+        div{
+            width: 50%;
+            text-align: center;
+            box-sizing: border-box;
+            border-top: 1px solid $primary-light;
+            border-right: 1px solid $primary-light;
+            border-left: 1px solid $primary-light;
+            border-radius: 1rem 1rem 0 0;
+        }
+        .inactive{
+            transform: scale(0.98);
+            border-bottom: none;
+            background-color: rgb(68, 68, 68);
+        }
     }
 }

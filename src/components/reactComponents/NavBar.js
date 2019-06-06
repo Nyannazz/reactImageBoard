@@ -19,7 +19,10 @@ export default class NavBar extends Component {
         <div className={`navItem centerAll ${location==="/popular"?"active":""}`}><Link className={`undecoratedLink`} to='/popular'>POPULAR</Link></div>
         <div className={`navItem centerAll ${location==="/new"?"active":""}`}><Link className={`undecoratedLink`} to='/new'>NEW</Link></div>
         <Search/>
-        <div className={`navItem centerAll ${location==="/profile"?"active":""}`}><Link className={`undecoratedLink`} to='/profile'>PROFILE</Link></div>
+        {this.props.loggedIn?
+          <div className={`navItem centerAll ${location==="/profile"?"active":""}`}><Link className={`undecoratedLink`} to='/profile'>PROFILE</Link></div>:
+          <div onClick={this.props.openLogSign} className={"navItem centerAll pointer"}>LOG IN</div>
+          }
         {/* <div>SETTINGS</div> */}
       </nav>
     )

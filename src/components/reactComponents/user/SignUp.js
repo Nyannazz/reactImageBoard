@@ -12,7 +12,8 @@ export default class SignUp extends Component {
              email: "",
              password: "",
              passwordRe: "",
-             signUpStatus: 0
+             signUpStatus: 0,
+
         }
     }
     signUp=(event)=>{
@@ -24,7 +25,7 @@ export default class SignUp extends Component {
             formData.append("password",this.state.password);
             axios.post(`${BASEURL}/signup`,formData).then(response=>{
                 console.log(response)
-                this.setState({singUpStatus:1})
+                this.setState({signUpStatus:1})
             }).catch(error=>{
                 window.alert("failure")
                 console.log(error)
@@ -32,15 +33,14 @@ export default class SignUp extends Component {
         }
         
     }
-    signUp=(event)=>{
+
+    logIn=(event)=>{
         event.preventDefault();
             const formData=new FormData();
-            formData.append("name",this.state.name);
             formData.append("email",this.state.email);
             formData.append("password",this.state.password);
             axios.post(`${BASEURL}/login`,formData).then(response=>{
                 console.log(response)
-                this.setState({singUpStatus:1})
             }).catch(error=>{
                 window.alert("failure")
                 console.log(error)
@@ -69,14 +69,18 @@ export default class SignUp extends Component {
         const {name,email,password,passwordRe,signUpStatus}=this.state;
         return (
             <div className={'logSignContainer'}>
+            <div className={'logSignSwitch'}>
+                <div onClick={()=>this.setState({signUpStatus:0})} className={signUpStatus===1?'inactive':""}>SIGN UP</div>
+                <div onClick={()=>this.setState({signUpStatus:1})} className={signUpStatus===0?'inactive':""}>LOG IN</div>
+            </div>
             {signUpStatus?
-            <form onSubmit={this.signUp} className={'logSignForm'}>
+            <form onSubmit={this.logIn} className={'logSignForm'}>
             <h1>LOG IN</h1>
             <input value={email} onChange={this.onChange} name='email' placeholder='email' type="email"/>
             <input value={password} onChange={this.onChange} name='password' placeholder='password' type="password"/>
             <input className={"submitButtonMain"} type="submit"/>
             </form>:
-            <form onSubmit={this.logIn} className={'logSignForm'}>
+            <form onSubmit={this.signUp} className={'logSignForm'}>
                 <h1>SIGN UP</h1>
                 <input value={name} onChange={this.onChange} name='name' placeholder='user name' type="text"/>
                 <input value={email} onChange={this.onChange} name='email' placeholder='email' type="email"/>

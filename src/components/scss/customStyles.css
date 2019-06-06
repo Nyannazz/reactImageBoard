@@ -569,6 +569,7 @@ html, body {
   border-radius: 1rem;
   border: 1px solid #e7b9ff;
   background-color: #2e3035;
+  /* width: 100%;  mobile*/
   padding: 2rem;
   position: relative;
 }
@@ -751,12 +752,14 @@ html, body {
   padding: 2rem;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  background-color: #2e3035;
   /* border: 1px solid $primary-light; */
   border-bottom: 1px solid #e7b9ff;
   border-right: 1px solid #e7b9ff;
   border-left: 1px solid #e7b9ff;
   border-radius: 0 0 1rem 1rem;
   width: 100%;
+  z-index: 4;
 }
 
 .logSignForm input {
@@ -772,6 +775,8 @@ html, body {
 .fixHeightNoBorder {
   border: none !important;
   min-height: 40rem;
+  background-color: transparent !important;
+  z-index: 4;
 }
 
 .logSignContainer {
@@ -783,9 +788,11 @@ html, body {
   display: -ms-flexbox;
   display: flex;
   /* margin-bottom: 2rem; */
+  overflow: hidden;
 }
 
 .logSignContainer .logSignSwitch div {
+  background-color: #2e3035;
   width: 50%;
   text-align: center;
   -webkit-box-sizing: border-box;
@@ -797,9 +804,76 @@ html, body {
 }
 
 .logSignContainer .logSignSwitch .inactive {
-  -webkit-transform: scaleY(0.95);
-          transform: scaleY(0.95);
-  border-bottom: 1px solid #e7b9ff;
+  -webkit-transform: scaleY(0.95) translateY(2px);
+          transform: scaleY(0.95) translateY(2px);
+  border-bottom: 2px solid #e7b9ff;
   background-color: #444444;
+}
+
+@media (max-width: 767px) {
+  #postFeedSmall {
+    display: none;
+  }
+  .navForward, .navBack {
+    display: none !important;
+  }
+  .commentCell, .commentForm {
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+  }
+  .fullScreenButton {
+    display: none;
+  }
+  .uploadComp {
+    -ms-grid-columns: 100%;
+        grid-template-columns: 100%;
+    -ms-grid-rows: (minmax(2rem, 1fr))[auto-fill];
+        grid-template-rows: repeat(auto-fill, minmax(2rem, 1fr));
+  }
+  .uploadComp .uploadForm {
+    margin-top: 2rem;
+    padding-bottom: 2rem;
+    width: 94%;
+    -ms-grid-row: 2;
+    -ms-grid-row-span: 1;
+    grid-row: 2/3;
+    grid-column: 1/-1;
+  }
+  .uploadComp .imageContainer {
+    margin-top: 1rem;
+    -ms-grid-row: 1;
+    -ms-grid-row-span: 1;
+    grid-row: 1/2;
+    grid-column: 1/-1;
+  }
+  .uploadModal {
+    background-color: #2e3035;
+    display: block;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100%;
+  }
+  .uploadModal .innerContent {
+    border-radius: 0;
+    border: none;
+    padding: 2rem 0;
+  }
+  .uploadModal .innerContent .closeButton {
+    position: fixed;
+    right: 2%;
+    top: 3.3rem;
+    height: 1rem;
+    width: 1rem;
+    font-size: 1rem;
+  }
+  .fixHeightNoBorder {
+    min-height: unset;
+  }
+  .logSignContainer {
+    margin-top: 2rem;
+  }
+  .logSignForm input {
+    min-width: unset;
+  }
 }
 /*# sourceMappingURL=customStyles.css.map */

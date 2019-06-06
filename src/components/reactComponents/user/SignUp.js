@@ -69,7 +69,7 @@ export default class SignUp extends Component {
         const {name,email,password,passwordRe,signUpStatus}=this.state;
         return (
             <div className={'logSignContainer'}>
-            <div className={'logSignSwitch'}>
+            <div className={'logSignSwitch pointer'}>
                 <div onClick={()=>this.setState({signUpStatus:0})} className={signUpStatus===1?'inactive':""}>SIGN UP</div>
                 <div onClick={()=>this.setState({signUpStatus:1})} className={signUpStatus===0?'inactive':""}>LOG IN</div>
             </div>

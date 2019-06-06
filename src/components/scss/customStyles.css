@@ -748,13 +748,20 @@ html, body {
 }
 
 .logSignForm {
-  /* padding: 2rem; */
+  padding: 2rem;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   /* border: 1px solid $primary-light; */
+  border-bottom: 1px solid #e7b9ff;
+  border-right: 1px solid #e7b9ff;
+  border-left: 1px solid #e7b9ff;
+  border-radius: 0 0 1rem 1rem;
   width: 100%;
 }
 
 .logSignForm input {
   color: white;
+  min-width: 24rem;
   width: 100%;
   display: block;
   margin: 1rem 0 0 0;
@@ -762,18 +769,20 @@ html, body {
   border: 1px solid #805acb;
 }
 
+.fixHeightNoBorder {
+  border: none !important;
+  min-height: 40rem;
+}
+
 .logSignContainer {
   width: 100%;
-  min-width: 24rem;
-  /* border: 1px solid $primary-light;
-    border-radius: 1rem; */
 }
 
 .logSignContainer .logSignSwitch {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
 }
 
 .logSignContainer .logSignSwitch div {
@@ -788,9 +797,9 @@ html, body {
 }
 
 .logSignContainer .logSignSwitch .inactive {
-  -webkit-transform: scale(0.98);
-          transform: scale(0.98);
-  border-bottom: none;
+  -webkit-transform: scaleY(0.95);
+          transform: scaleY(0.95);
+  border-bottom: 1px solid #e7b9ff;
   background-color: #444444;
 }
 /*# sourceMappingURL=customStyles.css.map */

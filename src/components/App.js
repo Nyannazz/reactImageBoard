@@ -49,7 +49,7 @@ export default class ComponentName extends Component {
                   </div>}
                   {this.state.logSignOpen&&
                   <div className={"uploadModal centerAll"}>
-                    <div className={"innerContent"}>
+                    <div className={"innerContent  fixHeightNoBorder"}>
                         <i onClick={()=>this.setState({logSignOpen: false})} className="material-icons closeButton">
                             close
                         </i>

@@ -7,6 +7,10 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import './scss/customStyles.css';
 import CreatePost from './reactComponents/user/CreatePost.js'
 import FullScreenModal from './reactComponents/FullScreenModal.js'
+import axios from 'axios';
+const BASEURL=`${process.env.REACT_APP_BE_URL}`;
+
+
 
 export default class ComponentName extends Component {
     constructor(props) {
@@ -16,10 +20,78 @@ export default class ComponentName extends Component {
           uploadOpen: false,
           zoom: false,
           logSignOpen: false,
-          loggedIn: false
+          loggedIn: false,
+
+          signUpStatus: 0,
+          name: "",
+          email: "",
+          password: "",
+          passwordRe: "",
          
       }
     }
+    onChange=(event)=>{
+        this.setState({[event.target.name]:event.target.value})
+    }
+    
+    signUp=(event)=>{
+        event.preventDefault();
+        if(this.validateState){
+            const formData=new FormData();
+            formData.append("name",this.state.name);
+            formData.append("email",this.state.email);
+            formData.append("password",this.state.password);
+            axios.post(`${BASEURL}/signup`,formData).then(response=>{
+                console.log(response)
+                this.setState({signUpStatus:1})
+            }).catch(error=>{
+                window.alert("failure")
+                console.log(error)
+            })
+        }
+        
+    }
+
+    logIn=(event)=>{
+        event.preventDefault();
+            const formData=new FormData();
+            formData.append("email",this.state.email);
+            formData.append("password",this.state.password);
+            axios.post(`${BASEURL}/login`,formData).then(response=>{
+                console.log(response)
+                this.setState({loggedIn:true, logSignOpen: false},
+                    ()=>this.createLocalStore())
+            }).catch(error=>{
+                window.alert("failure")
+                console.log(error)
+            })
+    }
+    validateState=()=>{
+        
+        const {name,email,password,passwordRe}=this.state;
+        let valid=false;
+        //matching pw length in backend
+        if(name.length>3 &&
+            email.length>4  &&
+            password.length>7 &&
+            password===passwordRe){
+                valid=true;
+            }
+        return valid;
+    }
+
+    createLocalStore=()=>{
+        localStorage.setItem("userState",JSON.stringify(this.state))
+    }
+    componentDidMount(){
+        // try recover from local storage
+        const stateStr=localStorage.getItem("userState")
+        if(stateStr){
+            const state=JSON.parse(stateStr);
+            this.setState(state)
+        }
+    }
+
     setScroll=(amount)=>{
         const offset=-80;
         const currentScroll=this.scrollRef.current.scrollTop;
@@ -53,7 +125,18 @@ export default class ComponentName extends Component {
                         <i onClick={()=>this.setState({logSignOpen: false})} className="material-icons closeButton">
                             close
                         </i>
-                        <SignUp/>
+                        <SignUp 
+                            logIn={this.logIn}
+                            signUp={this.signUp}
+                            sign={()=>this.setState({signUpStatus:0})}
+                            log={()=>this.setState({signUpStatus:1})}
+                            signUpStatus={this.state.signUpStatus}
+                            onChange={this.onChange}
+                            name={this.state.name}
+                            email={this.state.email}
+                            password={this.state.password}
+                            passwordRe={this.state.passwordRe}
+                        />
                     </div>
                   </div>}
                   

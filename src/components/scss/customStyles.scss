@@ -657,6 +657,7 @@ html,body{
             margin-top: 1rem;
             grid-row: 1/2;
             grid-column: 1/-1;
+            max-height: unset;
         }
     }
     .uploadModal{
@@ -670,9 +671,8 @@ html,body{
             border: none;
             padding: 2rem 0;
             .closeButton{
-                position: fixed;
                 right: 2%;
-                top: 3.3rem;
+                top: 2%;
                 height: 1rem;
                 width: 1rem;
                 font-size: 1rem;

@@ -20,7 +20,6 @@ export default class UserPage extends Component {
   render() {
     return (
       <div id='userPage'>
-        <SignUp></SignUp>
         <WelcomeBanner>
           <button className={'submitButtonMain'} onClick={this.openUpload}>upload something</button>
         </WelcomeBanner>

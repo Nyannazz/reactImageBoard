@@ -60,12 +60,40 @@ export default class ComponentName extends Component {
             formData.append("password",this.state.password);
             axios.post(`${BASEURL}/login`,formData,{credentials: true}).then(response=>{
                 console.log(response)
-                this.setState({loggedIn:true, logSignOpen: false,token:response.data.token},
+                this.setState({
+                    loggedIn:true, 
+                    logSignOpen: false,
+                    token:response.data.token,
+                    name: "",
+                    email: "",
+                    password: "",
+                    passwordRe: "",
+                    },
                     ()=>this.createLocalStore())
             }).catch(error=>{
                 window.alert("failure")
                 console.log(error)
             })
+    }
+    logOut=(event)=>{
+        event.preventDefault();
+        const token=this.state.token;
+        if(token){
+            /* axios.get(`${BASEURL}/logout`,
+            {headers:{"Authorization":`Bearer ${token}`}}
+            ).then(()=>{
+                this.setState({
+                    loggedIn: false,
+                    token: ""
+                })
+                localStorage.removeItem("userState");
+            }).catch(error=>console.log(error)) */
+            this.setState({
+                loggedIn: false,
+                token: ""
+            })
+            localStorage.removeItem("userState");
+        }
     }
     validateState=()=>{
         
@@ -81,7 +109,7 @@ export default class ComponentName extends Component {
         return valid;
     }
 
-    createLocalStore=(jwtToken)=>{
+    createLocalStore=()=>{
         localStorage.setItem("userState",JSON.stringify({...this.state}))
     }
     componentDidMount(){
@@ -101,16 +129,22 @@ export default class ComponentName extends Component {
     fullScreenImage=(imageSource)=>{
         this.setState({fullScreenImage:imageSource});
     }
+
+
+
     render() {
         return (
         <BrowserRouter>
             <div className="App">
                 <header className="App-header centerAll">
+
                 <Route path="" render={(props)=>
-                    <NavBar loggedIn={this.state.loggedIn} openLogSign={()=>this.setState({logSignOpen: true})} openUpload={()=>this.setState({uploadOpen:!this.state.uploadOpen})} {...props}/>
+                    <NavBar logOut={this.logOut} loggedIn={this.state.loggedIn} openLogSign={()=>this.setState({logSignOpen: true})} openUpload={()=>this.setState({uploadOpen:!this.state.uploadOpen})} {...props}/>
                 }/>    
+
                 </header>
                 <main ref={this.scrollRef}>
+                  
                   {this.state.uploadOpen&&
                   <div className={"uploadModal centerAll"}>
                     <div className={"innerContent"}>
@@ -120,6 +154,7 @@ export default class ComponentName extends Component {
                         <CreatePost/>
                     </div>
                   </div>}
+
                   {this.state.logSignOpen&&
                   <div className={"uploadModal centerAll"}>
                     <div className={"innerContent  fixHeightNoBorder"}>

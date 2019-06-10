@@ -3,7 +3,6 @@ import PostItem from './posts/PostItem.js'
 import PostView from './posts/PostView.js'
 import {BoardProvider} from './imageBoardContext.js'
 import axios from 'axios'
-import PostViewModal from './posts/postViewModal.js';
 import {Route, Switch} from 'react-router-dom';
 const BASEURL=`${process.env.REACT_APP_BE_URL}`
 

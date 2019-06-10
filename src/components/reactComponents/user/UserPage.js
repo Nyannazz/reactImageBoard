@@ -21,7 +21,9 @@ export default class UserPage extends Component {
     return (
       <div id='userPage'>
         <WelcomeBanner>
-          <button className={'submitButtonMain'} onClick={this.openUpload}>upload something</button>
+          <button className={'submitButtonMain'} onClick={this.openUpload}>
+            upload something
+          </button>
         </WelcomeBanner>
         {this.state.openUpload&&<CreatePost/>}
         <section className={'postBoardProfile'}>

@@ -3,7 +3,8 @@ import Search from './Search.js'
 import {Link} from 'react-router-dom'
 
 
-const NavBar = ({location,openLogSign,logOut,loggedIn,openUpload}) => {
+const NavBar = ({history,openLogSign,logOut,loggedIn,openUpload}) => {
+  const location=history.location.pathname;
   return (
       <nav className={'mainNavBar noSelect'}> 
         <div className={'undecoratedLink centerAll pointer navItem'} onClick={openUpload}>UPLOAD</div>

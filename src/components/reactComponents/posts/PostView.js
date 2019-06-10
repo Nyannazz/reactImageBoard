@@ -19,6 +19,7 @@ export default class PostView extends Component {
     this.state = {
       post: {},
       postId: this.props.match.params.postId || 0,
+      favorite: false
     }
   }
   
@@ -37,12 +38,16 @@ export default class PostView extends Component {
 
   }
   getPost=(id)=>{
+    console.log('called')
+    const path=this.props.token? "/logged/posts/" : "/posts/";
+    const headers=this.props.token?{headers:{"Authorization":`Bearer ${this.props.token}`}}:{};
     if(id){
-      axios(`${BASEURL}${"/logged/posts/"}${id}`,{withCredentials: true})
+      axios(`${BASEURL}${path}${id}`,headers)
       .then(res=>{
         if(res.data.id || res.data.length>0){
           this.setState({
             post:res.data[0] || res.data,
+            favorite: res.data.users_with_favorite && res.data.users_with_favorite.length? true: false, 
             postId:this.props.match.params.postId})
             console.log(res.data)
           }else{
@@ -53,6 +58,24 @@ export default class PostView extends Component {
         
       ).catch(error=>{console.log(error)
         this.props.history.push('/notfound')
+      })
+
+    }
+    
+  }
+  toggleFavorite=()=>{
+    const headers={headers:{"Authorization":`Bearer ${this.props.token}`}};
+    const id=this.state.postId;
+    if(id && headers){
+      axios(`${BASEURL}${"/favorite/"}${id}`,headers)
+      .then(()=>{
+        this.setState({
+          favorite: !this.state.favorite
+        })  
+      }
+        
+      ).catch(error=>{
+        console.log(error)
       })
 
     }
@@ -127,7 +150,12 @@ xhr.send(null);
             </Link>
           </div>}
           
-          <PostRating {...this.state.post}/>
+          <PostRating 
+            tags={this.state.post.tags}
+            upvotes={this.state.post.upvotes}
+            favorite={this.state.favorite}
+            toggleFavorite={this.toggleFavorite}
+          />
           
           
           <CommentForm currentPost={this.state.post.id}/>

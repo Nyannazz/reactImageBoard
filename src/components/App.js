@@ -27,6 +27,7 @@ export default class ComponentName extends Component {
           email: "",
           password: "",
           passwordRe: "",
+          token: ""
          
       }
     }
@@ -59,8 +60,8 @@ export default class ComponentName extends Component {
             formData.append("password",this.state.password);
             axios.post(`${BASEURL}/login`,formData,{credentials: true}).then(response=>{
                 console.log(response)
-                this.setState({loggedIn:true, logSignOpen: false},
-                    /* ()=>this.createLocalStore() */)
+                this.setState({loggedIn:true, logSignOpen: false,token:response.data.token},
+                    ()=>this.createLocalStore())
             }).catch(error=>{
                 window.alert("failure")
                 console.log(error)
@@ -80,8 +81,8 @@ export default class ComponentName extends Component {
         return valid;
     }
 
-    createLocalStore=()=>{
-        localStorage.setItem("userState",JSON.stringify(this.state))
+    createLocalStore=(jwtToken)=>{
+        localStorage.setItem("userState",JSON.stringify({...this.state}))
     }
     componentDidMount(){
         // try recover from local storage
@@ -143,10 +144,10 @@ export default class ComponentName extends Component {
                   <Switch>
                   <Route path='/profile' render={({history})=>
                   <UserPage>
-                      <ImageBoard simpleMode={true} history={history} openFull={this.fullScreenImage}/>
+                      <ImageBoard token={this.state.token} simpleMode={true} history={history} openFull={this.fullScreenImage}/>
                   </UserPage>}/>
                   
-                  <Route path='/' render={({props})=><ImageBoard openFull={this.fullScreenImage}/>}/>
+                  <Route path='/' render={({props})=><ImageBoard token={this.state.token} openFull={this.fullScreenImage}/>}/>
                   </Switch>
                 </main>
                 {this.state.fullScreenImage&&

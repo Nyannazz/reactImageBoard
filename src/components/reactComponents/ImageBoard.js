@@ -71,6 +71,7 @@ export default class ImageBoard extends Component {
         <Route path='/post/:postId' render={(props)=>    
           this.state.posts.length>0&&
             <PostView 
+              token={this.props.token}
               postId={this.state.postOpenId} 
               posts={this.state.posts}
               loadMore={this.loadMore}

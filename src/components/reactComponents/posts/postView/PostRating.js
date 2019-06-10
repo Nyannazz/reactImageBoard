@@ -1,6 +1,6 @@
 import React from 'react'
 
-const PostRating = ({views,tags,upvotes,downvotes,favorite}) => {
+const PostRating = ({/* views, */tags,upvotes,/* downvotes, */favorite,toggleFavorite}) => {
   return (
     <div className={"ratings"}>
         <section>
@@ -9,14 +9,17 @@ const PostRating = ({views,tags,upvotes,downvotes,favorite}) => {
                 add
               </i>
             </div>
-            <div className={'centerAll pointer'}>
+            <div
+              className={'centerAll pointer'}>
               <i className="material-icons">
                 remove
               </i>
             </div>
         </section>
         <p className={'ratingP'}>{upvotes | 0}</p>
-        <div className={'favoriteWrapper'}>
+        <div 
+          className={'favoriteWrapper'}
+          onClick={toggleFavorite}>
           <i className="material-icons">
             {favorite?"favorite":"favorite_border"}
           </i>  

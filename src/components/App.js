@@ -57,10 +57,10 @@ export default class ComponentName extends Component {
             const formData=new FormData();
             formData.append("email",this.state.email);
             formData.append("password",this.state.password);
-            axios.post(`${BASEURL}/login`,formData).then(response=>{
+            axios.post(`${BASEURL}/login`,formData,{credentials: true}).then(response=>{
                 console.log(response)
                 this.setState({loggedIn:true, logSignOpen: false},
-                    ()=>this.createLocalStore())
+                    /* ()=>this.createLocalStore() */)
             }).catch(error=>{
                 window.alert("failure")
                 console.log(error)

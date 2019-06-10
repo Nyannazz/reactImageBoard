@@ -38,8 +38,8 @@ export default class PostView extends Component {
   }
   getPost=(id)=>{
     if(id){
-      axios(`${BASEURL}/posts/${id}`).then(
-      res=>{
+      axios(`${BASEURL}${"/logged/posts/"}${id}`,{withCredentials: true})
+      .then(res=>{
         if(res.data.id || res.data.length>0){
           this.setState({
             post:res.data[0] || res.data,
@@ -58,6 +58,14 @@ export default class PostView extends Component {
     }
     
   }
+/*   getPost=(id)=>{
+    var xhr = new XMLHttpRequest();
+xhr.open('GET', `${BASEURL}${"/logged/posts/"}${id}`, true);
+xhr.setRequestHeader("Host", "image-board.local");
+xhr.setRequestHeader("cookie", "imageboard_session=eyJpdiI6IjI4SkRGaE1qZnNzU3hSTEtRbjN3eFE9PSIsInZhbHVlIjoiVmlLTnBYTGVCbjJWYlpjN3IrS3ZORlF0RTVuUlljVG1TU0tUbUphQzVOeUZuc1JYQUM5VGRTY0dPZTVJRFwvdDciLCJtYWMiOiI3NGM4NzVjMTY2MTkxNDdjZjQ5NDEyOTdmMGFkNThiY2NkZTg2M2M2ODg0NWUzYzE0ZWRmN2E5ZTExZmY0YzkxIn0%3D");
+xhr.withCredentials = true;
+xhr.send(null);
+  } */
   getPreview=()=>{
     let postArr=[]
     const posts=this.props.posts;

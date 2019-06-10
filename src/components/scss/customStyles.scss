@@ -265,7 +265,8 @@ html,body{
     .ratingP{
         font-size: 4rem;
         font-weight: bold; 
-        margin-right: 4rem;   
+        margin-right: 1rem; 
+        width: 10rem;  
     }
     .postTags{
         display: flex;
@@ -278,6 +279,13 @@ html,body{
             border: 1px solid $secondary;
             background-color: $secondary-light;
             font-size: 0.8rem;
+        }
+    }
+    .favoriteWrapper{
+        margin: 0 2rem 0 1rem;
+        i{
+            font-size: 3rem;
+            cursor: pointer;
         }
     }
 }

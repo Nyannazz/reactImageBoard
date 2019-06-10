@@ -20,9 +20,13 @@ const PostRating = ({/* views, */tags,upvotes,/* downvotes, */favorite,toggleFav
         <div 
           className={'favoriteWrapper'}
           onClick={toggleFavorite}>
-          <i className="material-icons">
-            {favorite?"favorite":"favorite_border"}
-          </i>  
+          {favorite?
+          <i className={`material-icons on`}>
+            favorite
+          </i>:
+          <i className={`material-icons off`}>
+            favorite_border
+          </i>}  
         </div>
         <div className={'postTags'}>
           {tags&&tags.map(tag=><p className={'tag pointer'}>{tag.name}</p>)}          

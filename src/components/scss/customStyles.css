@@ -388,6 +388,53 @@ html, body {
 .ratings .favoriteWrapper i {
   font-size: 3rem;
   cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.ratings .favoriteWrapper i:hover {
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
+}
+
+.ratings .favoriteWrapper .on {
+  -webkit-animation: 0.5s bounce ease-in-out forwards;
+          animation: 0.5s bounce ease-in-out forwards;
+  font-size: 3.4rem;
+}
+
+@-webkit-keyframes bounce {
+  0% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+  75% {
+    -webkit-transform: scale(1.5);
+            transform: scale(1.5);
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    color: #ff4081;
+  }
+}
+
+@keyframes bounce {
+  0% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+  75% {
+    -webkit-transform: scale(1.5);
+            transform: scale(1.5);
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    color: #ff4081;
+  }
 }
 
 .comments {

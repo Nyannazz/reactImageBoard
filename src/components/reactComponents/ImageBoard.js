@@ -9,11 +9,10 @@ const BASEURL=`${process.env.REACT_APP_BE_URL}`
 export default class ImageBoard extends Component {
     constructor(props) {
       super(props)
-
-      this.requestModes={
+      /* this.requestModes={
         new: {path:'/posts',pathUrl: ''},
         user: {path:'/logged/user' ,pathUrl: '/profile'}
-      }
+      } */
       this.imageFeed={};
       this.loadingMore=false;
       this.postWidth=5;
@@ -21,8 +20,9 @@ export default class ImageBoard extends Component {
          posts:[],
          postOpen: 2,
          postOpenId: 20,
-         endReached: false
-         
+         endReached: false,
+
+         currentMode: this.props.mode
       }
     }
     componentDidMount(){
@@ -35,17 +35,53 @@ export default class ImageBoard extends Component {
             token=JSON.parse(stateStr).token;
         }
       }
-      this.getPosts(BASEURL+(this.requestModes[this.props.mode].path || "/posts"),token);
+      console.log(this.props)
+      this.getPostByMode(this.props.mode, token);
     }
 
-    getPosts=(url,token)=>{
+
+    componentDidUpdate=()=>{
+      // if mode changes create new post array for the mode
+      if(this.props.mode!==this.state.currentMode){
+        this.getPostByMode(this.props.mode, this.props.token)
+        this.setState({
+          currentMode: this.props.mode
+        })
+      }
+      console.log(this.props)
+
+    }
+    getPostByMode=(mode, token)=>{
+      switch(mode){
+        case "user":
+          this.getPosts(`${BASEURL}/logged/user`,token,(res)=>{
+            //callback to create the first page of postarray
+            this.setState({posts: res.data.data} ,()=>this.loadingMore=false)
+          }); 
+          break;
+        case "tag":
+          this.searchByTag(this.props.match.params.tagname);
+          break;
+        default: 
+          this.getPosts(`${BASEURL}/posts`,token,(res)=>{
+            //callback to create the first page of postarray
+            this.setState({posts: res.data.data} ,()=>this.loadingMore=false)
+          }); 
+          break;
+      }
+    }
+
+
+
+
+    getPosts=(url,token, callback)=>{
       /* console.log(this.props) */
       const headers=token?{headers:{"Authorization":`Bearer ${token}`}}:{}
       if(url){
         this.loadingMore=true;
         axios.get(url, headers)
           .then(res=>{
-          this.setState({posts:[...this.state.posts,...res.data.data]} ,()=>this.loadingMore=false)
+          callback(res)
           console.log(res.data)
           this.imageFeed=res.data;
         }).catch(err=>{
@@ -60,33 +96,39 @@ export default class ImageBoard extends Component {
     loadMore=()=>{
       console.log(this.imageFeed.next_page_url)
       if(!this.loadingMore){
-        this.getPosts(this.imageFeed.next_page_url)
+        this.getPosts(this.imageFeed.next_page_url,this.props.token,(res)=>{
+          //callback to append the new post "page" to current post array
+          this.setState({posts:[...this.state.posts,...res.data.data]} ,()=>this.loadingMore=false)
+        })
 
       }
     }
 
     searchByTag=(tag)=>{
-      
-      const url=`${BASEURL}/posts/tag/${tag}`
-      const token=this.props.token
-     
-      const headers=token?{headers:{"Authorization":`Bearer ${token}`}}:{}
-      if(url){
-        this.loadingMore=true;
-        axios.get(url, headers)
-          .then(res=>{
-          this.setState({posts:res.data.data},
-            ()=>this.loadingMore=false)
-          console.log(res.data)
-          this.imageFeed=res.data;
-        }).catch(err=>{
-          console.log(err)
-        })
+      if(tag){
+        const url=`${BASEURL}/posts/tag/${tag}`
+        const token=this.props.token
+        console.log(this.props)
+        const headers=token?{headers:{"Authorization":`Bearer ${token}`}}:{}
+        if(url){
+          this.loadingMore=true;
+          axios.get(url, headers)
+            .then(res=>{
+            this.setState({posts:res.data.data},
+              ()=>{
+                this.loadingMore=false;
+                this.props.history.push(`/tag/${tag}`);
+              })
+            console.log(res.data)
+            this.imageFeed=res.data;
+          }).catch(err=>{
+            console.log(err)
+          })
+        }
       }
-      if(this.imageFeed.current_page===this.imageFeed.last_page && this.state.endReached===false){
-        this.setState({endReached:true})
+      else{
+        this.props.history.push("");
       }
-
     }
   
   render() {
@@ -94,7 +136,7 @@ export default class ImageBoard extends Component {
       <BoardProvider value={{state:this.state,openPost:this.openPost}}>
         <Switch>
         
-        <Route path={['/post/:postId','/profile/post/:postId']} render={(props)=>    
+        <Route path={['/post/:postId','/profile/post/:postId','/tag/post/:postId']} render={(props)=>    
           this.state.posts.length>0&&
             <PostView 
               token={this.props.token}
@@ -102,7 +144,7 @@ export default class ImageBoard extends Component {
               posts={this.state.posts}
               loadMore={this.loadMore}
               openFull={this.props.openFull}
-              pathUrl={this.requestModes[this.props.mode].pathUrl || ""}
+              pathUrl={this.props.pathUrl || ""}
               searchByTag={this.searchByTag}
               {...props}
             />
@@ -116,7 +158,7 @@ export default class ImageBoard extends Component {
                 key={index} 
                 postOpen={this.state.postOpenId} 
                 post={post}
-                pathUrl={this.requestModes[this.props.mode].pathUrl || ""}
+                pathUrl={this.props.pathUrl || ""}
               />
             )
           }

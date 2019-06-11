@@ -179,11 +179,15 @@ export default class ComponentName extends Component {
                   <Switch>
                   <Route path='/profile' render={({history})=>
                   <UserPage token={this.state.token}>
-                      <ImageBoard mode={"user"} token={this.state.token} simpleMode={true} history={history} openFull={this.fullScreenImage}/>
+                      <ImageBoard mode={"user"} pathUrl="/profile" history={history} token={this.state.token} simpleMode={true} history={history} openFull={this.fullScreenImage}/>
                   </UserPage>}/>
                   
-                  <Route path='/' render={({props})=>
-                    <ImageBoard mode={"new"} token={this.state.token} openFull={this.fullScreenImage}/>}
+                  <Route path='/tag/:tagname' render={({history,match})=>
+                    <ImageBoard mode={"tag"} pathUrl="/tag" history={history} match={match} token={this.state.token} openFull={this.fullScreenImage}/>}
+                  />
+                  
+                  <Route path='/' render={({history})=>
+                    <ImageBoard mode={"new"} pathUrl="" history={history} token={this.state.token} openFull={this.fullScreenImage}/>}
                   />
                   </Switch>
                 </main>

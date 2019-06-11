@@ -543,10 +543,30 @@ html, body {
   grid-column: 1/-1;
 }
 
-#userPage .postBoardProfile h1 {
-  font-size: 2rem;
-  /* text-align: center; */
+#userPage .postBoardProfile .profilePostWrapper {
   border-bottom: 2px solid white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-bottom: 1rem;
+  /* .toggleMyPostsView{
+            }
+            .toggleFavoritesView{
+            } */
+}
+
+#userPage .postBoardProfile .profilePostWrapper h1 {
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+}
+
+#userPage .postBoardProfile .profilePostWrapper .inactive {
+  color: lightgrey;
+  opacity: 0.4;
+  font-weight: 400;
 }
 
 .userBanner {

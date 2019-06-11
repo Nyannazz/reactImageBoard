@@ -16,8 +16,9 @@ export default class ImageBoard extends Component {
       this.imageFeed={};
       this.loadingMore=false;
       this.postWidth=5;
+      this.tagname=this.props.match?this.props.match.params.tagname : "";
       this.state = {
-         posts:[],
+         posts: [],
          postOpen: 2,
          postOpenId: 20,
          endReached: false,
@@ -42,8 +43,11 @@ export default class ImageBoard extends Component {
 
     componentDidUpdate=()=>{
       // if mode changes create new post array for the mode
-      if(this.props.mode!==this.state.currentMode){
+      if((this.props.mode!==this.state.currentMode) || (this.props.match&&(this.tagname!==this.props.match.params.tagname))){
         this.getPostByMode(this.props.mode, this.props.token)
+        if(this.props.match){
+          this.tagname=this.props.match.params.tagname;
+        }
         this.setState({
           currentMode: this.props.mode
         })
@@ -121,8 +125,13 @@ export default class ImageBoard extends Component {
               })
             console.log(res.data)
             this.imageFeed=res.data;
-          }).catch(err=>{
+          }).catch((err)=>{
             console.log(err)
+            this.setState({posts:[]},
+              ()=>{
+                this.loadingMore=false;
+                this.props.history.push(`/tag/${tag}`);
+              })
           })
         }
       }
@@ -132,11 +141,12 @@ export default class ImageBoard extends Component {
     }
   
   render() {
+    const pathUrl=this.props.pathUrl==="/tag"? `/tag/${this.tagname}` : this.props.pathUrl;
     return (
       <BoardProvider value={{state:this.state,openPost:this.openPost}}>
         <Switch>
         
-        <Route path={['/post/:postId','/profile/post/:postId','/tag/post/:postId']} render={(props)=>    
+        <Route path={['/post/:postId','/profile/post/:postId','/tag/:tagname/post/:postId']} render={(props)=>    
           this.state.posts.length>0&&
             <PostView 
               token={this.props.token}
@@ -144,7 +154,7 @@ export default class ImageBoard extends Component {
               posts={this.state.posts}
               loadMore={this.loadMore}
               openFull={this.props.openFull}
-              pathUrl={this.props.pathUrl || ""}
+              pathUrl={pathUrl || ""}
               searchByTag={this.searchByTag}
               {...props}
             />
@@ -152,13 +162,13 @@ export default class ImageBoard extends Component {
           />
           <Route path='/' render={(props)=>
           <div id='imageBoard' className={'imageGrid'}>
-          {this.state.posts.length>0&&this.state.posts.map((post, index)=>
+          {(this.state.posts && this.state.posts.length>0)&&this.state.posts.map((post, index)=>
               <PostItem 
                 index={index} 
                 key={index} 
                 postOpen={this.state.postOpenId} 
                 post={post}
-                pathUrl={this.props.pathUrl || ""}
+                pathUrl={pathUrl || ""}
               />
             )
           }

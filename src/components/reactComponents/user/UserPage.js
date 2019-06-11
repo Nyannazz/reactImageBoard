@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import WelcomeBanner from './userPage/WelcomeBanner.js'
 import CreatePost from './CreatePost.js'
-import SignUp from './SignUp.js';
+import ImageBoard from '../../reactComponents/ImageBoard.js'
 
 export default class UserPage extends Component {
   constructor(props) {
     super(props)
     this.openUpload=this.openUpload.bind(this)
     this.state = {
-       openUpload: false
+       openUpload: false,
+       mode: "user"
+
     }
   }
   
@@ -18,6 +20,7 @@ export default class UserPage extends Component {
   }
 
   render() {
+    const {history, token, fullScreenImage}=this.props;
     return (
       <div id='userPage'>
         <WelcomeBanner>
@@ -27,8 +30,22 @@ export default class UserPage extends Component {
         </WelcomeBanner>
         {this.state.openUpload&&<CreatePost token={this.props.token}/>}
         <section className={'postBoardProfile'}>
-          <h1>YOUR POSTS</h1>
+          <div className={"profilePostWrapper"}>
+            <h1 onClick={()=>this.setState({mode: "user"})} className={`toggleMyPostsView ${this.state.mode==="user"?"":"inactive"}`}>
+              YOUR POSTS
+            </h1>
+            <h1 onClick={()=>this.setState({mode: "favorites"})} className={`toggleMyPostsView ${this.state.mode==="favorites"?"":"inactive"}`}>
+              YOUR FAVORITES
+            </h1>
+          </div>
           {this.props.children}
+          <ImageBoard 
+            mode={this.state.mode} 
+            pathUrl="/profile" 
+            history={history} 
+            token={token} 
+            openFull={fullScreenImage}
+          />
         </section>
       </div>
     )

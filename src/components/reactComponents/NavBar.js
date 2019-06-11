@@ -10,7 +10,9 @@ const NavBar = ({history,openLogSign,logOut,loggedIn,openUpload}) => {
         <div className={'undecoratedLink centerAll pointer navItem'} onClick={openUpload}>UPLOAD</div>
         <div className={`navItem centerAll ${location==="/popular"?"active":""}`}><Link className={`undecoratedLink`} to='/popular'>POPULAR</Link></div>
         <div className={`navItem centerAll ${location==="/new"?"active":""}`}><Link className={`undecoratedLink`} to='/new'>NEW</Link></div>
-        <Search/>
+        
+        <Search history={history}/>
+
         {loggedIn?
           [<div className={`navItem centerAll ${location==="/profile"?"active":""}`}>
             <Link className={`undecoratedLink`} to='/profile'>

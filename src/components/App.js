@@ -139,7 +139,12 @@ export default class ComponentName extends Component {
                 <header className="App-header centerAll">
 
                 <Route path="" render={(props)=>
-                    <NavBar logOut={this.logOut} loggedIn={this.state.loggedIn} openLogSign={()=>this.setState({logSignOpen: true})} openUpload={()=>this.setState({uploadOpen:!this.state.uploadOpen})} {...props}/>
+                    <NavBar 
+                        logOut={this.logOut} loggedIn={this.state.loggedIn} 
+                        openLogSign={()=>this.setState({logSignOpen: true})} 
+                        openUpload={()=>this.setState({uploadOpen:!this.state.uploadOpen})} 
+                        {...props}
+                    />
                 }/>    
 
                 </header>
@@ -177,11 +182,15 @@ export default class ComponentName extends Component {
                   </div>}
                   
                   <Switch>
+                {this.state.loggedIn && 
                   <Route path='/profile' render={({history})=>
-                  <UserPage token={this.state.token}>
-                      <ImageBoard mode={"user"} pathUrl="/profile" history={history} token={this.state.token} simpleMode={true} history={history} openFull={this.fullScreenImage}/>
-                  </UserPage>}/>
-                  
+                    <UserPage 
+                        token={this.state.token}
+                        history={history}
+                        openFull={this.fullScreenImage}
+                    />}
+                  />
+                }  
                   <Route path='/tag/:tagname' render={({history,match})=>
                     <ImageBoard mode={"tag"} pathUrl="/tag" history={history} match={match} token={this.state.token} openFull={this.fullScreenImage}/>}
                   />

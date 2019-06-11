@@ -50,13 +50,13 @@ export default class PostView extends Component {
             postId:this.props.match.params.postId})
             /* console.log(res.data) */
           }else{
-            /* this.props.history.push('/notfound') */
+            this.props.history.push('/')
 
           }
         }
         
       ).catch(error=>{console.log(error)
-        /* this.props.history.push('/notfound') */
+          this.props.history.push('/') 
       })
 
     }

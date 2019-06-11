@@ -37,8 +37,9 @@ export default class ImageBoard extends Component {
       }
       this.getPosts(BASEURL+(this.requestModes[this.props.mode].path || "/posts"),token);
     }
+
     getPosts=(url,token)=>{
-      console.log(this.props)
+      /* console.log(this.props) */
       const headers=token?{headers:{"Authorization":`Bearer ${token}`}}:{}
       if(url){
         this.loadingMore=true;
@@ -64,7 +65,29 @@ export default class ImageBoard extends Component {
       }
     }
 
-    
+    searchByTag=(tag)=>{
+      
+      const url=`${BASEURL}/posts/tag/${tag}`
+      const token=this.props.token
+     
+      const headers=token?{headers:{"Authorization":`Bearer ${token}`}}:{}
+      if(url){
+        this.loadingMore=true;
+        axios.get(url, headers)
+          .then(res=>{
+          this.setState({posts:res.data.data},
+            ()=>this.loadingMore=false)
+          console.log(res.data)
+          this.imageFeed=res.data;
+        }).catch(err=>{
+          console.log(err)
+        })
+      }
+      if(this.imageFeed.current_page===this.imageFeed.last_page && this.state.endReached===false){
+        this.setState({endReached:true})
+      }
+
+    }
   
   render() {
     return (
@@ -80,6 +103,7 @@ export default class ImageBoard extends Component {
               loadMore={this.loadMore}
               openFull={this.props.openFull}
               pathUrl={this.requestModes[this.props.mode].pathUrl || ""}
+              searchByTag={this.searchByTag}
               {...props}
             />
           }

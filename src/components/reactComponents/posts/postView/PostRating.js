@@ -1,6 +1,6 @@
 import React from 'react'
 
-const PostRating = ({/* views, */tags,upvotes,/* downvotes, */favorite, toggleFavorite}) => {
+const PostRating = ({/* views, */tags,upvotes,/* downvotes, */favorite, toggleFavorite, searchByTag}) => {
   return (
     <div className={"ratings"}>
         <section>
@@ -17,6 +17,7 @@ const PostRating = ({/* views, */tags,upvotes,/* downvotes, */favorite, toggleFa
             </div>
         </section>
         <p className={'ratingP'}>{upvotes | 0}</p>
+        
         <div 
           className={'favoriteWrapper'}
           onClick={toggleFavorite}>
@@ -28,8 +29,11 @@ const PostRating = ({/* views, */tags,upvotes,/* downvotes, */favorite, toggleFa
             favorite_border
           </i>}  
         </div>
+        
         <div className={'postTags'}>
-          {tags&&tags.map(tag=><p className={'tag pointer'}>{tag.name}</p>)}          
+          {tags&&tags.map(tag=>
+            <p onClick={()=>searchByTag(tag.name)} className={'tag pointer'}>{tag.name}</p>
+          )}          
         </div>
         
       </div>

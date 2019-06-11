@@ -50,13 +50,13 @@ export default class PostView extends Component {
             postId:this.props.match.params.postId})
             /* console.log(res.data) */
           }else{
-            this.props.history.push('/notfound')
+            /* this.props.history.push('/notfound') */
 
           }
         }
         
       ).catch(error=>{console.log(error)
-        this.props.history.push('/notfound')
+        /* this.props.history.push('/notfound') */
       })
 
     }
@@ -109,7 +109,7 @@ export default class PostView extends Component {
 
     
   render() {
-    const {posts,openFull,pathUrl}=this.props;
+    const {posts,openFull,pathUrl,searchByTag}=this.props;
     const currentImage=this.state.post?this.state.post.resourceurl:"";
     const postPreview=this.getPreview()
     const postIndex=postPreview[1];
@@ -120,8 +120,12 @@ export default class PostView extends Component {
         <div ref={this.scrollRef} className={`postView`}>
           <section id='postFeedSmall'>
               {postPreview[0].map((post, index)=>
-                <PostItem index={index} key={index} 
-                post={post}/>
+                <PostItem 
+                  index={index} 
+                  key={index} 
+                  post={post}
+                  pathUrl={pathUrl}
+                />
                 )
               }
           </section>
@@ -149,10 +153,14 @@ export default class PostView extends Component {
             upvotes={this.state.post.upvotes}
             favorite={this.state.favorite}
             toggleFavorite={this.toggleFavorite}
+            searchByTag={searchByTag}
           />
           
           
-          <CommentForm currentPost={this.state.post.id}/>
+          <CommentForm 
+            currentPost={this.state.post.id}
+            refreshPost={()=>this.getPost(this.state.postId)}
+          />
           <PostComments comments={this.state.post.comments}/>
 
         </div>     

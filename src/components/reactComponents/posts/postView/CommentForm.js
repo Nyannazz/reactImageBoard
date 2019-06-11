@@ -33,7 +33,10 @@ export default class CommentForm extends Component {
             .then(response=>{
                 if(response.status===200){
                     this.setState({
-                        succes:"succes!"
+                        succes:"succes!",
+                        comment: ""
+                    },()=>{
+                        this.props.refreshPost()
                     })
                 }
             })

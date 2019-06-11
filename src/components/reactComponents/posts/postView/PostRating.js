@@ -1,6 +1,6 @@
 import React from 'react'
 
-const PostRating = ({/* views, */tags,upvotes,/* downvotes, */favorite,toggleFavorite}) => {
+const PostRating = ({/* views, */tags,upvotes,/* downvotes, */favorite, toggleFavorite}) => {
   return (
     <div className={"ratings"}>
         <section>

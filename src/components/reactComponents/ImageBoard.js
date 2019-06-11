@@ -9,11 +9,10 @@ const BASEURL=`${process.env.REACT_APP_BE_URL}`
 export default class ImageBoard extends Component {
     constructor(props) {
       super(props)
-      //console.log(this.props.location.search)
-      //this.createRows=this.createRows.bind(this)
+
       this.requestModes={
-        new: '/posts',
-        user: '/posts/user/'
+        new: {path:'/posts',pathUrl: ''},
+        user: {path:'/logged/user' ,pathUrl: '/profile'}
       }
       this.imageFeed={};
       this.loadingMore=false;
@@ -27,13 +26,24 @@ export default class ImageBoard extends Component {
       }
     }
     componentDidMount(){
-      this.getPosts(BASEURL+this.requestModes["new"]);
-      //this.props.history.push('/top/?id=23423')
+      //after refresh token gets lost for first render so grab it here too
+      let token=this.props.token;
+      if(!token){
+        //get token from local storage
+        const stateStr=localStorage.getItem("userState")
+        if(stateStr){
+            token=JSON.parse(stateStr).token;
+        }
+      }
+      this.getPosts(BASEURL+(this.requestModes[this.props.mode].path || "/posts"),token);
     }
-    getPosts=(url,unlock)=>{
+    getPosts=(url,token)=>{
+      console.log(this.props)
+      const headers=token?{headers:{"Authorization":`Bearer ${token}`}}:{}
       if(url){
         this.loadingMore=true;
-        axios.get(url).then(res=>{
+        axios.get(url, headers)
+          .then(res=>{
           this.setState({posts:[...this.state.posts,...res.data.data]} ,()=>this.loadingMore=false)
           console.log(res.data)
           this.imageFeed=res.data;
@@ -53,13 +63,7 @@ export default class ImageBoard extends Component {
 
       }
     }
-/*     openPost(postId){
-      if(postId>=0 && postId<this.state.posts.length){
-        this.setState({postOpenId: this.state.posts[postId].id,postOpen:postId},
-          this.props.history.push(`/post/${this.state.posts[postId].id}`))
-      }
-    } */
-    
+
     
   
   render() {
@@ -67,7 +71,7 @@ export default class ImageBoard extends Component {
       <BoardProvider value={{state:this.state,openPost:this.openPost}}>
         <Switch>
         
-        <Route path='/post/:postId' render={(props)=>    
+        <Route path={['/post/:postId','/profile/post/:postId']} render={(props)=>    
           this.state.posts.length>0&&
             <PostView 
               token={this.props.token}
@@ -75,6 +79,7 @@ export default class ImageBoard extends Component {
               posts={this.state.posts}
               loadMore={this.loadMore}
               openFull={this.props.openFull}
+              pathUrl={this.requestModes[this.props.mode].pathUrl || ""}
               {...props}
             />
           }
@@ -82,13 +87,17 @@ export default class ImageBoard extends Component {
           <Route path='/' render={(props)=>
           <div id='imageBoard' className={'imageGrid'}>
           {this.state.posts.length>0&&this.state.posts.map((post, index)=>
-              <PostItem index={index} key={index} 
-              postOpen={this.state.postOpenId} 
-              post={post}/>
+              <PostItem 
+                index={index} 
+                key={index} 
+                postOpen={this.state.postOpenId} 
+                post={post}
+                pathUrl={this.requestModes[this.props.mode].pathUrl || ""}
+              />
             )
           }
         </div>}/>
-          </Switch>
+        </Switch>
       </BoardProvider>
     )
   }

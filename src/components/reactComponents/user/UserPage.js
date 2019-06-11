@@ -25,7 +25,7 @@ export default class UserPage extends Component {
             upload something
           </button>
         </WelcomeBanner>
-        {this.state.openUpload&&<CreatePost/>}
+        {this.state.openUpload&&<CreatePost token={this.props.token}/>}
         <section className={'postBoardProfile'}>
           <h1>YOUR POSTS</h1>
           {this.props.children}

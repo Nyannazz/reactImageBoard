@@ -23,7 +23,7 @@ export default class Search extends Component {
         <input name='search' onChange={this.onChange} value={this.state.search} className='searchInput' type='text'></input>
         <input id='searchBarSubmit' className={'searchSubmit centerAll'} type='submit'/>
         <label htmlFor='searchBarSubmit'>
-          <i class="material-icons">
+          <i className="material-icons">
             youtube_searched_for
           </i>
         </label>

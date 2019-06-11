@@ -13,7 +13,7 @@ export default class PostView extends Component {
   
   constructor(props) {
     super(props)
-    console.log(this.props.match.params.postId)
+    /* console.log(this.props.match.params.postId) */
     this.scrollRef=React.createRef();
     this.img_url='https://img.pr0gramm.com/2019/05/15/159cd1cb97de3843.png'
     this.state = {
@@ -38,7 +38,6 @@ export default class PostView extends Component {
 
   }
   getPost=(id)=>{
-    console.log('called')
     const path=this.props.token? "/logged/posts/" : "/posts/";
     const headers=this.props.token?{headers:{"Authorization":`Bearer ${this.props.token}`}}:{};
     if(id){
@@ -47,9 +46,9 @@ export default class PostView extends Component {
         if(res.data.id || res.data.length>0){
           this.setState({
             post:res.data[0] || res.data,
-            favorite: res.data.users_with_favorite && res.data.users_with_favorite.length? true: false, 
+            favorite: res.data.users_with_favorite, 
             postId:this.props.match.params.postId})
-            console.log(res.data)
+            /* console.log(res.data) */
           }else{
             this.props.history.push('/notfound')
 
@@ -81,14 +80,7 @@ export default class PostView extends Component {
     }
     
   }
-/*   getPost=(id)=>{
-    var xhr = new XMLHttpRequest();
-xhr.open('GET', `${BASEURL}${"/logged/posts/"}${id}`, true);
-xhr.setRequestHeader("Host", "image-board.local");
-xhr.setRequestHeader("cookie", "imageboard_session=eyJpdiI6IjI4SkRGaE1qZnNzU3hSTEtRbjN3eFE9PSIsInZhbHVlIjoiVmlLTnBYTGVCbjJWYlpjN3IrS3ZORlF0RTVuUlljVG1TU0tUbUphQzVOeUZuc1JYQUM5VGRTY0dPZTVJRFwvdDciLCJtYWMiOiI3NGM4NzVjMTY2MTkxNDdjZjQ5NDEyOTdmMGFkNThiY2NkZTg2M2M2ODg0NWUzYzE0ZWRmN2E5ZTExZmY0YzkxIn0%3D");
-xhr.withCredentials = true;
-xhr.send(null);
-  } */
+
   getPreview=()=>{
     let postArr=[]
     const posts=this.props.posts;
@@ -117,11 +109,13 @@ xhr.send(null);
 
     
   render() {
-    const {nextPost,prevPost,posts,openFull}=this.props;
+    const {posts,openFull,pathUrl}=this.props;
     const currentImage=this.state.post?this.state.post.resourceurl:"";
     const postPreview=this.getPreview()
     const postIndex=postPreview[1];
-    console.log(postIndex)
+    const nextPost=`${pathUrl}/post/${postIndex===posts.length-1?posts[postIndex].id:posts[postIndex+1].id}`;
+    const prevPost=`${pathUrl}/post/${postIndex>=1?posts[postIndex-1].id:posts[0].id}`
+
     return (
         <div ref={this.scrollRef} className={`postView`}>
           <section id='postFeedSmall'>
@@ -138,12 +132,12 @@ xhr.send(null);
                 crop_free
               </i>
             </div>
-            <Link to={`/post/${postIndex===posts.length-1?posts[postIndex].id:posts[postIndex+1].id}`} className={'undecoratedLink postNav navForward centerAll'}>
+            <Link to={nextPost} className={'undecoratedLink postNav navForward centerAll'}>
               <i class="material-icons">
                 keyboard_arrow_right
               </i>
             </Link>
-            <Link to={`/post/${postIndex>=1?posts[postIndex-1].id:posts[0].id}`} className={'undecoratedLink postNav navBack centerAll'}>
+            <Link to={prevPost} className={'undecoratedLink postNav navBack centerAll'}>
               <i class="material-icons">
                 keyboard_arrow_left
               </i>

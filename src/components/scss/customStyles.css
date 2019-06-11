@@ -725,8 +725,13 @@ html, body {
 }
 
 .commentCell .commentRow {
-  padding: 1rem 0;
+  padding: 0 0 1rem 0;
   /* border-bottom: 1px solid green; */
+}
+
+.commentCell .commentRow .commentBy {
+  padding-bottom: 0.5rem;
+  color: #e7b9ff;
 }
 
 .commentCell .answerCell {

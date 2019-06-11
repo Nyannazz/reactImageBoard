@@ -151,7 +151,7 @@ export default class ComponentName extends Component {
                         <i onClick={()=>this.setState({uploadOpen: false})} className="material-icons closeButton">
                             close
                         </i>
-                        <CreatePost/>
+                        <CreatePost token={this.state.token}/>
                     </div>
                   </div>}
 
@@ -178,11 +178,13 @@ export default class ComponentName extends Component {
                   
                   <Switch>
                   <Route path='/profile' render={({history})=>
-                  <UserPage>
-                      <ImageBoard token={this.state.token} simpleMode={true} history={history} openFull={this.fullScreenImage}/>
+                  <UserPage token={this.state.token}>
+                      <ImageBoard mode={"user"} token={this.state.token} simpleMode={true} history={history} openFull={this.fullScreenImage}/>
                   </UserPage>}/>
                   
-                  <Route path='/' render={({props})=><ImageBoard token={this.state.token} openFull={this.fullScreenImage}/>}/>
+                  <Route path='/' render={({props})=>
+                    <ImageBoard mode={"new"} token={this.state.token} openFull={this.fullScreenImage}/>}
+                  />
                   </Switch>
                 </main>
                 {this.state.fullScreenImage&&

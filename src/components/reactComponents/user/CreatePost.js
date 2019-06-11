@@ -44,16 +44,19 @@ export default class CreatePost extends Component {
     let formData=new FormData()
     formData.append('file',this.state.file)
     formData.append('title',this.state.title)
-    formData.append('createdBy','1')
     formData.append('body',this.state.body)
     formData.append('tags',tagArrString)
-    axios.post(`${BASEURL}/posts`,
-            formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
 
-                }
-            }
+    const headers=this.props.token?
+      {headers:
+        {'Content-Type': 'multipart/form-data',
+        "Authorization":`Bearer ${this.props.token}`
+        }
+      }:{headers:{'Content-Type': 'multipart/form-data'}}
+
+    const requestMode=this.props.token? "/logged/posts" : "/posts"
+    
+    axios.post(`${BASEURL}${requestMode}`, formData, headers
         ).then(response=> {
             this.setState({postCreated:"POST SUCCESFULLY CREATED"})
         })

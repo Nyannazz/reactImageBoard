@@ -550,8 +550,12 @@ html,body{
     font-size: 1.2rem;
     margin-top: 1rem;
     .commentRow{
-        padding: 1rem 0;
+        padding: 0 0 1rem 0;
         /* border-bottom: 1px solid green; */
+        .commentBy{
+            padding-bottom: 0.5rem;
+            color: $primary-light;
+        }
     }
     .answerCell{
         margin-left: 4rem;

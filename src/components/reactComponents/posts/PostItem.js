@@ -11,9 +11,9 @@ export default class PostItem extends Component {
     }
     
   render() {
-    const{post, postOpen,index}=this.props;
+    const{post, postOpen,pathUrl}=this.props;
     return (
-        <Link to={`/post/${post.id || 0}`} className={`centerAll postItem pointer`}>
+        <Link to={`${pathUrl}/post/${post.id || 0}`} className={`centerAll postItem pointer`}>
             <img alt="" src={post.thumbnail}></img>
             {post.id===postOpen&&<div className="selectedArrow"/>}
         </Link>

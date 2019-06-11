@@ -3,7 +3,6 @@ import Comment from './Comment'
 import PropTypes from 'prop-types'
 
 const PostComments = ({comments}) => {
-    console.log(comments)
     return (
         <div className={'commentSection'}>
             <h1>COMMENTS</h1>

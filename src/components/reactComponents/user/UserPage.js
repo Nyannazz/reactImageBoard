@@ -19,6 +19,11 @@ export default class UserPage extends Component {
     this.setState({openUpload:!this.state.openUpload})
   }
 
+  goTo=()=>{
+    this.props.history.push("/profile")
+  }
+
+
   render() {
     const {history, token, fullScreenImage}=this.props;
     return (
@@ -31,10 +36,10 @@ export default class UserPage extends Component {
         {this.state.openUpload&&<CreatePost token={this.props.token}/>}
         <section className={'postBoardProfile'}>
           <div className={"profilePostWrapper"}>
-            <h1 onClick={()=>this.setState({mode: "user"})} className={`toggleMyPostsView ${this.state.mode==="user"?"":"inactive"}`}>
+            <h1 onClick={()=>this.setState({mode: "user"},()=>this.goTo())} className={`toggleMyPostsView pointer ${this.state.mode==="user"?"":"inactive"}`}>
               YOUR POSTS
             </h1>
-            <h1 onClick={()=>this.setState({mode: "favorites"})} className={`toggleMyPostsView ${this.state.mode==="favorites"?"":"inactive"}`}>
+            <h1 onClick={()=>this.setState({mode: "favorites"},()=>this.goTo())} className={`toggleMyPostsView pointer ${this.state.mode==="favorites"?"":"inactive"}`}>
               YOUR FAVORITES
             </h1>
           </div>

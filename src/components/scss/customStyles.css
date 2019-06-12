@@ -482,13 +482,38 @@ html, body {
 }
 
 .searchComp .searchInput {
-  width: 190%;
+  width: 100%;
   background-color: transparent;
   border: none;
+  /* &:-webkit-autofill{
+            background-color: transparent !important;
+
+        }
+        &:-webkit-autofill:focus{
+            background-color: transparent !important;
+        } */
+}
+
+@-webkit-keyframes autofill {
+  to {
+    background: transparent;
+  }
+}
+
+@keyframes autofill {
+  to {
+    background: transparent;
+  }
+}
+
+.searchComp .searchInput:-webkit-autofill {
+  -webkit-animation-name: autofill;
+  -webkit-animation-fill-mode: both;
 }
 
 .searchComp .searchInput:focus {
   outline: none;
+  background-color: transparent !important;
 }
 
 .searchComp .searchSubmit {

@@ -63,6 +63,12 @@ export default class ImageBoard extends Component {
             this.setState({posts: res.data.data} ,()=>this.loadingMore=false)
           }); 
           break;
+        case "favorites":
+          this.getPosts(`${BASEURL}/logged/favorites`,token,(res)=>{
+            //callback to create the first page of postarray
+            this.setState({posts: res.data.data} ,()=>this.loadingMore=false)
+          }); 
+          break;
         case "tag":
           this.searchByTag(this.props.match.params.tagname);
           break;

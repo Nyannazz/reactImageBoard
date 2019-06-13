@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PostItem from './posts/PostItem.js'
 import PostView from './posts/PostView.js'
-import {BoardProvider} from './imageBoardContext.js'
 import axios from 'axios'
 import {Route, Switch} from 'react-router-dom';
 const BASEURL=`${process.env.REACT_APP_BE_URL}`
@@ -16,6 +15,12 @@ export default class ImageBoard extends Component {
       this.imageFeed={};
       this.loadingMore=false;
       this.tagname=this.props.match?this.props.match.params.tagname : "";
+      /* this.props.history.listen((location) => {
+        this.changeModeByLocation(location);
+      }); */
+      this.allowedModes=['new','popular','tag','user','favorites'];
+      this.currentMode=this.getModeFromPath(this.allowedModes);
+
       this.state = {
          posts: [],
          postOpen: 2,
@@ -24,9 +29,23 @@ export default class ImageBoard extends Component {
          loading: true,
          error: false,
 
-         currentMode: this.props.mode
+         /* currentMode: this.props.mode */
       }
     }
+
+    getModeFromPath=(allowedModes)=>{
+      const newLocation=this.props.history.location.pathname.split('/')[1];
+      if(allowedModes.includes(newLocation)){
+        return newLocation
+      }
+      else if(allowedModes.includes(this.props.mode)){
+        return this.props.mode
+      }
+      return 'new'
+      
+    }
+
+
     componentDidMount(){
       //after refresh token gets lost for first render so grab it here too
       let token=this.props.token;
@@ -37,21 +56,38 @@ export default class ImageBoard extends Component {
             token=JSON.parse(stateStr).token;
         }
       }
-      console.log(this.props)
-      this.getPostByMode(this.props.mode, token);
+      this.getPostByMode(this.currentMode, token);
+    }
+    
+    changeModeByLocation=(location)=>{
+
+      const newLocation=location.pathname.split('/')[1];
+      console.log(newLocation)
+      if(this.allowedModes.includes(newLocation) && this.currentMode!==newLocation){
+        console.log(newLocation);
+        if(this.props.match){
+          this.tagname=this.props.match.params.tagname;
+          console.log(location)
+
+        }
+        this.currentMode=newLocation;
+        this.getPostByMode(this.currentMode, this.props.token)
+      }
     }
 
 
     componentDidUpdate=()=>{
+      const newMode=this.getModeFromPath(this.allowedModes)
       // if mode changes create new post array for the mode
-      if((this.props.mode!==this.state.currentMode) || (this.props.match&&(this.tagname!==this.props.match.params.tagname))){
-        this.getPostByMode(this.props.mode, this.props.token)
+      if((newMode!==this.currentMode) || (this.props.match&&(this.tagname!==this.props.match.params.tagname))){
+        this.getPostByMode(newMode, this.props.token)
+
         if(this.props.match){
           this.tagname=this.props.match.params.tagname;
         }
-        this.setState({
-          currentMode: this.props.mode
-        })
+        
+        this.currentMode=newMode;
+        
       }
 
     }
@@ -103,7 +139,6 @@ export default class ImageBoard extends Component {
       
     }
     loadMore=()=>{
-      console.log(this.imageFeed.next_page_url)
       if(!this.loadingMore){
         this.getPosts(this.imageFeed.next_page_url,this.props.token,(res)=>{
           //callback to append the new post "page" to current post array
@@ -117,7 +152,6 @@ export default class ImageBoard extends Component {
       if(tag){
         const url=`${BASEURL}/posts/tag/${tag}`
         const token=this.props.token
-        console.log(this.props)
         const headers=token?{headers:{"Authorization":`Bearer ${token}`}}:{}
         if(url){
           this.loadingMore=true;
@@ -128,10 +162,8 @@ export default class ImageBoard extends Component {
                 this.loadingMore=false;
                 this.props.history.push(`/tag/${tag}`);
               })
-            console.log(res.data)
             this.imageFeed=res.data;
           }).catch((err)=>{
-            console.log(err)
             this.setState({posts:[],loading: false,error: true},
               ()=>{
                 this.loadingMore=false;

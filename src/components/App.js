@@ -191,12 +191,12 @@ export default class ComponentName extends Component {
                         />}
                     />
                     }  
-                    <Route path='/tag/:tagname' render={({history,match})=>
+                    {/* <Route path='/tag/:tagname' render={({history,match})=>
                         <ImageBoard key="imageBoardTags" mode={"tag"} pathUrl="/tag" history={history} match={match} token={this.state.token} openFull={this.fullScreenImage}/>}
-                    />
+                    /> */}
                     
-                    <Route path='/' render={({history})=>
-                        <ImageBoard key="imageBoardNew" mode={"new"} pathUrl="" history={history} token={this.state.token} openFull={this.fullScreenImage}/>}
+                    <Route path={['/tag/:tagname',"/"]} render={({history, match})=>
+                        <ImageBoard key="imageBoardNew" mode={"new"} pathUrl="" history={history} match={match} token={this.state.token} openFull={this.fullScreenImage}/>}
                     />
                   </Switch>
                 </main>

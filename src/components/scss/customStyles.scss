@@ -10,6 +10,7 @@ html,body{
     display: flex;
     flex-direction: column;
     color: $textColor;
+    overflow: hidden;
     .App-header{
         background-color: $primary-dark;
         height: 3rem;

@@ -23,6 +23,7 @@ html, body {
       -ms-flex-direction: column;
           flex-direction: column;
   color: white;
+  overflow: hidden;
 }
 
 .App .App-header {

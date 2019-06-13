@@ -136,8 +136,8 @@ export default class ComponentName extends Component {
         return (
         <BrowserRouter>
             <div className="App">
+                
                 <header className="App-header centerAll">
-
                 <Route path="" render={(props)=>
                     <NavBar 
                         logOut={this.logOut} loggedIn={this.state.loggedIn} 
@@ -146,8 +146,8 @@ export default class ComponentName extends Component {
                         {...props}
                     />
                 }/>    
-
                 </header>
+                
                 <main ref={this.scrollRef}>
                   
                   {this.state.uploadOpen&&
@@ -182,22 +182,22 @@ export default class ComponentName extends Component {
                   </div>}
                   
                   <Switch>
-                {this.state.loggedIn && 
-                  <Route path='/profile' render={({history})=>
-                    <UserPage 
-                        token={this.state.token}
-                        history={history}
-                        openFull={this.fullScreenImage}
-                    />}
-                  />
-                }  
-                  <Route path='/tag/:tagname' render={({history,match})=>
-                    <ImageBoard mode={"tag"} pathUrl="/tag" history={history} match={match} token={this.state.token} openFull={this.fullScreenImage}/>}
-                  />
-                  
-                  <Route path='/' render={({history})=>
-                    <ImageBoard mode={"new"} pathUrl="" history={history} token={this.state.token} openFull={this.fullScreenImage}/>}
-                  />
+                    {this.state.loggedIn && 
+                    <Route path='/profile' render={({history})=>
+                        <UserPage 
+                            token={this.state.token}
+                            history={history}
+                            openFull={this.fullScreenImage}
+                        />}
+                    />
+                    }  
+                    <Route path='/tag/:tagname' render={({history,match})=>
+                        <ImageBoard key="imageBoardTags" mode={"tag"} pathUrl="/tag" history={history} match={match} token={this.state.token} openFull={this.fullScreenImage}/>}
+                    />
+                    
+                    <Route path='/' render={({history})=>
+                        <ImageBoard key="imageBoardNew" mode={"new"} pathUrl="" history={history} token={this.state.token} openFull={this.fullScreenImage}/>}
+                    />
                   </Switch>
                 </main>
                 {this.state.fullScreenImage&&

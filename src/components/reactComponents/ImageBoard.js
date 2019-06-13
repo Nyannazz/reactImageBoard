@@ -15,13 +15,14 @@ export default class ImageBoard extends Component {
       } */
       this.imageFeed={};
       this.loadingMore=false;
-      this.postWidth=5;
       this.tagname=this.props.match?this.props.match.params.tagname : "";
       this.state = {
          posts: [],
          postOpen: 2,
          postOpenId: 20,
          endReached: false,
+         loading: true,
+         error: false,
 
          currentMode: this.props.mode
       }
@@ -52,7 +53,6 @@ export default class ImageBoard extends Component {
           currentMode: this.props.mode
         })
       }
-      console.log(this.props)
 
     }
     getPostByMode=(mode, token)=>{
@@ -60,13 +60,13 @@ export default class ImageBoard extends Component {
         case "user":
           this.getPosts(`${BASEURL}/logged/user`,token,(res)=>{
             //callback to create the first page of postarray
-            this.setState({posts: res.data.data} ,()=>this.loadingMore=false)
+            this.setState({posts: res.data.data,loading: false, error: false} ,()=>this.loadingMore=false)
           }); 
           break;
         case "favorites":
           this.getPosts(`${BASEURL}/logged/favorites`,token,(res)=>{
             //callback to create the first page of postarray
-            this.setState({posts: res.data.data} ,()=>this.loadingMore=false)
+            this.setState({posts: res.data.data,loading: false, error: false} ,()=>this.loadingMore=false)
           }); 
           break;
         case "tag":
@@ -75,7 +75,7 @@ export default class ImageBoard extends Component {
         default: 
           this.getPosts(`${BASEURL}/posts`,token,(res)=>{
             //callback to create the first page of postarray
-            this.setState({posts: res.data.data} ,()=>this.loadingMore=false)
+            this.setState({posts: res.data.data, loading: false, error: false} ,()=>this.loadingMore=false)
           }); 
           break;
       }
@@ -85,17 +85,16 @@ export default class ImageBoard extends Component {
 
 
     getPosts=(url,token, callback)=>{
-      /* console.log(this.props) */
       const headers=token?{headers:{"Authorization":`Bearer ${token}`}}:{}
       if(url){
         this.loadingMore=true;
+        this.setState({loading: true})
         axios.get(url, headers)
           .then(res=>{
           callback(res)
-          console.log(res.data)
           this.imageFeed=res.data;
         }).catch(err=>{
-          console.log(err)
+          this.setState({error: true,loading: false})
         })
       }
       if(this.imageFeed.current_page===this.imageFeed.last_page && this.state.endReached===false){
@@ -124,7 +123,7 @@ export default class ImageBoard extends Component {
           this.loadingMore=true;
           axios.get(url, headers)
             .then(res=>{
-            this.setState({posts:res.data.data},
+            this.setState({posts:res.data.data, loading: false, error: false},
               ()=>{
                 this.loadingMore=false;
                 this.props.history.push(`/tag/${tag}`);
@@ -133,7 +132,7 @@ export default class ImageBoard extends Component {
             this.imageFeed=res.data;
           }).catch((err)=>{
             console.log(err)
-            this.setState({posts:[]},
+            this.setState({posts:[],loading: false,error: true},
               ()=>{
                 this.loadingMore=false;
                 this.props.history.push(`/tag/${tag}`);
@@ -148,39 +147,44 @@ export default class ImageBoard extends Component {
   
   render() {
     const pathUrl=this.props.pathUrl==="/tag"? `/tag/${this.tagname}` : this.props.pathUrl;
+
+    if(this.state.loading){
+      /* <Loading/> */
+      return <div className="innerContent">loading</div>;
+    }
+    if(this.state.error){
+      return <div className="innerContent">error!</div>
+    }
+
     return (
-      <BoardProvider value={{state:this.state,openPost:this.openPost}}>
         <Switch>
-        
-        <Route path={['/post/:postId','/profile/post/:postId','/tag/:tagname/post/:postId']} render={(props)=>    
-          this.state.posts.length>0&&
-            <PostView 
-              token={this.props.token}
-              postId={this.state.postOpenId} 
-              posts={this.state.posts}
-              loadMore={this.loadMore}
-              openFull={this.props.openFull}
-              pathUrl={pathUrl || ""}
-              searchByTag={this.searchByTag}
-              {...props}
-            />
-          }
-          />
-          <Route path='/' render={(props)=>
-          <div id='imageBoard' className={'imageGrid'}>
-          {(this.state.posts && this.state.posts.length>0)&&this.state.posts.map((post, index)=>
-              <PostItem 
-                index={index} 
-                key={index} 
-                postOpen={this.state.postOpenId} 
-                post={post}
+          <Route path={['/post/:postId','/profile/post/:postId','/tag/:tagname/post/:postId']} render={(props)=>    
+            this.state.posts.length>0&&
+              <PostView 
+                token={this.props.token}
+                postId={this.state.postOpenId} 
+                posts={this.state.posts}
+                loadMore={this.loadMore}
+                openFull={this.props.openFull}
                 pathUrl={pathUrl || ""}
-              />
-            )
-          }
-        </div>}/>
+                searchByTag={this.searchByTag}
+                {...props}
+              />}
+          />
+          <Route path='/' render={()=>
+            <div id='imageBoard' className={'imageGrid'}>
+              {(this.state.posts && this.state.posts.length>0)&&this.state.posts.map((post, index)=>
+                <PostItem 
+                  index={index} 
+                  key={"postItem"+index} 
+                  postOpen={this.state.postOpenId} 
+                  post={post}
+                  pathUrl={pathUrl || ""}
+                />)
+              }
+            </div>}
+          />
         </Switch>
-      </BoardProvider>
     )
   }
 }

@@ -14,12 +14,12 @@ const NavBar = ({history,openLogSign,logOut,loggedIn,openUpload}) => {
         <Search history={history}/>
 
         {loggedIn?
-          [<div className={`navItem centerAll ${location==="/profile"?"active":""}`}>
+          [<div key='navProfileButton' className={`navItem centerAll ${location==="/profile"?"active":""}`}>
             <Link className={`undecoratedLink`} to='/profile'>
               PROFILE
             </Link>
           </div>,
-          <div onClick={logOut} className={`navItem centerAll logOutButton`}>
+          <div key='navLogOutButton' onClick={logOut} className={`navItem centerAll logOutButton`}>
             LOG OUT
           </div>]:
           <div onClick={openLogSign} className={"navItem centerAll pointer"}>LOG IN</div>

@@ -14,10 +14,23 @@ export default class ImageBoard extends Component {
       }
     }
 
+    componentDidMount(){
+      this.getInitialPosts();
+    }
+
+    getInitialPosts=()=>{
+      console.log(this.props.posts)
+      if(this.props.match && this.props.match.params.tagname){
+        this.props.getPosts(this.props.match.params.tagname);
+      }
+      else{
+        this.props.getPosts();
+      }
+    }
     
   
   render() {
-    const pathUrl=this.props.pathUrl==="/tag"? `/tag/${this.tagname}` : this.props.pathUrl;
+    const pathUrl=this.props.pathUrl==="/tag"? `/tag/${this.props.match.params.tagname}` : this.props.pathUrl;
 
     if(this.props.loading){
       /* <Loading/> */
@@ -35,7 +48,7 @@ export default class ImageBoard extends Component {
                 token={this.props.token}
                 postId={this.state.postOpenId} 
                 posts={this.props.posts}
-                loadMore={this.loadMore}
+                loadMore={this.props.loadMore}
                 openFull={this.props.openFull}
                 pathUrl={pathUrl || ""}
                 searchByTag={this.props.searchByTag}

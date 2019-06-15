@@ -19,12 +19,10 @@ export default class ComponentName extends Component {
 
       this.imageFeed={};
       this.loadingMore=false;
-      this.tagname=this.props.match?this.props.match.params.tagname : "";
+      /* this.tagname=this.props.match?this.props.match.params.tagname : ""; */
       /* this.props.history.listen((location) => {
         this.changeModeByLocation(location);
       }); */
-      this.allowedModes=['new','popular','tag','user','favorites'];
-      this.currentMode=this.getModeFromPath(this.allowedModes);
 
       this.state = {
           uploadOpen: false,
@@ -42,6 +40,7 @@ export default class ComponentName extends Component {
 
           //image board state
           posts: [],
+          postsTag: [],
           postOpen: 2,
           postOpenId: 20,
           endReached: false,
@@ -185,7 +184,7 @@ export default class ComponentName extends Component {
       }
   
   
-      componentDidUpdate=()=>{
+/*       componentDidUpdate=()=>{
         const newMode=this.getModeFromPath(this.allowedModes)
         // if mode changes create new post array for the mode
         if((newMode!==this.currentMode) || (this.props.match&&(this.tagname!==this.props.match.params.tagname))){
@@ -199,7 +198,7 @@ export default class ComponentName extends Component {
           
         }
   
-      }
+      } */
   /*     getPostByMode=(mode, token)=>{
         switch(mode){
           case "user":
@@ -231,10 +230,33 @@ export default class ComponentName extends Component {
             this.getPosts(`${BASEURL}/logged/user`,token,(res)=>{
                 //callback to create the first page of postarray
                 this.setState({posts: res.data.data,loading: false, error: false} ,()=>this.loadingMore=false)
-              }); 
+              })
         }
-        
       }
+
+      getFavoritePosts=()=>{
+        const token=this.state.token;
+        if(token){
+          this.getPosts(`${BASEURL}/logged/favorites`,token,(res)=>{
+            //callback to create the first page of postarray
+            this.setState({posts: res.data.data,loading: false, error: false} ,()=>this.loadingMore=false)
+          })
+        }
+      }
+
+      getNewPosts=()=>{
+        console.log('get new posts')
+        const token=this.state.token;
+        this.getPosts(`${BASEURL}/posts`,token,(res)=>{
+          //callback to create the first page of postarray
+          this.setState({posts: res.data.data, loading: false, error: false} ,()=>this.loadingMore=false)
+        })
+      }
+
+/*       getPostsByTag=(tagName)=>{
+        this.searchByTag(tagName);
+
+      } */
   
   
   
@@ -256,42 +278,44 @@ export default class ComponentName extends Component {
         }
         
       }
-      loadMore=()=>{
-        if(!this.loadingMore){
+      loadMore=(saveTo)=>{
+        const target=saveTo || 'posts';
+        console.log(this.state)
+        if(!this.loadingMore && this.state[target]){
           this.getPosts(this.imageFeed.next_page_url,this.props.token,(res)=>{
             //callback to append the new post "page" to current post array
-            this.setState({posts:[...this.state.posts,...res.data.data]} ,()=>this.loadingMore=false)
+            this.setState({[target]:[...this.state[target],...res.data.data]} ,()=>this.loadingMore=false)
           })
-  
         }
       }
   
       searchByTag=(tag)=>{
+        console.log(tag)
+        const token=this.state.token;
         if(tag){
           const url=`${BASEURL}/posts/tag/${tag}`
-          const token=this.props.token
           const headers=token?{headers:{"Authorization":`Bearer ${token}`}}:{}
           if(url){
             this.loadingMore=true;
             axios.get(url, headers)
               .then(res=>{
-              this.setState({posts:res.data.data, loading: false, error: false},
+              this.setState({postsTag:res.data.data, loading: false, error: false},
                 ()=>{
                   this.loadingMore=false;
-                  this.props.history.push(`/tag/${tag}`);
+                  /* this.props.history.push(`/tag/${tag}`); */
                 })
               this.imageFeed=res.data;
             }).catch((err)=>{
-              this.setState({posts:[],loading: false,error: true},
+              this.setState({postsTag:[],loading: false,error: true},
                 ()=>{
                   this.loadingMore=false;
-                  this.props.history.push(`/tag/${tag}`);
+                  /* this.props.history.push(`/tag/${tag}`); */
                 })
             })
           }
         }
         else{
-          this.props.history.push("");
+          /* this.props.history.push(""); */
         }
       }
 
@@ -358,8 +382,13 @@ export default class ComponentName extends Component {
                         <ImageBoard key="imageBoardTags" mode={"tag"} pathUrl="/tag" history={history} match={match} token={this.state.token} openFull={this.fullScreenImage}/>}
                     /> */}
                     
+                    
+                    <Route path={"/tag/:tagname"} render={({history, match})=>
+                        <ImageBoard loadMore={()=>this.loadMore('postsTag')} key='boardTag' posts={this.state.postsTag} getPosts={this.searchByTag} pathUrl="/tag" history={history} match={match} token={this.state.token} openFull={this.fullScreenImage}/>}
+                    />
+
                     <Route path={"/"} render={({history, match})=>
-                        <ImageBoard key="imageBoardNew" mode={"new"} pathUrl="" history={history} match={match} token={this.state.token} openFull={this.fullScreenImage}/>}
+                        <ImageBoard loadMore={()=>this.loadMore('posts')} key='boardNew' posts={this.state.posts} getPosts={this.getNewPosts} pathUrl="" history={history} token={this.state.token} openFull={this.fullScreenImage}/>}
                     />
                   </Switch>
                 </main>

@@ -1,211 +1,50 @@
 import React, { Component } from 'react'
 import PostItem from './posts/PostItem.js'
 import PostView from './posts/PostView.js'
-import axios from 'axios'
 import {Route, Switch} from 'react-router-dom';
-const BASEURL=`${process.env.REACT_APP_BE_URL}`
 
 export default class ImageBoard extends Component {
     constructor(props) {
       super(props)
-      /* this.requestModes={
-        new: {path:'/posts',pathUrl: ''},
-        user: {path:'/logged/user' ,pathUrl: '/profile'}
-      } */
-      this.imageFeed={};
-      this.loadingMore=false;
-      this.tagname=this.props.match?this.props.match.params.tagname : "";
-      /* this.props.history.listen((location) => {
-        this.changeModeByLocation(location);
-      }); */
-      this.allowedModes=['new','popular','tag','user','favorites'];
-      this.currentMode=this.getModeFromPath(this.allowedModes);
 
       this.state = {
-         posts: [],
          postOpen: 2,
          postOpenId: 20,
-         endReached: false,
-         loading: true,
-         error: false,
 
-         /* currentMode: this.props.mode */
       }
     }
 
-    getModeFromPath=(allowedModes)=>{
-      const newLocation=this.props.history.location.pathname.split('/')[1];
-      if(allowedModes.includes(newLocation)){
-        return newLocation
-      }
-      else if(allowedModes.includes(this.props.mode)){
-        return this.props.mode
-      }
-      return 'new'
-      
-    }
-
-
-    componentDidMount(){
-      //after refresh token gets lost for first render so grab it here too
-      let token=this.props.token;
-      if(!token){
-        //get token from local storage
-        const stateStr=localStorage.getItem("userState")
-        if(stateStr){
-            token=JSON.parse(stateStr).token;
-        }
-      }
-      this.getPostByMode(this.currentMode, token);
-    }
     
-    changeModeByLocation=(location)=>{
-
-      const newLocation=location.pathname.split('/')[1];
-      console.log(newLocation)
-      if(this.allowedModes.includes(newLocation) && this.currentMode!==newLocation){
-        console.log(newLocation);
-        if(this.props.match){
-          this.tagname=this.props.match.params.tagname;
-          console.log(location)
-
-        }
-        this.currentMode=newLocation;
-        this.getPostByMode(this.currentMode, this.props.token)
-      }
-    }
-
-
-    componentDidUpdate=()=>{
-      const newMode=this.getModeFromPath(this.allowedModes)
-      // if mode changes create new post array for the mode
-      if((newMode!==this.currentMode) || (this.props.match&&(this.tagname!==this.props.match.params.tagname))){
-        this.getPostByMode(newMode, this.props.token)
-
-        if(this.props.match){
-          this.tagname=this.props.match.params.tagname;
-        }
-        
-        this.currentMode=newMode;
-        
-      }
-
-    }
-    getPostByMode=(mode, token)=>{
-      switch(mode){
-        case "user":
-          this.getPosts(`${BASEURL}/logged/user`,token,(res)=>{
-            //callback to create the first page of postarray
-            this.setState({posts: res.data.data,loading: false, error: false} ,()=>this.loadingMore=false)
-          }); 
-          break;
-        case "favorites":
-          this.getPosts(`${BASEURL}/logged/favorites`,token,(res)=>{
-            //callback to create the first page of postarray
-            this.setState({posts: res.data.data,loading: false, error: false} ,()=>this.loadingMore=false)
-          }); 
-          break;
-        case "tag":
-          this.searchByTag(this.props.match.params.tagname);
-          break;
-        default: 
-          this.getPosts(`${BASEURL}/posts`,token,(res)=>{
-            //callback to create the first page of postarray
-            this.setState({posts: res.data.data, loading: false, error: false} ,()=>this.loadingMore=false)
-          }); 
-          break;
-      }
-    }
-
-
-
-
-    getPosts=(url,token, callback)=>{
-      const headers=token?{headers:{"Authorization":`Bearer ${token}`}}:{}
-      if(url){
-        this.loadingMore=true;
-        this.setState({loading: true})
-        axios.get(url, headers)
-          .then(res=>{
-          callback(res)
-          this.imageFeed=res.data;
-        }).catch(err=>{
-          this.setState({error: true,loading: false})
-        })
-      }
-      if(this.imageFeed.current_page===this.imageFeed.last_page && this.state.endReached===false){
-        this.setState({endReached:true})
-      }
-      
-    }
-    loadMore=()=>{
-      if(!this.loadingMore){
-        this.getPosts(this.imageFeed.next_page_url,this.props.token,(res)=>{
-          //callback to append the new post "page" to current post array
-          this.setState({posts:[...this.state.posts,...res.data.data]} ,()=>this.loadingMore=false)
-        })
-
-      }
-    }
-
-    searchByTag=(tag)=>{
-      if(tag){
-        const url=`${BASEURL}/posts/tag/${tag}`
-        const token=this.props.token
-        const headers=token?{headers:{"Authorization":`Bearer ${token}`}}:{}
-        if(url){
-          this.loadingMore=true;
-          axios.get(url, headers)
-            .then(res=>{
-            this.setState({posts:res.data.data, loading: false, error: false},
-              ()=>{
-                this.loadingMore=false;
-                this.props.history.push(`/tag/${tag}`);
-              })
-            this.imageFeed=res.data;
-          }).catch((err)=>{
-            this.setState({posts:[],loading: false,error: true},
-              ()=>{
-                this.loadingMore=false;
-                this.props.history.push(`/tag/${tag}`);
-              })
-          })
-        }
-      }
-      else{
-        this.props.history.push("");
-      }
-    }
   
   render() {
     const pathUrl=this.props.pathUrl==="/tag"? `/tag/${this.tagname}` : this.props.pathUrl;
 
-    if(this.state.loading){
+    if(this.props.loading){
       /* <Loading/> */
       return <div className="innerContent">loading</div>;
     }
-    if(this.state.error){
+    if(this.props.error){
       return <div className="innerContent">error!</div>
     }
 
     return (
         <Switch>
           <Route path={['/post/:postId','/profile/post/:postId','/tag/:tagname/post/:postId']} render={(props)=>    
-            this.state.posts.length>0&&
+            this.props.posts.length>0&&
               <PostView 
                 token={this.props.token}
                 postId={this.state.postOpenId} 
-                posts={this.state.posts}
+                posts={this.props.posts}
                 loadMore={this.loadMore}
                 openFull={this.props.openFull}
                 pathUrl={pathUrl || ""}
-                searchByTag={this.searchByTag}
+                searchByTag={this.props.searchByTag}
                 {...props}
               />}
           />
           <Route path='/' render={()=>
             <div id='imageBoard' className={'imageGrid'}>
-              {(this.state.posts && this.state.posts.length>0)&&this.state.posts.map((post, index)=>
+              {(this.props.posts && this.props.posts.length>0)&&this.props.posts.map((post, index)=>
                 <PostItem 
                   index={index} 
                   key={"postItem"+index} 

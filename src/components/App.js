@@ -40,7 +40,7 @@ export default class ComponentName extends Component {
 
           //image board state
           posts: [],
-          postsTag: [],
+          postsSearch: [],
           postOpen: 2,
           postOpenId: 20,
           endReached: false,
@@ -182,48 +182,7 @@ export default class ComponentName extends Component {
           this.getPostByMode(this.currentMode, this.props.token)
         }
       }
-  
-  
-/*       componentDidUpdate=()=>{
-        const newMode=this.getModeFromPath(this.allowedModes)
-        // if mode changes create new post array for the mode
-        if((newMode!==this.currentMode) || (this.props.match&&(this.tagname!==this.props.match.params.tagname))){
-          this.getPostByMode(newMode, this.props.token)
-  
-          if(this.props.match){
-            this.tagname=this.props.match.params.tagname;
-          }
-          
-          this.currentMode=newMode;
-          
-        }
-  
-      } */
-  /*     getPostByMode=(mode, token)=>{
-        switch(mode){
-          case "user":
-            this.getPosts(`${BASEURL}/logged/user`,token,(res)=>{
-              //callback to create the first page of postarray
-              this.setState({posts: res.data.data,loading: false, error: false} ,()=>this.loadingMore=false)
-            }); 
-            break;
-          case "favorites":
-            this.getPosts(`${BASEURL}/logged/favorites`,token,(res)=>{
-              //callback to create the first page of postarray
-              this.setState({posts: res.data.data,loading: false, error: false} ,()=>this.loadingMore=false)
-            }); 
-            break;
-          case "tag":
-            this.searchByTag(this.props.match.params.tagname);
-            break;
-          default: 
-            this.getPosts(`${BASEURL}/posts`,token,(res)=>{
-              //callback to create the first page of postarray
-              this.setState({posts: res.data.data, loading: false, error: false} ,()=>this.loadingMore=false)
-            }); 
-            break;
-        }
-      } */
+
       getUserPosts=()=>{
         const token=this.state.token;
         if(token){
@@ -245,12 +204,19 @@ export default class ComponentName extends Component {
       }
 
       getNewPosts=()=>{
-        console.log('get new posts')
         const token=this.state.token;
         this.getPosts(`${BASEURL}/posts`,token,(res)=>{
           //callback to create the first page of postarray
           this.setState({posts: res.data.data, loading: false, error: false} ,()=>this.loadingMore=false)
         })
+      }
+
+      searchByTag=(tagName)=>{
+        this.searchPosts(`${BASEURL}/posts/search/`,tagName)
+      }
+
+      searchByString=(searchString)=>{
+        this.searchPosts(`${BASEURL}/posts/search/`,searchString)
       }
 
 /*       getPostsByTag=(tagName)=>{
@@ -289,24 +255,24 @@ export default class ComponentName extends Component {
         }
       }
   
-      searchByTag=(tag)=>{
-        console.log(tag)
+      searchPosts=(url, search)=>{
+        console.log(search)
         const token=this.state.token;
-        if(tag){
-          const url=`${BASEURL}/posts/tag/${tag}`
+        if(search){
+          const searchUrl=`${url}${search}`
           const headers=token?{headers:{"Authorization":`Bearer ${token}`}}:{}
-          if(url){
+          if(searchUrl){
             this.loadingMore=true;
-            axios.get(url, headers)
+            axios.get(searchUrl, headers)
               .then(res=>{
-              this.setState({postsTag:res.data.data, loading: false, error: false},
+              this.setState({postsSearch:res.data.data, loading: false, error: false},
                 ()=>{
                   this.loadingMore=false;
                   /* this.props.history.push(`/tag/${tag}`); */
                 })
               this.imageFeed=res.data;
             }).catch((err)=>{
-              this.setState({postsTag:[],loading: false,error: true},
+              this.setState({postsSearch:[],loading: false,error: true},
                 ()=>{
                   this.loadingMore=false;
                   /* this.props.history.push(`/tag/${tag}`); */
@@ -383,11 +349,15 @@ export default class ComponentName extends Component {
                     /> */}
                     
                     
-                    <Route path={"/tag/:tagname"} render={({history, match})=>
-                        <ImageBoard loadMore={()=>this.loadMore('postsTag')} key='boardTag' posts={this.state.postsTag} getPosts={this.searchByTag} pathUrl="/tag" history={history} match={match} token={this.state.token} openFull={this.fullScreenImage}/>}
+                    <Route path={"/tag/:search"} render={({history, match})=>
+                        <ImageBoard loadMore={()=>this.loadMore('postsSearch')} key='boardTag' posts={this.state.postsSearch} getPosts={this.searchByTag} pathUrl="/tag" history={history} match={match} token={this.state.token} openFull={this.fullScreenImage}/>}
                     />
 
-                    <Route path={"/"} render={({history, match})=>
+                    <Route path={"/search/:search"} render={({history, match})=>
+                        <ImageBoard loadMore={()=>this.loadMore('postsSearch')} key='boardSearch' posts={this.state.postsSearch} getPosts={this.searchByString} pathUrl="/search" history={history} match={match} token={this.state.token} openFull={this.fullScreenImage}/>}
+                    />
+
+                    <Route path={"/"} render={({history})=>
                         <ImageBoard loadMore={()=>this.loadMore('posts')} key='boardNew' posts={this.state.posts} getPosts={this.getNewPosts} pathUrl="" history={history} token={this.state.token} openFull={this.fullScreenImage}/>}
                     />
                   </Switch>

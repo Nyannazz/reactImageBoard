@@ -109,7 +109,7 @@ export default class PostView extends Component {
 
     
   render() {
-    const {posts,openFull,pathUrl,searchByTag}=this.props;
+    const {posts,openFull,pathUrl,searchByTag, history}=this.props;
     const currentImage=this.state.post?this.state.post.resourceurl:"";
     const postPreview=this.getPreview()
     const postIndex=postPreview[1];
@@ -153,7 +153,8 @@ export default class PostView extends Component {
             upvotes={this.state.post.upvotes}
             favorite={this.state.favorite}
             toggleFavorite={this.toggleFavorite}
-            searchByTag={searchByTag}
+            /* searchByTag={searchByTag} */
+            history={history}
           />
           
           

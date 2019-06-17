@@ -2,12 +2,12 @@ import React from 'react'
 import Comment from './Comment'
 import PropTypes from 'prop-types'
 
-const PostComments = ({comments}) => {
+const PostComments = ({comments, postId}) => {
     return (
         <div className={'commentSection'}>
             <h1>COMMENTS</h1>
-            {comments.map(comment=>
-                <Comment comment={comment}/>    
+            {comments.map((comment, index)=>
+                <Comment key={`comments${postId}${index}`} comment={comment}/>    
             )}
             
         </div>

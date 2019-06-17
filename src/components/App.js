@@ -185,25 +185,26 @@ export default class ComponentName extends Component {
         }
       }
 
-      getUserPosts=()=>{
+      getUserPosts=(type)=>{
+        const currentType=(type==='user' || type ==='favorites')?type : 'user';
         const token=this.state.token;
         if(token){
-            this.getPosts(`${BASEURL}/logged/user`,token,(res)=>{
+            this.getPosts(`${BASEURL}/logged/${currentType}`,token,(res)=>{
                 //callback to create the first page of postarray
-                this.setState({posts: res.data.data,loading: false, error: false} ,()=>this.loadingMore=false)
+                this.setState({postsUserFavorite: res.data.data,loading: false, error: false} ,()=>this.loadingMore=false)
               })
         }
       }
 
-      getFavoritePosts=()=>{
+      /* getFavoritePosts=()=>{
         const token=this.state.token;
         if(token){
           this.getPosts(`${BASEURL}/logged/favorites`,token,(res)=>{
             //callback to create the first page of postarray
-            this.setState({posts: res.data.data,loading: false, error: false} ,()=>this.loadingMore=false)
+            this.setState({postsUserFavorite: res.data.data,loading: false, error: false} ,()=>this.loadingMore=false)
           })
         }
-      }
+      } */
 
       getNewPosts=()=>{
         if(!this.mainBoardLoaded){
@@ -262,7 +263,7 @@ export default class ComponentName extends Component {
       }
   
       searchPosts=(url, search)=>{
-        console.log(search)
+        /* console.log(search) */
         const token=this.state.token;
         if(search){
           const searchUrl=`${url}${search}`
@@ -349,7 +350,6 @@ export default class ComponentName extends Component {
                             openFull={this.fullScreenImage}
                             loadMore={()=>this.loadMore('postsUserFavorite')} 
                             posts={this.state.postsUserFavorite} 
-                            getFavoritePosts={this.getFavoritePosts} 
                             getUserPosts={this.getUserPosts} 
                         />}
                     />
@@ -404,7 +404,7 @@ export default class ComponentName extends Component {
                     <img 
                         onClick={()=>this.setState({zoom:!this.state.zoom})} 
                         alt='' 
-                        class="fullScreenImage" 
+                        className="fullScreenImage" 
                         src={this.state.fullScreenImage}
                         style={this.state.zoom?{objectFit:"cover"}:{objectFit:"contain",height: "99.6%"}}
                     />

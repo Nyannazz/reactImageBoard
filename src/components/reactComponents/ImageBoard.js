@@ -8,6 +8,7 @@ export default class ImageBoard extends Component {
       super(props)
       this.getInitialPosts();
       this.lastSearch="";
+      this.lastMode="";
       this.state = {
          postOpen: 2,
          postOpenId: 20,
@@ -17,25 +18,38 @@ export default class ImageBoard extends Component {
 
 
     getInitialPosts=()=>{
-      console.log(this.props.posts)
       if(this.props.match && this.props.match.params.search){
         this.lastSearch=this.props.match.params.search;
         this.props.getPosts(this.props.match.params.search);
+        
       }
-      else{
+      else if(this.props.mode){
+        console.log(this.props.mode)
+        this.props.getPosts(this.props.mode);
+        this.lastMode=this.props.mode;
+      }else{
         this.props.getPosts();
       }
     }
     componentDidUpdate(){
       this.refreshSearch();
+      this.refreshMode();
     }
     
     refreshSearch=()=>{
       if((this.props.match && this.props.match.params.search)&&
-      (this.lastSearch!==this.props.match.params.lastSearch)){
+      (this.lastSearch!==this.props.match.params.search)){
 
         this.lastSearch=this.props.match.params.search;
         this.props.getPosts(this.props.match.params.search);
+      }
+    }
+
+    refreshMode(){
+      if(this.props.mode && (this.props.mode!==this.lastMode)){
+        this.lastMode=this.props.mode;
+        this.props.getPosts(this.props.mode);
+        console.log(this.props.mode)
       }
     }
     

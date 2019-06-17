@@ -109,7 +109,7 @@ export default class PostView extends Component {
 
     
   render() {
-    const {posts,openFull,pathUrl,searchByTag, history}=this.props;
+    const {posts,openFull,pathUrl,searchByTag, history,token}=this.props;
     const currentImage=this.state.post?this.state.post.resourceurl:"";
     const postPreview=this.getPreview()
     const postIndex=postPreview[1];
@@ -122,7 +122,7 @@ export default class PostView extends Component {
               {postPreview[0].map((post, index)=>
                 <PostItem 
                   index={index} 
-                  key={index} 
+                  key={`preview${post.id}${index}`} 
                   post={post}
                   pathUrl={pathUrl}
                 />
@@ -137,12 +137,12 @@ export default class PostView extends Component {
               </i>
             </div>
             <Link to={nextPost} className={'undecoratedLink postNav navForward centerAll'}>
-              <i class="material-icons">
+              <i className="material-icons">
                 keyboard_arrow_right
               </i>
             </Link>
             <Link to={prevPost} className={'undecoratedLink postNav navBack centerAll'}>
-              <i class="material-icons">
+              <i className="material-icons">
                 keyboard_arrow_left
               </i>
             </Link>
@@ -150,6 +150,8 @@ export default class PostView extends Component {
           
           <PostRating 
             tags={this.state.post.tags}
+            token={token}
+            postId={this.state.postId}
             upvotes={this.state.post.upvotes}
             favorite={this.state.favorite}
             toggleFavorite={this.toggleFavorite}
@@ -162,7 +164,10 @@ export default class PostView extends Component {
             currentPost={this.state.post.id}
             refreshPost={()=>this.getPost(this.state.postId)}
           />
-          <PostComments comments={this.state.post.comments}/>
+          <PostComments 
+            comments={this.state.post.comments}
+            postId={this.state.postId}
+          />
 
         </div>     
  

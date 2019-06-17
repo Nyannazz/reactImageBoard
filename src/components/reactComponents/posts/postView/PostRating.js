@@ -1,6 +1,6 @@
 import React from 'react'
 
-const PostRating = ({history,/* views, */tags, upvotes,/* downvotes, */favorite, toggleFavorite, searchByTag}) => {
+const PostRating = ({postId, token, history,/* views, */tags, upvotes,/* downvotes, */favorite, toggleFavorite, searchByTag}) => {
   return (
     <div className={"ratings"}>
         <section>
@@ -18,21 +18,23 @@ const PostRating = ({history,/* views, */tags, upvotes,/* downvotes, */favorite,
         </section>
         <p className={'ratingP'}>{upvotes | 0}</p>
         
-        <div 
-          className={'favoriteWrapper'}
-          onClick={toggleFavorite}>
-          {favorite?
-          <i className={`material-icons on`}>
-            favorite
-          </i>:
-          <i className={`material-icons off`}>
-            favorite_border
-          </i>}  
-        </div>
+        {token&&
+          <div 
+            className={'favoriteWrapper'}
+            onClick={toggleFavorite}>
+            {favorite?
+            <i className={`material-icons on`}>
+              favorite
+            </i>:
+            <i className={`material-icons off`}>
+              favorite_border
+            </i>}  
+          </div>
+        }
         
         <div className={'postTags'}>
-          {tags&&tags.map(tag=>
-            <p onClick={()=>history.push(`/tag/${tag.name}`)} className={'tag pointer'}>{tag.name}</p>
+          {tags&&tags.map((tag, index)=>
+            <p key={`tags${postId}${index}`} onClick={()=>history.push(`/tag/${tag.name}`)} className={'tag pointer'}>{tag.name}</p>
           )}          
         </div>
         

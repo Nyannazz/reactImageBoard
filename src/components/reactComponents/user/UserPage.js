@@ -25,7 +25,7 @@ export default class UserPage extends Component {
 
 
   render() {
-    const {history, token, fullScreenImage}=this.props;
+    const {history, token, openFull,loadMore,posts,getFavoritePosts,getUserPosts}=this.props;
     return (
       <div id='userPage'>
         <WelcomeBanner>
@@ -49,7 +49,11 @@ export default class UserPage extends Component {
             pathUrl="/profile" 
             history={history} 
             token={token} 
-            openFull={fullScreenImage}
+            openFull={openFull}
+            loadMore={loadMore} 
+            posts={posts} 
+            getFavoritePosts={getFavoritePosts} 
+            getUserPosts={getUserPosts} 
           />
         </section>
       </div>

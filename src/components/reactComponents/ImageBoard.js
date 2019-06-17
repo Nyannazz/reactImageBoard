@@ -15,9 +15,6 @@ export default class ImageBoard extends Component {
       }
     }
 
-    /* componentDidMount(){
-      this.getInitialPosts();
-    } */
 
     getInitialPosts=()=>{
       console.log(this.props.posts)

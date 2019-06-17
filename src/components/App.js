@@ -41,6 +41,8 @@ export default class ComponentName extends Component {
           //image board state
           posts: [],
           postsSearch: [],
+          postsUserFavorite: [],
+
           postOpen: 2,
           postOpenId: 20,
           endReached: false,
@@ -204,11 +206,19 @@ export default class ComponentName extends Component {
       }
 
       getNewPosts=()=>{
-        const token=this.state.token;
-        this.getPosts(`${BASEURL}/posts`,token,(res)=>{
-          //callback to create the first page of postarray
-          this.setState({posts: res.data.data, loading: false, error: false} ,()=>this.loadingMore=false)
-        })
+        if(!this.mainBoardLoaded){
+          const token=this.state.token;
+          this.getPosts(`${BASEURL}/posts`,token,(res)=>{
+            //callback to create the first page of postarray
+            this.setState({
+              posts: res.data.data, 
+              loading: false, error: false},()=>{
+                this.loadingMore=false
+                this.mainBoardLoaded=true
+            })
+          })
+        }
+        
       }
 
       searchByTag=(tagName)=>{
@@ -219,10 +229,6 @@ export default class ComponentName extends Component {
         this.searchPosts(`${BASEURL}/posts/search/`,searchString)
       }
 
-/*       getPostsByTag=(tagName)=>{
-        this.searchByTag(tagName);
-
-      } */
   
   
   
@@ -341,6 +347,10 @@ export default class ComponentName extends Component {
                             token={this.state.token}
                             history={history}
                             openFull={this.fullScreenImage}
+                            loadMore={()=>this.loadMore('postsUserFavorite')} 
+                            posts={this.state.postsUserFavorite} 
+                            getFavoritePosts={this.getFavoritePosts} 
+                            getUserPosts={this.getUserPosts} 
                         />}
                     />
                     }  
@@ -350,15 +360,42 @@ export default class ComponentName extends Component {
                     
                     
                     <Route path={"/tag/:search"} render={({history, match})=>
-                        <ImageBoard loadMore={()=>this.loadMore('postsSearch')} key='boardTag' posts={this.state.postsSearch} getPosts={this.searchByTag} pathUrl="/tag" history={history} match={match} token={this.state.token} openFull={this.fullScreenImage}/>}
+                        <ImageBoard 
+                          loadMore={()=>this.loadMore('postsSearch')} 
+                          key='boardTag' 
+                          posts={this.state.postsSearch} 
+                          getPosts={this.searchByTag} 
+                          pathUrl="/tag" 
+                          history={history} 
+                          match={match} 
+                          token={this.state.token} 
+                          openFull={this.fullScreenImage}/>}
                     />
 
                     <Route path={"/search/:search"} render={({history, match})=>
-                        <ImageBoard loadMore={()=>this.loadMore('postsSearch')} key='boardSearch' posts={this.state.postsSearch} getPosts={this.searchByString} pathUrl="/search" history={history} match={match} token={this.state.token} openFull={this.fullScreenImage}/>}
+                        <ImageBoard 
+                          loadMore={()=>this.loadMore('postsSearch')} 
+                          key='boardSearch' 
+                          posts={this.state.postsSearch} 
+                          getPosts={this.searchByString} 
+                          pathUrl="/search" 
+                          history={history} 
+                          match={match} token={this.state.token} 
+                          openFull={this.fullScreenImage}
+                        />}
                     />
 
                     <Route path={"/"} render={({history})=>
-                        <ImageBoard loadMore={()=>this.loadMore('posts')} key='boardNew' posts={this.state.posts} getPosts={this.getNewPosts} pathUrl="" history={history} token={this.state.token} openFull={this.fullScreenImage}/>}
+                        <ImageBoard 
+                          loadMore={()=>this.loadMore('posts')} 
+                          key='boardNew' 
+                          posts={this.state.posts} 
+                          getPosts={this.getNewPosts} pathUrl="" 
+                          history={history} 
+                          token={this.state.token} 
+                          openFull={this.fullScreenImage}
+                        />
+                      }
                     />
                   </Switch>
                 </main>

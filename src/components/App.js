@@ -99,22 +99,23 @@ export default class ComponentName extends Component {
         event.preventDefault();
         const token=this.state.token;
         if(token){
-            /* axios.get(`${BASEURL}/logout`,
-            {headers:{"Authorization":`Bearer ${token}`}}
-            ).then(()=>{
-                this.setState({
-                    loggedIn: false,
-                    token: ""
-                })
-                localStorage.removeItem("userState");
-            }).catch(error=>console.log(error)) */
-            this.setState({
-                loggedIn: false,
-                token: ""
-            })
-            localStorage.removeItem("userState");
+          this.setState({
+            loggedIn: false,
+            token: ""
+          })
+          localStorage.removeItem("userState");
         }
     }
+
+    loggedOutByServer=()=>{
+      this.setState({
+        loggedIn: false,
+        token: "",
+      })
+      alert('you have been logged out')
+      localStorage.removeItem("userState");
+    }
+
     validateState=()=>{
         
         const {name,email,password,passwordRe}=this.state;
@@ -154,7 +155,7 @@ export default class ComponentName extends Component {
 
 
     // get data for image board
-    getModeFromPath=(allowedModes)=>{
+ /*    getModeFromPath=(allowedModes)=>{
         const newLocation=this.props.history.location.pathname.split('/')[1];
         if(allowedModes.includes(newLocation)){
           return newLocation
@@ -164,12 +165,12 @@ export default class ComponentName extends Component {
         }
         return 'new'
         
-      }
+      } */
   
   
       
       
-      changeModeByLocation=(location)=>{
+/*       changeModeByLocation=(location)=>{
   
         const newLocation=location.pathname.split('/')[1];
         console.log(newLocation)
@@ -183,7 +184,7 @@ export default class ComponentName extends Component {
           this.currentMode=newLocation;
           this.getPostByMode(this.currentMode, this.props.token)
         }
-      }
+      } */
 
       getUserPosts=(type)=>{
         const currentType=(type==='user' || type ==='favorites')?type : 'user';
@@ -242,7 +243,10 @@ export default class ComponentName extends Component {
             .then(res=>{
             callback(res)
             this.imageFeed=res.data;
-          }).catch(err=>{
+          }).catch(error=>{
+            if(error.response.status===403){
+              this.loggedOutByServer();
+            }
             this.setState({error: true,loading: false})
           })
         }
@@ -278,7 +282,7 @@ export default class ComponentName extends Component {
                   /* this.props.history.push(`/tag/${tag}`); */
                 })
               this.imageFeed=res.data;
-            }).catch((err)=>{
+            }).catch((error)=>{
               this.setState({postsSearch:[],loading: false,error: true},
                 ()=>{
                   this.loadingMore=false;
@@ -350,7 +354,8 @@ export default class ComponentName extends Component {
                             openFull={this.fullScreenImage}
                             loadMore={()=>this.loadMore('postsUserFavorite')} 
                             posts={this.state.postsUserFavorite} 
-                            getUserPosts={this.getUserPosts} 
+                            getUserPosts={this.getUserPosts}
+                            loggedOutByServer={this.loggedOutByServer} 
                         />}
                     />
                     }  
@@ -368,8 +373,10 @@ export default class ComponentName extends Component {
                           pathUrl="/tag" 
                           history={history} 
                           match={match} 
-                          token={this.state.token} 
-                          openFull={this.fullScreenImage}/>}
+                          token={this.state.token}
+                          openFull={this.fullScreenImage}
+                          loggedOutByServer={this.loggedOutByServer} 
+                        />}
                     />
 
                     <Route path={"/search/:search"} render={({history, match})=>
@@ -382,6 +389,7 @@ export default class ComponentName extends Component {
                           history={history} 
                           match={match} token={this.state.token} 
                           openFull={this.fullScreenImage}
+                          loggedOutByServer={this.loggedOutByServer}
                         />}
                     />
 
@@ -394,6 +402,7 @@ export default class ComponentName extends Component {
                           history={history} 
                           token={this.state.token} 
                           openFull={this.fullScreenImage}
+                          loggedOutByServer={this.loggedOutByServer}
                         />
                       }
                     />

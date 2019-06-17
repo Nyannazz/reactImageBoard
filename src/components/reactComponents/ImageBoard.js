@@ -76,6 +76,7 @@ export default class ImageBoard extends Component {
                 loadMore={this.props.loadMore}
                 openFull={this.props.openFull}
                 pathUrl={pathUrl || ""}
+                loggedOutByServer={this.props.loggedOutByServer}
                 /* searchByTag={this.props.getPosts} */
                 {...props}
               />}

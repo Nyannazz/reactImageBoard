@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-const BASEURL='http://image-board.local/comments';
+const BASEURL=`${process.env.REACT_APP_BE_URL}`;
 
 
 export default class CommentForm extends Component {

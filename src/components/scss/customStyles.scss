@@ -10,10 +10,13 @@ html,body{
     display: flex;
     flex-direction: column;
     color: $textColor;
+    overflow: hidden;
     .App-header{
         background-color: $primary-dark;
         height: 3rem;
         width: 100%;
+        z-index: 2;
+
     }
     main{
         /* background-color: #fff; */
@@ -33,6 +36,7 @@ html,body{
         margin: 0 auto;
     }
 }
+
 .undecoratedLink{
     text-decoration: none;
     color: white;
@@ -40,32 +44,26 @@ html,body{
 .pointer{
     cursor: pointer;
 }
+.noSelect{
+    user-select: none;
+}
 
-/* #imageBoard{
-    height: 100%;
+#imageBoard{
     width: 100%;
-    max-width: 90rem;
+    max-width:  $containerWidth;
     margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(auto-fill,minmax(15rem, 1fr));
-    grid-auto-flow: row;
-    grid-auto-rows: repeat(auto-fill,minmax(15rem, 1fr));
-    grid-gap: 0.1rem;
+    grid-gap: 0.2rem;
+}
 
-    div{
-        background-color: white;
-        height: 15rem;
-        align-self: center;
-    }
-} */
-
-#imageBoard{
+/* #imageBoard{
     width: 100%;
     max-width: $containerWidth;
     margin: 0 auto;
     
-}
-.imageGrid{
+} */
+/* .imageGrid{
     display: flex;
     flex-wrap: wrap;
     margin: 0 auto;
@@ -78,10 +76,10 @@ html,body{
         padding: 0.1rem;
     }
 }
-
+ */
 .postItem{
-    max-height: 8rem;
-    width: 16rem;
+    /* max-height: 9rem;
+    width: 16rem; */
     align-self: center;
     /* margin: 0.1rem; */
     overflow: hidden;
@@ -108,12 +106,90 @@ html,body{
     
 }
 
+#postFeedSmall{
+    overflow: hidden;
+    display: grid;
+    //height: 12rem;
+    //grid-auto-flow: column;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
 
+#postViewModal{
+    position: absolute;
+    top: 3rem;
+    left: 0;
+    height: calc(100% - 3rem);
+    width: 100%;
+    overflow: auto;
+    background-color: $bgColor;
+    
+}
+.fullScreenModal{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    background-color: $bgColor;
+    z-index: 4;
+
+    .closeButton{
+        position: fixed !important;
+        top: 2rem;
+        right: 2rem;
+    }
+}
+@keyframes comeFromTop{
+    0%{
+        transform: translateY(-10rem);
+    }
+    100%{
+        transform: translateY(0);
+    }
+
+}
+@keyframes fadeOut{
+    0%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+        display: none;
+    }
+
+}
+.shortInfo{
+    position: fixed;
+    width: 100%;
+    top: 1rem;
+    animation: comeFromTop 1s,fadeOut 2s forwards ease-in 2s;
+
+    p{
+      padding: 2rem;
+      border-radius: 1rem;
+      border: 1px solid $primary-light;
+      background-color: $bgColor;  
+    }
+}
+
+
+.fullScreenImage{
+    margin: 0 auto;
+    padding: 0;
+    width: 100%;
+}
+.innerContent{
+    max-width: $containerWidth;
+    margin: 0 auto;
+}
 
 .postView{
     width: 100%;
     margin: 0 auto;
     position: relative;
+    padding-bottom: 4rem;
+    max-width: $containerWidth;
     img{
         max-width: 100%;
         max-height: 100vh;
@@ -123,27 +199,42 @@ html,body{
     p{
         margin: 0;
     }
-    .postNav{
-        position: absolute;
-        top: 35vh;
-        font-size: 4rem;
-        cursor: pointer;
+    .imageWrapper{
         user-select: none;
-        i{
-            font-size: 6rem;
-            color: rgba(200,200,200,0.6);
-
+        position: relative;
+        .fullScreenButton{
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            i{
+                font-size: 3rem;
+            }
             &:hover{
-                color: rgba(255, 255, 255, 1);
-
+                transform: scale(1.2);
+            }
+        }
+        .postNav{
+            position: absolute;
+            top: calc(50% - 3rem);
+            cursor: pointer;
+            user-select: none;
+            i{
+                font-size: 6rem;
+                color: rgba(200,200,200,0.6);
+    
+                &:hover{
+                    color: rgba(255, 255, 255, 1);
+    
+                }
             }
         }
     }
+    
     .navForward{
-        right: 0;
+        right: -6rem;
     }
     .navBack{
-        left: 0;
+        left: -6rem;
     }
     
 }
@@ -151,22 +242,32 @@ html,body{
     min-height: 2rem;
     display: flex;
     align-items: center;
+    margin: 0.5rem 0;
     section{
         display: flex;
         width: 4rem;
         flex-direction: column;
         justify-content: space-around;
         align-content: center;
-        font-size: 3rem;
+        font-size: 2rem;
         padding: 0.5rem;
-        p{
+        div{
             text-align: center;
+            border-radius: 50%;
+            border: 1px solid $primary-light;
+            margin: 0.2rem;
+            width: 2rem;
+            height: 2rem;
+            &:hover{
+                background-color: $primary-dark;
+            }
         }
     }
     .ratingP{
         font-size: 4rem;
-        width: 12rem;
-        font-weight: bold;    
+        font-weight: bold; 
+        margin-right: 1rem; 
+        width: 10rem;  
     }
     .postTags{
         display: flex;
@@ -181,9 +282,41 @@ html,body{
             font-size: 0.8rem;
         }
     }
+    .favoriteWrapper{
+        width: 4rem;
+        margin: 0 1rem 0 1rem;
+        
+        i{
+            font-size: 3rem;
+            cursor: pointer;
+            user-select: none;
+            &:hover{
+                transform: scale(1.2);
+            }
+        }
+        .on{
+            animation: 0.5s bounce ease-in-out forwards;
+            font-size: 3.4rem;
+
+        }
+    }
 }
+@keyframes bounce{
+    0%{
+        transform: scale(1);
+    }
+    75%{
+        transform: scale(1.5);
+
+    }
+    100%{
+        transform: scale(1);
+        color: $secondary;
+    }
+}
+
+
 .comments{
-    max-height: 100vh;
     display: flex;
     align-items: center;
 }
@@ -194,8 +327,20 @@ html,body{
 .mainNavBar{
     max-width: $containerWidth;
     width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
+    .navItem{
+        height: 100%;
+        box-sizing: border-box;
+        padding: 0 0.8rem;
+    }
+    .active{
+        //font-weight: bold;
+        font-size: 1.1rem;
+        border-bottom: 0.3rem solid white;
+    }
+    
 }
 
 
@@ -210,13 +355,32 @@ html,body{
     border:1px solid transparent;
     
     .searchInput{
-        width: 190%;
+        width: 100%;
         background-color: transparent;
         border: none;
-        &:focus{
-             outline: none;
+        @keyframes autofill {
+            to {
+                background: transparent;
+            }
         }
+        
+        &:-webkit-autofill {
+            -webkit-animation-name: autofill;
+            -webkit-animation-fill-mode: both;
+        }
+        &:focus{
+            outline: none;
+            background-color: transparent !important;
+        }
+        /* &:-webkit-autofill{
+            background-color: transparent !important;
+
+        }
+        &:-webkit-autofill:focus{
+            background-color: transparent !important;
+        } */
     }
+    
     
     .searchSubmit{
         //display: none;
@@ -253,8 +417,34 @@ html,body{
     grid-template-rows: repeat(6,1fr);
     
     .postBoardProfile{
+        margin-top: 8rem;
         grid-column: 1/-1;
+        
+        .profilePostWrapper{
+            border-bottom: 2px solid white;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            h1{
+                font-size: 2rem;
+                margin-bottom: 0.8rem;
+                
+            }
+            /* .toggleMyPostsView{
+            }
+            .toggleFavoritesView{
+            } */
+            .inactive{
+                color: lightgrey;
+                opacity: 0.4;
+                font-weight: 400;
+            }
+        }
+        
     }
+}
+.logOutButton{
+    
 }
 .userBanner{
     grid-column: 1/-1;
@@ -274,35 +464,92 @@ html,body{
         }
     }
 }
+
+@keyframes slideInFromTop{
+    0%{
+        transform: translateY(-100vh) scale(0);
+
+    }
+    100%{
+        transform: translateY(0) scale(1);
+    }
+}
+.closeButton{
+    cursor: pointer;
+    background-color: $primary-dark;
+    padding: 0.6rem;
+    border-radius: 50%;
+    font-size: 2.2rem;
+    position: absolute;
+    border: 1px solid $primary-light;
+    &:hover{
+        font-weight: bold;
+        transform: scale(1.4)
+    }
+}
+.uploadModal{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    .innerContent{
+        animation: slideInFromTop 1s ease-in-out;
+        max-width: 84rem !important;
+        border-radius: 1rem;
+        border: 1px solid $primary-light;
+        background-color: $bgColor;
+        /* width: 100%;  mobile*/
+        padding: 2rem;
+        position: relative;
+    }
+    .closeButton{
+        
+        right: -1.4rem;
+        top: -1.4rem;
+        
+    }
+}
+
 .uploadComp{
     grid-column: 1/-1;
     display: grid;
     padding-bottom: 3rem;
     grid-template-columns: repeat(8,1fr);
+    .postSucces{
+        height: 10rem;
+        font-size: 1.4rem;
+    }
     .uploadForm{
-        width: 100%;
+        width: 90%;
         /* background-color: $secondary-light; */
         grid-column: 1/4;
         min-height: 14rem;
+        align-self: center;
 
         input, textarea{
             color: white;
-            width: 90%;
+            width: 100%;
             display: block;
-            margin: 1rem auto 0 auto;
+            margin: 1rem 0 0 0;
             background-color: transparent;
             border: 1px solid $primary-dark;
         }
         textarea{
             min-height: 12rem;
+            padding: 0;
         }
   
         .dragAndDrop{
-            width: 90%;
-            margin: 0 auto;
+            width: 100%;
+            margin: 0;
             height: 10rem;
             border: 1px solid $primary-dark;
             border-radius: 1.4rem;
+            p{
+                margin: 1rem;
+                text-align: center;
+                
+            }
         }
     }
     .imageContainer{
@@ -332,11 +579,20 @@ html,body{
 
 
 .commentCell{
-    height: 10rem;
+    //height: 10rem;
     width: 100%;
+    border: 1px solid $primary-light;
+    border-radius: 0.4rem;
+    padding: 0 2rem;
+    font-size: 1.2rem;
+    margin-top: 1rem;
     .commentRow{
-        padding: 1rem 0;
-        border-bottom: 1px solid green;
+        padding: 0 0 1rem 0;
+        /* border-bottom: 1px solid green; */
+        .commentBy{
+            padding-bottom: 0.5rem;
+            color: $primary-light;
+        }
     }
     .answerCell{
         margin-left: 4rem;
@@ -344,6 +600,7 @@ html,body{
 }
 
 .commentForm{
+    margin-top: 3rem;
     width: 100%;
     max-width: 50rem;
     height: 10rem;
@@ -352,8 +609,15 @@ html,body{
     overflow: hidden;
     border: 2px solid black;
     position: relative;
+    .commentInfo{
+        text-align: center;
+        border-bottom: 1px solid white;
+        font-size: 1.4rem;
+    }
     .commentText{
+        color: white;
         height: 100%;
+        width: 90%;
         margin: 0.5rem 1rem 0 1rem;
         background-color: transparent;
         border: none;
@@ -389,3 +653,119 @@ html,body{
         color: black !important;
     }
 }
+
+.logSignForm{
+    padding: 2rem;
+    box-sizing: border-box;
+    background-color: $bgColor;
+    /* border: 1px solid $primary-light; */
+    border-bottom: 1px solid $primary-light;
+    border-right: 1px solid $primary-light;
+    border-left: 1px solid $primary-light;
+    border-radius: 0 0 1rem 1rem;
+    width: 100%;
+    z-index: 4;
+
+    input{
+        color: white;
+        min-width: 24rem; // change for mobile
+        width: 100%;
+        display: block;
+        margin: 1rem 0 0 0;
+        background-color: transparent;
+        border: 1px solid $primary-dark;
+    }
+}
+.fixHeightNoBorder{
+    border: none !important;
+    min-height: 40rem; // change for mobile
+    background-color: transparent !important;
+    z-index: 4;
+}
+.logSignContainer{
+    width: 100%;
+    
+    .logSignSwitch{
+        display: flex;
+        /* margin-bottom: 2rem; */
+        overflow: hidden;
+        div{
+            background-color: $bgColor;
+            width: 50%;
+            text-align: center;
+            box-sizing: border-box;
+            border-top: 1px solid $primary-light;
+            border-right: 1px solid $primary-light;
+            border-left: 1px solid $primary-light;
+            border-radius: 1rem 1rem 0 0;
+        }
+        .inactive{
+            transform: scaleY(0.95) translateY(2px);
+            border-bottom: 2px solid $primary-light;
+            background-color: rgb(68, 68, 68);
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    #postFeedSmall{
+        display: none;
+    }
+  
+    .navForward, .navBack{
+        display: none !important;
+    }
+    .commentCell,.commentForm{
+        box-sizing: border-box;
+    }
+    .fullScreenButton{
+        display: none;
+    }
+    .uploadComp{
+        grid-template-columns: 100%;
+        grid-template-rows: repeat(auto-fill,minmax(2rem, 1fr));
+        .uploadForm{
+            margin-top: 2rem;
+            padding-bottom: 2rem;
+            width: 94%;
+            grid-row: 2/3;
+            grid-column: 1/-1;
+        }
+        .imageContainer{
+            margin-top: 1rem;
+            grid-row: 1/2;
+            grid-column: 1/-1;
+            max-height: unset;
+        }
+    }
+    .uploadModal{
+        background-color: $bgColor;
+        display: block;
+        overflow-x: hidden;
+        overflow-y: auto;
+        height: 100%;
+        .innerContent{
+            border-radius: 0;
+            border: none;
+            padding: 2rem 0;
+            .closeButton{
+                right: 2%;
+                top: 2%;
+                height: 1rem;
+                width: 1rem;
+                font-size: 1rem;
+            }
+        }
+    }
+    .fixHeightNoBorder{
+        min-height: unset;
+    }
+    .logSignContainer{
+        margin-top: 2rem;
+    }
+    .logSignForm{
+        input{
+            min-width: unset;
+        }
+    }
+  }

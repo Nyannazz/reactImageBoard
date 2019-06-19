@@ -1,110 +1,100 @@
 import React, { Component } from 'react'
 import PostItem from './posts/PostItem.js'
-import PostRow from './posts/PostRow.js'
 import PostView from './posts/PostView.js'
-import {BoardProvider} from './imageBoardContext.js'
-import {AppConsumer} from '../AppContext.js'
-import axios from 'axios'
-
+import {Route, Switch} from 'react-router-dom';
 
 export default class ImageBoard extends Component {
     constructor(props) {
       super(props)
-      //console.log(this.props.location.search)
-      //this.createRows=this.createRows.bind(this)
-      this.openPost=this.openPost.bind(this)
-      this.createPostGrid=this.createPostGrid.bind(this)
-      this.postWidth=5;
+      this.getInitialPosts();
+      this.lastSearch="";
+      this.lastMode="";
       this.state = {
-         posts:[],
-         postOpen: 1
-      }
-    }
-    componentDidMount(){
-      axios.get('http://image-board.local/posts').then(res=>{
-        this.setState({posts:res.data}/* ,()=>console.log(this.state.posts) */)
-      }).catch(err=>{
-        console.log(err)
-      })
-      //this.props.history.push('/top/?id=23423')
-    }
-    openPost(postId){
-      if(postId<=this.state.posts.length){
-        this.setState({postOpen: postId})
-      }else{
+         postOpen: 2,
+         postOpenId: 20,
 
       }
     }
-    /* createRows(rowLen){
-      this.rows=[]
-      this.postRowCount=0;
-      for(let i=0;i<this.state.posts.length;i++){
-        if(i%rowLen===0){
-          let index=i;
-          this.rows.push(
-            <PostRow 
-              scroll={this.props.scroll}
-              postRowCount={this.postRowCount} 
-              postOpen={this.state.postOpen}
-              openPost={this.openPost} 
-              posts={[
-                {index:index+0 ,val:this.state.posts[index+0]},
-                {index:index+1 ,val:this.state.posts[index+1]},
-                {index:index+2 ,val:this.state.posts[index+2]},
-                {index:index+3 ,val:this.state.posts[index+3]},
-                {index:index+4 ,val:this.state.posts[index+4]},
-                {index:index+5 ,val:this.state.posts[index+5]}]}
-            />
-          )
-          this.postRowCount++
-        }
-      }return this.rows
-    } */
-    createPostGrid(post,index,postWidth){
-      //console.log(index)
-      let getOpenPostPos
-      if(this.state.postOpen){
-          getOpenPostPos=this.state.postOpen/postWidth;
-          getOpenPostPos=(Math.ceil(getOpenPostPos)*postWidth)-1
-          getOpenPostPos=getOpenPostPos<this.state.posts.length? getOpenPostPos : this.state.posts.length-1;
+
+
+    getInitialPosts=()=>{
+      if(this.props.match && this.props.match.params.search){
+        this.lastSearch=this.props.match.params.search;
+        this.props.getPosts(this.props.match.params.search);
+        
       }
-      if(index===getOpenPostPos){
-        return(
-          [<PostItem index={index+1} key={index} 
-            openPost={this.openPost} 
-            postOpen={this.state.postOpen} 
-            post={post}/>,
-            <AppConsumer>
-              {context=>
-                <PostView 
-                  postId={this.state.posts[this.state.postOpen-1].id} 
-                  provContext={context}
-                  simpleMode={this.props.simpleMode}
-                />}
-            </AppConsumer>]
-        )
+      else if(this.props.mode){
+        console.log(this.props.mode)
+        this.props.getPosts(this.props.mode);
+        this.lastMode=this.props.mode;
       }else{
-        return(
-          <PostItem index={index+1} key={index} 
-            openPost={this.openPost} 
-            postOpen={this.state.postOpen} 
-            post={post}/>
-        )
+        this.props.getPosts();
+      }
+    }
+    componentDidUpdate(){
+      this.refreshSearch();
+      this.refreshMode();
+    }
+    
+    refreshSearch=()=>{
+      if((this.props.match && this.props.match.params.search)&&
+      (this.lastSearch!==this.props.match.params.search)){
+
+        this.lastSearch=this.props.match.params.search;
+        this.props.getPosts(this.props.match.params.search);
+      }
+    }
+
+    refreshMode(){
+      if(this.props.mode && (this.props.mode!==this.lastMode)){
+        this.lastMode=this.props.mode;
+        this.props.getPosts(this.props.mode);
+        console.log(this.props.mode)
       }
     }
     
   
   render() {
+    const pathUrl=(this.props.pathUrl==="/tag" || this.props.pathUrl==="/search")? `${this.props.pathUrl}/${this.props.match.params.search}` : this.props.pathUrl;
+
+    if(this.props.loading){
+      /* <Loading/> */
+      return <div className="innerContent">loading</div>
+    }
+    if(this.props.error){
+      return <div className="innerContent">error!</div>
+    }
+
     return (
-      <BoardProvider value={{state:this.state,openPost:this.openPost}}>
-        <div id='imageBoard' className={'imageGrid'}>
-          {this.state.posts.map((post, index)=>
-              this.createPostGrid(post,index,this.postWidth)
-            )
-          }
-          {/* this.createRows(6) */}  
-        </div>
-      </BoardProvider>
+        <Switch>
+          <Route path={['/post/:postId','/profile/post/:postId','/tag/:search/post/:postId','/search/:search/post/:postId']} render={(props)=>    
+            this.props.posts.length>0&&
+              <PostView 
+                token={this.props.token}
+                postId={this.state.postOpenId} 
+                posts={this.props.posts}
+                loadMore={this.props.loadMore}
+                openFull={this.props.openFull}
+                pathUrl={pathUrl || ""}
+                loggedOutByServer={this.props.loggedOutByServer}
+                /* searchByTag={this.props.getPosts} */
+                {...props}
+              />}
+          />
+          <Route path='/' render={()=>
+            <div id='imageBoard' className={'imageGrid'}>
+              {(this.props.posts && this.props.posts.length>0)&&this.props.posts.map((post, index)=>
+                <PostItem 
+                  index={index} 
+                  key={"postItem"+index} 
+                  postOpen={this.state.postOpenId} 
+                  post={post}
+                  pathUrl={pathUrl || ""}
+                />)
+              }
+            </div>}
+          />
+        </Switch>
     )
   }
 }

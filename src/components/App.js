@@ -19,11 +19,8 @@ export default class ComponentName extends Component {
 
       this.imageFeed={};
       this.loadingMore=false;
-      /* this.tagname=this.props.match?this.props.match.params.tagname : ""; */
-      /* this.props.history.listen((location) => {
-        this.changeModeByLocation(location);
-      }); */
-
+      this.scrollWait=false;
+ 
       this.state = {
           uploadOpen: false,
           zoom: false,
@@ -140,7 +137,24 @@ export default class ComponentName extends Component {
             const state=JSON.parse(stateStr);
             this.setState(state)
         }
+        this.scrollRef.current.addEventListener('scroll',(event)=>this.handleScroll(event));
     }
+
+    handleScroll=(event)=>{
+      const scrollVal=event.target.scrollTop;
+      const maxScroll=event.target.scrollHeight-event.target.offsetHeight;
+
+      const scrollPercent=scrollVal / maxScroll;
+      if(scrollPercent>0.9 && !this.scrollWait){
+        console.log(scrollPercent)
+        this.loadMore('posts')
+      }
+      // after more content was loaded and scrollpercent is below 90% unlock again
+      if(this.scrollWait && scrollPercent<=0.9){
+        this.scrollWait=false;
+      }
+    }
+
 
     setScroll=(amount)=>{
         const offset=-80;
@@ -244,7 +258,7 @@ export default class ComponentName extends Component {
             callback(res)
             this.imageFeed=res.data;
           }).catch(error=>{
-            if(error.response.status===403){
+            if(error && error.response && error.response.status===403){
               this.loggedOutByServer();
             }
             this.setState({error: true,loading: false})
@@ -257,7 +271,6 @@ export default class ComponentName extends Component {
       }
       loadMore=(saveTo)=>{
         const target=saveTo || 'posts';
-        console.log(this.state)
         if(!this.loadingMore && this.state[target]){
           this.getPosts(this.imageFeed.next_page_url,this.props.token,(res)=>{
             //callback to append the new post "page" to current post array

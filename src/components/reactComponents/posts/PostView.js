@@ -56,7 +56,7 @@ export default class PostView extends Component {
         }
         
       ).catch(error=>{
-        if(error.response.status===403){
+        if(error && error.response && error.response.status===403){
           this.props.loggedOutByServer();
         }
         this.props.history.push('/') 

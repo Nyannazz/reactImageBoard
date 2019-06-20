@@ -15,7 +15,6 @@ export default class Search extends Component {
       this.setState({[name]:value})
     }
     onSubmit=(event)=>{
-      // no real search for now only fancy way to search for custom tag
       event.preventDefault();
       this.props.history.push(`/search/${this.state.search}`)
     }

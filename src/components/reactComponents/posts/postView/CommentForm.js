@@ -29,7 +29,7 @@ export default class CommentForm extends Component {
             const formData=new FormData();
             formData.append("body",this.state.comment);
             formData.append("postId",this.props.currentPost)
-            axios.post(BASEURL,formData)
+            axios.post(`${BASEURL}/comments` ,formData)
             .then(response=>{
                 if(response.status===200){
                     this.setState({

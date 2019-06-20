@@ -3,13 +3,19 @@ import Search from './Search.js'
 import {Link} from 'react-router-dom'
 
 
-const NavBar = ({history,openLogSign,logOut,loggedIn,openUpload}) => {
+const NavBar = ({history,openLogSign,logOut,loggedIn,openUpload,mobileNavOpen}) => {
   const location=history.location.pathname;
   return (
-      <nav className={'mainNavBar noSelect'}> 
+      <nav className={`mainNavBar noSelect ${mobileNavOpen? 'mobileNavOpen':'mobileNavClosed'}`}> 
+
         <div className={'undecoratedLink centerAll pointer navItem'} onClick={openUpload}>UPLOAD</div>
-        <div className={`navItem centerAll ${location==="/popular"?"active":""}`}><Link className={`undecoratedLink`} to='/popular'>POPULAR</Link></div>
-        <div className={`navItem centerAll ${location==="/new"?"active":""}`}><Link className={`undecoratedLink`} to='/new'>NEW</Link></div>
+        <div className={`navItem centerAll ${location==="/popular"?"active":""}`}>
+          <Link className={`undecoratedLink`} to='/popular'>POPULAR</Link>
+        </div>
+        
+        <div className={`navItem centerAll ${location==="/new"?"active":""}`}>
+          <Link className={`undecoratedLink`} to='/new'>NEW</Link>
+        </div>
         
         <Search history={history}/>
 

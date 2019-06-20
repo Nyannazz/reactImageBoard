@@ -920,6 +920,28 @@ html, body {
 }
 
 @media (max-width: 767px) {
+  .mainNavBar {
+    position: absolute;
+    top: 3rem;
+    background-color: #2e3035;
+    height: unset;
+    display: -ms-grid;
+    display: grid;
+    padding: 2rem 0;
+    grid-gap: 2rem;
+    grid-auto-rows: repeat(5, 1fr);
+    -webkit-animation: comeFromTop 0.8s;
+            animation: comeFromTop 0.8s;
+    border-bottom: 1px solid #e7b9ff;
+  }
+  .mainNavBar .searchComp {
+    -ms-grid-row: 1;
+    -ms-grid-row-span: 1;
+    grid-row: 1/2;
+  }
+  .mobileNavClosed {
+    display: none;
+  }
   #postFeedSmall {
     display: none;
   }

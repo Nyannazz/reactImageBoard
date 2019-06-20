@@ -708,6 +708,29 @@ html,body{
 }
 
 @media (max-width: 767px) {
+  
+    .mainNavBar{
+        position: absolute;
+        top: 3rem;
+        background-color: $bgColor;
+        height: unset;
+        display: grid;
+        padding: 2rem 0;
+        grid-gap: 2rem;
+        grid-auto-rows: repeat(5,1fr);
+        animation: comeFromTop 0.8s;
+        border-bottom: 1px solid $primary-light;
+        .searchComp{
+            grid-row: 1/2;
+        }
+    }
+    
+    .mobileNavClosed{
+        display: none;
+    }
+
+
+
     #postFeedSmall{
         display: none;
     }

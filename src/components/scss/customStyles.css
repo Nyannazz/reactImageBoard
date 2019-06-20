@@ -33,6 +33,10 @@ html, body {
   z-index: 2;
 }
 
+.App .App-header .mobileToggle {
+  display: none;
+}
+
 .App main {
   /* background-color: #fff; */
   background-color: #2e3035;
@@ -357,11 +361,16 @@ html, body {
   background-color: #805acb;
 }
 
+.ratings .votePlaceholder {
+  width: 2rem;
+}
+
 .ratings .ratingP {
   font-size: 4rem;
   font-weight: bold;
   margin-right: 1rem;
-  width: 10rem;
+  min-width: 10rem;
+  text-align: center;
 }
 
 .ratings .postTags {
@@ -920,6 +929,17 @@ html, body {
 }
 
 @media (max-width: 767px) {
+  .mobileToggle {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
   .mainNavBar {
     position: absolute;
     top: 3rem;

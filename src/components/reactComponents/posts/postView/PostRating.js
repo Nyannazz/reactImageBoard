@@ -1,22 +1,28 @@
 import React from 'react'
 
-const PostRating = ({postId, token, history,/* views, */tags, upvotes,/* downvotes, */favorite, toggleFavorite, searchByTag}) => {
+const PostRating = ({ratePost, postId, token, history, tags, rating, favorite, toggleFavorite/* , searchByTag */}) => {
   return (
     <div className={"ratings"}>
-        <section>
-            <div className={'centerAll pointer'}>
-              <i className="material-icons">
-                add
-              </i>
-            </div>
-            <div
-              className={'centerAll pointer'}>
-              <i className="material-icons">
-                remove
-              </i>
-            </div>
-        </section>
-        <p className={'ratingP'}>{upvotes | 0}</p>
+        {token?
+          <section>
+              <div 
+                onClick={()=>ratePost(1)} 
+                className={'centerAll pointer'}>
+                <i className="material-icons">
+                  add
+                </i>
+              </div>
+              <div
+                onClick={()=>ratePost(0)} 
+                className={'centerAll pointer'}>
+                <i className="material-icons">
+                  remove
+                </i>
+              </div>
+          </section>:
+          <div className='votePlaceholder'></div>
+        }
+        <p className={'ratingP'}>{rating | 0}</p>
         
         {token&&
           <div 

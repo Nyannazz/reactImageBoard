@@ -66,22 +66,36 @@ export default class PostView extends Component {
     
   }
   toggleFavorite=()=>{
-    const headers={headers:{"Authorization":`Bearer ${this.props.token}`}};
     const id=this.state.postId;
-    if(id && headers){
-      axios(`${BASEURL}${"/favorite/"}${id}`,headers)
+    if(id && this.props.token){
+      const headers={headers:{"Authorization":`Bearer ${this.props.token}`}};
+      axios(`${BASEURL}${"/logged/favorite/"}${id}`,headers)
       .then(()=>{
         this.setState({
           favorite: !this.state.favorite
         })  
-      }
-        
+      }   
       ).catch(error=>{
         console.log(error)
       })
-
     }
-    
+  }
+
+  ratePost=(vote)=>{
+    const id=this.state.postId;
+    if(id && this.props.token){
+      const headers={headers:{"Authorization":`Bearer ${this.props.token}`}};
+      const likeDislike=vote? "like" : "dislike";
+      axios(`${BASEURL}/logged/${likeDislike}/${id}`,headers)
+      .then(()=>{
+        /* this.setState({
+          favorite: !this.state.favorite
+        }) */  
+      }   
+      ).catch(error=>{
+        console.log(error)
+      })
+    }
   }
 
   getPreview=()=>{
@@ -155,9 +169,10 @@ export default class PostView extends Component {
             tags={this.state.post.tags}
             token={token}
             postId={this.state.postId}
-            upvotes={this.state.post.upvotes}
+            rating={this.state.post.rating}
             favorite={this.state.favorite}
             toggleFavorite={this.toggleFavorite}
+            ratePost={this.ratePost}
             /* searchByTag={searchByTag} */
             history={history}
           />

@@ -16,6 +16,9 @@ html,body{
         height: 3rem;
         width: 100%;
         z-index: 2;
+        .mobileToggle{
+            display: none;
+        }
 
     }
     main{
@@ -262,12 +265,17 @@ html,body{
                 background-color: $primary-dark;
             }
         }
+        
+    }
+    .votePlaceholder{
+        width: 2rem;
     }
     .ratingP{
         font-size: 4rem;
         font-weight: bold; 
         margin-right: 1rem; 
-        width: 10rem;  
+        min-width: 10rem;
+        text-align: center;  
     }
     .postTags{
         display: flex;
@@ -708,7 +716,12 @@ html,body{
 }
 
 @media (max-width: 767px) {
-  
+    .mobileToggle{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     .mainNavBar{
         position: absolute;
         top: 3rem;

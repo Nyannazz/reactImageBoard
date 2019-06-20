@@ -29,7 +29,17 @@ export default class CommentForm extends Component {
             const formData=new FormData();
             formData.append("body",this.state.comment);
             formData.append("postId",this.props.currentPost)
-            axios.post(`${BASEURL}/comments` ,formData)
+
+            const headers=this.props.token?
+                {headers:
+                    {'Content-Type': 'multipart/form-data',
+                    "Authorization":`Bearer ${this.props.token}`
+                    }
+                }:{headers:{'Content-Type': 'multipart/form-data'}}
+
+            const requestMode=this.props.token? "/logged/comments" : "/comments"
+
+            axios.post(`${BASEURL}${requestMode}` ,formData, headers)
             .then(response=>{
                 if(response.status===200){
                     this.setState({

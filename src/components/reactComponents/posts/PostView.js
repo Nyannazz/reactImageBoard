@@ -166,6 +166,7 @@ export default class PostView extends Component {
           <CommentForm 
             currentPost={this.state.post.id}
             refreshPost={()=>this.getPost(this.state.postId)}
+            token={token}
           />
           <PostComments 
             comments={this.state.post.comments}

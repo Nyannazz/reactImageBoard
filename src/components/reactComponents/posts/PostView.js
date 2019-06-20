@@ -16,10 +16,13 @@ export default class PostView extends Component {
     /* console.log(this.props.match.params.postId) */
     this.scrollRef=React.createRef();
     this.img_url='https://img.pr0gramm.com/2019/05/15/159cd1cb97de3843.png'
+    this.serverRating=0;
     this.state = {
       post: {},
       postId: this.props.match.params.postId || 0,
-      favorite: false
+      favorite: false,
+      vote: 0,
+      rating: 0
     }
   }
   
@@ -46,9 +49,11 @@ export default class PostView extends Component {
         if(res.data.id || res.data.length>0){
           this.setState({
             post:res.data[0] || res.data,
-            favorite: res.data.users_with_favorite, 
+            favorite: res.data.users_with_favorite,
+            vote:  res.data.vote,
+            rating: res.data.rating,
             postId:this.props.match.params.postId})
-            /* console.log(res.data) */
+            this.serverRating=res.data.rating
           }else{
             this.props.history.push('/')
 
@@ -85,12 +90,14 @@ export default class PostView extends Component {
     const id=this.state.postId;
     if(id && this.props.token){
       const headers={headers:{"Authorization":`Bearer ${this.props.token}`}};
-      const likeDislike=vote? "like" : "dislike";
+      const likeDislike=vote===1? "like" : "dislike";
+      console.log(likeDislike)
       axios(`${BASEURL}/logged/${likeDislike}/${id}`,headers)
-      .then(()=>{
-        /* this.setState({
-          favorite: !this.state.favorite
-        }) */  
+      .then((response)=>{
+        this.setState({
+          vote: response.data,
+          rating: (this.state.rating-this.state.rating)+response.data
+        })  
       }   
       ).catch(error=>{
         console.log(error)
@@ -169,7 +176,8 @@ export default class PostView extends Component {
             tags={this.state.post.tags}
             token={token}
             postId={this.state.postId}
-            rating={this.state.post.rating}
+            rating={this.state.rating}
+            vote={this.state.vote}
             favorite={this.state.favorite}
             toggleFavorite={this.toggleFavorite}
             ratePost={this.ratePost}

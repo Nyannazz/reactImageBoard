@@ -1,19 +1,21 @@
 import React from 'react'
 
-const PostRating = ({ratePost, postId, token, history, tags, rating, favorite, toggleFavorite/* , searchByTag */}) => {
+const PostRating = ({vote, ratePost, postId, token, history, tags, rating, favorite, toggleFavorite/* , searchByTag */}) => {
   return (
     <div className={"ratings"}>
         {token?
           <section>
               <div 
-                onClick={()=>ratePost(1)} 
+                onClick={()=>ratePost(1)}
+                id={vote===1?'currentVote':''} 
                 className={'centerAll pointer'}>
                 <i className="material-icons">
                   add
                 </i>
               </div>
               <div
-                onClick={()=>ratePost(0)} 
+                onClick={()=>ratePost(-1)}
+                id={vote===-1?'currentVote':''}  
                 className={'centerAll pointer'}>
                 <i className="material-icons">
                   remove

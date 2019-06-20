@@ -348,6 +348,12 @@ html, body {
   padding: 0.5rem;
 }
 
+.ratings section #currentVote {
+  -webkit-transform: scale(1.2) !important;
+          transform: scale(1.2) !important;
+  background-color: #ff79b0;
+}
+
 .ratings section div {
   text-align: center;
   border-radius: 50%;
@@ -357,7 +363,7 @@ html, body {
   height: 2rem;
 }
 
-.ratings section div:hover {
+.ratings section div:hover, .ratings section div #currentVote {
   background-color: #805acb;
 }
 

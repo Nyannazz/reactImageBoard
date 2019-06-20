@@ -26,6 +26,7 @@ export default class ComponentName extends Component {
           zoom: false,
           logSignOpen: false,
           loggedIn: false,
+          mobileNavOpen: false,
 
           signUpStatus: 0,
           name: "",
@@ -165,41 +166,6 @@ export default class ComponentName extends Component {
         this.setState({fullScreenImage:imageSource});
     }
 
-
-
-
-    // get data for image board
- /*    getModeFromPath=(allowedModes)=>{
-        const newLocation=this.props.history.location.pathname.split('/')[1];
-        if(allowedModes.includes(newLocation)){
-          return newLocation
-        }
-        else if(allowedModes.includes(this.props.mode)){
-          return this.props.mode
-        }
-        return 'new'
-        
-      } */
-  
-  
-      
-      
-/*       changeModeByLocation=(location)=>{
-  
-        const newLocation=location.pathname.split('/')[1];
-        console.log(newLocation)
-        if(this.allowedModes.includes(newLocation) && this.currentMode!==newLocation){
-          console.log(newLocation);
-          if(this.props.match){
-            this.tagname=this.props.match.params.tagname;
-            console.log(location)
-  
-          }
-          this.currentMode=newLocation;
-          this.getPostByMode(this.currentMode, this.props.token)
-        }
-      } */
-
       getUserPosts=(type)=>{
         const currentType=(type==='user' || type ==='favorites')?type : 'user';
         const token=this.state.token;
@@ -211,15 +177,6 @@ export default class ComponentName extends Component {
         }
       }
 
-      /* getFavoritePosts=()=>{
-        const token=this.state.token;
-        if(token){
-          this.getPosts(`${BASEURL}/logged/favorites`,token,(res)=>{
-            //callback to create the first page of postarray
-            this.setState({postsUserFavorite: res.data.data,loading: false, error: false} ,()=>this.loadingMore=false)
-          })
-        }
-      } */
 
       getNewPosts=()=>{
         if(!this.mainBoardLoaded){
@@ -315,11 +272,19 @@ export default class ComponentName extends Component {
             <div className="App">
                 
                 <header className="App-header centerAll">
+                <div 
+                  onClick={()=>this.setState({mobileNavOpen: !this.state.mobileNavOpen})} 
+                  className='mobileToggle'
+                >
+                  X
+                </div>
                 <Route path="" render={(props)=>
-                    <NavBar 
-                        logOut={this.logOut} loggedIn={this.state.loggedIn} 
-                        openLogSign={()=>this.setState({logSignOpen: true})} 
-                        openUpload={()=>this.setState({uploadOpen:!this.state.uploadOpen})} 
+                    <NavBar
+                        mobileNavOpen={this.state.mobileNavOpen} 
+                        logOut={this.logOut} 
+                        loggedIn={this.state.loggedIn} 
+                        openLogSign={()=>this.setState({logSignOpen: true, mobileNavOpen: false})} 
+                        openUpload={()=>this.setState({uploadOpen:!this.state.uploadOpen,mobileNavOpen: false})} 
                         {...props}
                     />
                 }/>    
@@ -372,11 +337,7 @@ export default class ComponentName extends Component {
                         />}
                     />
                     }  
-                    {/* <Route path='/tag/:tagname' render={({history,match})=>
-                        <ImageBoard key="imageBoardTags" mode={"tag"} pathUrl="/tag" history={history} match={match} token={this.state.token} openFull={this.fullScreenImage}/>}
-                    /> */}
-                    
-                    
+    
                     <Route path={"/tag/:search"} render={({history, match})=>
                         <ImageBoard 
                           loadMore={()=>this.loadMore('postsSearch')} 

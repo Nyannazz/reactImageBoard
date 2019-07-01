@@ -91,6 +91,7 @@ html, body {
   -ms-grid-columns: (minmax(15rem, 1fr))[auto-fill];
       grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
   grid-gap: 0.2rem;
+  padding-bottom: 1rem;
 }
 
 /* #imageBoard{
@@ -936,9 +937,9 @@ html, body {
 
 @media (max-width: 767px) {
   .mobileToggle {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
+    display: -webkit-box !important;
+    display: -ms-flexbox !important;
+    display: flex !important;
     -webkit-box-align: center;
         -ms-flex-align: center;
             align-items: center;
@@ -956,14 +957,34 @@ html, body {
     padding: 2rem 0;
     grid-gap: 2rem;
     grid-auto-rows: repeat(5, 1fr);
-    -webkit-animation: comeFromTop 0.8s;
-            animation: comeFromTop 0.8s;
+    -webkit-animation: navFromTop 1s ease-in-out;
+            animation: navFromTop 1s ease-in-out;
     border-bottom: 1px solid #e7b9ff;
   }
   .mainNavBar .searchComp {
     -ms-grid-row: 1;
     -ms-grid-row-span: 1;
     grid-row: 1/2;
+  }
+  @-webkit-keyframes navFromTop {
+    from {
+      -webkit-transform: translateY(-100vh);
+              transform: translateY(-100vh);
+    }
+    to {
+      -webkit-transform: translateY(0);
+              transform: translateY(0);
+    }
+  }
+  @keyframes navFromTop {
+    from {
+      -webkit-transform: translateY(-100vh);
+              transform: translateY(-100vh);
+    }
+    to {
+      -webkit-transform: translateY(0);
+              transform: translateY(0);
+    }
   }
   .mobileNavClosed {
     display: none;

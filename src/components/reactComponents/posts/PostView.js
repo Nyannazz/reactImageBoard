@@ -94,9 +94,11 @@ export default class PostView extends Component {
       console.log(likeDislike)
       axios(`${BASEURL}/logged/${likeDislike}/${id}`,headers)
       .then((response)=>{
+        console.log("vote"+this.state.vote, "serverrating"+this.serverRating, "staterating"+this.state.rating)
         this.setState({
-          vote: response.data,
-          rating: (this.state.rating-this.state.rating)+response.data
+          rating: (this.state.rating-this.state.vote)+response.data,
+          vote: response.data
+
         })  
       }   
       ).catch(error=>{

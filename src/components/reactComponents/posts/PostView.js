@@ -139,8 +139,8 @@ export default class PostView extends Component {
     const currentImage=this.state.post?this.state.post.resourceurl:"";
     const postPreview=this.getPreview()
     const postIndex=postPreview[1];
-    const nextPost=`${pathUrl}/post/${postIndex===posts.length-1?posts[postIndex].id:posts[postIndex+1].id}`;
-    const prevPost=`${pathUrl}/post/${postIndex>=1?posts[postIndex-1].id:posts[0].id}`
+    const nextPost=`${pathUrl}/post/${postIndex===posts.length-1?posts[postIndex].id : posts[postIndex+1].id}`;
+    const prevPost=`${pathUrl}/post/${postIndex>=1?posts[postIndex-1].id : posts[0].id}`
 
     return (
         <div ref={this.scrollRef} className={`postView`}>

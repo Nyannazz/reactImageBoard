@@ -22,12 +22,14 @@ export default class PostView extends Component {
       postId: this.props.match.params.postId || 0,
       favorite: false,
       vote: 0,
-      rating: 0
+      rating: 0,
+      prev: 0,
+      next: 0
     }
   }
   
 
-  componentDidUpdate=()=>{
+/*   componentDidUpdate=()=>{
     if(this.props.match.params.postId!==this.state.postId){
       this.getPost(this.props.match.params.postId  || 0)
 
@@ -35,7 +37,7 @@ export default class PostView extends Component {
     if(this.props.match.params.postId==this.props.posts[this.props.posts.length-1].id){
       this.props.loadMore()
     }
-  }
+  } */
   componentDidMount(){
     this.getPost(this.state.postId);
 
@@ -46,14 +48,18 @@ export default class PostView extends Component {
     if(id){
       axios(`${BASEURL}${path}${id}`,headers)
       .then(res=>{
-        if(res.data.id || res.data.length>0){
+        const {post, prev, next}=res.data
+        if(post.id || post.length>0){
           this.setState({
-            post:res.data[0] || res.data,
-            favorite: res.data.users_with_favorite,
-            vote:  res.data.vote,
-            rating: res.data.rating,
-            postId:this.props.match.params.postId})
-            this.serverRating=res.data.rating
+            post:post,
+            favorite: post.users_with_favorite,
+            vote:  post.vote,
+            rating: post.rating,
+            postId:this.props.match.params.postId,
+            prev: prev,
+            next: next
+          })
+            this.serverRating=post.rating
           }else{
             this.props.history.push('/')
 
@@ -68,8 +74,23 @@ export default class PostView extends Component {
       })
 
     }
-    
   }
+
+  getNextPost=(next)=>{
+    if(next && next.id){
+      this.getPost(next.id)
+      this.props.history.push(`/post/${next.id}`) 
+    }  
+  }
+
+  getPrevPost=(prev)=>{
+    if(prev && prev.id){
+      this.getPost(prev.id)
+      this.props.history.push(`/post/${prev.id}`) 
+
+    }
+  }
+
   toggleFavorite=()=>{
     const id=this.state.postId;
     if(id && this.props.token){
@@ -162,7 +183,7 @@ export default class PostView extends Component {
                 crop_free
               </i>
             </div>
-            <Link to={nextPost} className={'undecoratedLink postNav navForward centerAll'}>
+{/*             <Link to={nextPost} className={'undecoratedLink postNav navForward centerAll'}>
               <i className="material-icons">
                 keyboard_arrow_right
               </i>
@@ -171,7 +192,24 @@ export default class PostView extends Component {
               <i className="material-icons">
                 keyboard_arrow_left
               </i>
-            </Link>
+            </Link> */}
+
+
+
+            {this.state.next&&
+              <div onClick={()=>this.getNextPost(this.state.next)} className={'undecoratedLink postNav navForward centerAll'}>
+                <i className="material-icons">
+                  keyboard_arrow_right
+                </i>
+              </div>
+            }
+            {this.state.prev&&
+              <div onClick={()=>this.getNextPost(this.state.prev)} className={'undecoratedLink postNav navBack centerAll'}>
+                <i className="material-icons">
+                  keyboard_arrow_left
+                </i>
+              </div>
+            }
           </div>}
           
           <PostRating 

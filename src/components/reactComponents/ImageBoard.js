@@ -6,6 +6,7 @@ import {Route, Switch} from 'react-router-dom';
 export default class ImageBoard extends Component {
     constructor(props) {
       super(props)
+      // load posts before first render
       this.getInitialPosts();
       this.lastSearch="";
       this.lastMode="";
@@ -24,7 +25,7 @@ export default class ImageBoard extends Component {
         
       }
       else if(this.props.mode){
-        console.log(this.props.mode)
+        /* console.log(this.props.mode) */
         this.props.getPosts(this.props.mode);
         this.lastMode=this.props.mode;
       }else{
@@ -67,7 +68,9 @@ export default class ImageBoard extends Component {
 
     return (
         <Switch>
-          <Route path={['/post/:postId','/profile/post/:postId','/tag/:search/post/:postId','/search/:search/post/:postId']} render={(props)=>    
+          <Route path={['/post/:postId','/profile/post/:postId','/tag/:search/post/:postId','/search/:search/post/:postId']} render={(props)=> 
+           /* TODO CREATE FEED WHEN THIS IS RENDERED FIRST */
+   
             this.props.posts.length>0&&
               <PostView 
                 token={this.props.token}
@@ -82,6 +85,7 @@ export default class ImageBoard extends Component {
               />}
           />
           <Route path='/' render={()=>
+          /* TODO MAKE THIS INTO FUNCTIONAL COMPONENT AND USE EFFECT TO GET POSTS */
             <div id='imageBoard' className={'imageGrid'}>
               {(this.props.posts && this.props.posts.length>0)&&this.props.posts.map((post, index)=>
                 <PostItem 

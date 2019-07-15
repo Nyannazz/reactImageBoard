@@ -372,7 +372,8 @@ export default class ComponentName extends Component {
                           loadMore={()=>this.loadMore('posts')} 
                           key='boardNew' 
                           posts={this.state.posts} 
-                          getPosts={this.getNewPosts} pathUrl="" 
+                          getPosts={this.getNewPosts} 
+                          pathUrl="" 
                           history={history} 
                           token={this.state.token} 
                           openFull={this.fullScreenImage}

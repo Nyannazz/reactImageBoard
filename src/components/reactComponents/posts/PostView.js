@@ -30,7 +30,7 @@ export default class PostView extends Component {
   }
   
 
-/*   componentDidUpdate=()=>{
+  componentDidUpdate=()=>{
     if(this.props.match.params.postId!==this.state.postId){
       this.getPost(this.props.match.params.postId  || 0)
 
@@ -38,7 +38,7 @@ export default class PostView extends Component {
     if(this.props.match.params.postId==this.props.posts[this.props.posts.length-1].id){
       this.props.loadMore()
     }
-  } */
+  }
   componentDidMount(){
     this.getPost(this.state.postId);
 

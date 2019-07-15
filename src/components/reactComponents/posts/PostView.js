@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import PostRating from './postView/PostRating.js'
 import PostComments from './postView/PostComments.js'
 import PostItem from './PostItem.js';
-import CommentForm from './postView/CommentForm.js'
+/* import CommentForm from './postView/CommentForm.js' */
+import CommentForm from './postView/CommentFormTwo.js'
 import axios from 'axios';
 import {Link} from 'react-router-dom'
 const BASEURL=`${process.env.REACT_APP_BE_URL}`
@@ -87,7 +88,6 @@ export default class PostView extends Component {
     if(prev && prev.id){
       this.getPost(prev.id)
       this.props.history.push(`/post/${prev.id}`) 
-
     }
   }
 
@@ -160,8 +160,8 @@ export default class PostView extends Component {
     const currentImage=this.state.post?this.state.post.resourceurl:"";
     const postPreview=this.getPreview()
     const postIndex=postPreview[1];
-    const nextPost=`${pathUrl}/post/${postIndex===posts.length-1?posts[postIndex].id : posts[postIndex+1].id}`;
-    const prevPost=`${pathUrl}/post/${postIndex>=1?posts[postIndex-1].id : posts[0].id}`
+/*     const nextPost=`${pathUrl}/post/${postIndex===posts.length-1?posts[postIndex].id : posts[postIndex+1].id}`;
+    const prevPost=`${pathUrl}/post/${postIndex>=1?posts[postIndex-1].id : posts[0].id}` */
 
     return (
         <div ref={this.scrollRef} className={`postView`}>
@@ -226,6 +226,11 @@ export default class PostView extends Component {
           />
           
           
+          {/* <CommentForm 
+            currentPost={this.state.post.id}
+            refreshPost={()=>this.getPost(this.state.postId)}
+            token={token}
+          /> */}
           <CommentForm 
             currentPost={this.state.post.id}
             refreshPost={()=>this.getPost(this.state.postId)}

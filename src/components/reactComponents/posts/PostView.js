@@ -49,7 +49,7 @@ export default class PostView extends Component {
     if(id){
       axios(`${BASEURL}${path}${id}`,headers)
       .then(res=>{
-        const {post, prev, next}=res.data
+        const post=res.data
         if(post.id || post.length>0){
           this.setState({
             post:post,
@@ -57,8 +57,43 @@ export default class PostView extends Component {
             vote:  post.vote,
             rating: post.rating,
             postId:this.props.match.params.postId,
-            prev: prev,
-            next: next
+            prev: post.prev,
+            next: post.next
+          })
+            this.serverRating=post.rating
+          }else{
+            this.props.history.push('/')
+
+          }
+        }
+        
+      ).catch(error=>{
+        if(error && error.response && error.response.status===403){
+          this.props.loggedOutByServer();
+        }
+        this.props.history.push('/') 
+      })
+
+    }
+  }
+
+
+  getPost=(id)=>{
+    const path=this.props.token? `/logged/${this.props.pathUrl}/posts/` : "/posts/";
+    const headers=this.props.token?{headers:{"Authorization":`Bearer ${this.props.token}`}}:{};
+    if(id){
+      axios(`${BASEURL}${path}${id}`,headers)
+      .then(res=>{
+        const post=res.data
+        if(post.id || post.length>0){
+          this.setState({
+            post:post,
+            favorite: post.users_with_favorite,
+            vote:  post.vote,
+            rating: post.rating,
+            postId:this.props.match.params.postId,
+            prev: post.prev,
+            next: post.next
           })
             this.serverRating=post.rating
           }else{

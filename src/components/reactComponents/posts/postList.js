@@ -5,6 +5,7 @@ import PostItem from './PostItem.js'
 export default function ({pathUrl,postOpenId,posts, getPosts}){
     useEffect(()=>{
         getPosts()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
     return (
         <div id='imageBoard' className={'imageGrid'}>

@@ -65,18 +65,21 @@ export default class ImageBoard extends Component {
     if(this.props.error){
       return <div className="innerContent">error!</div>
     }
-
     return (
         <Switch>
+              
+
           <Route path={['/post/:postId','/profile/post/:postId','/tag/:search/post/:postId','/search/:search/post/:postId']} render={(props)=> 
            /* TODO CREATE FEED WHEN THIS IS RENDERED FIRST */
-   
-            this.props.posts.length>0&&
-              <PostView 
+            
+              <PostView
+                target={this.props.target}
+                imageFeedFromPostView={this.props.imageFeedFromPostView}  
                 token={this.props.token}
                 postId={this.state.postOpenId} 
                 posts={this.props.posts}
                 loadMore={this.props.loadMore}
+                loadOlder={this.props.loadOlder}
                 openFull={this.props.openFull}
                 pathUrl={pathUrl || ""}
                 loggedOutByServer={this.props.loggedOutByServer}

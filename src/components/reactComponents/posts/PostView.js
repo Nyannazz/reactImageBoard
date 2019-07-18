@@ -41,6 +41,8 @@ export default class PostView extends Component {
     }
     if(this.props.match.params.postId>=this.props.posts[this.props.posts.length-1].id){
       this.props.loadMore()
+    }else if(this.props.match.params.postId<=this.props.posts[1].id){
+      //this.props.loadOlder();
     }
   }
   componentDidMount(){
@@ -62,12 +64,12 @@ export default class PostView extends Component {
       axios(`${BASEURL}${path}${id}`,headers)
       .then(res=>{
         const post=res.data
-        if(post.id || post.length>0){
+        if(post.id || post.length>0 || post[1].id || true){
           callback(post);
           
           this.serverRating=post.rating
         }else{
-          this.props.history.push('/')
+          //this.props.history.push('/')
 
         }
       }
@@ -76,13 +78,13 @@ export default class PostView extends Component {
         if(error && error.response && error.response.status===403){
           this.props.loggedOutByServer();
         }
-        this.props.history.push('/') 
+        //this.props.history.push('/') 
       })
 
     }
   }
 
-  getPostWithPreview=(id)=>{
+  getPostWithPreviewBackEnd=(id)=>{
     // if the current list of posts does not include the post or preview get data from server
     this.getPostBase(id, (post)=>{
       this.setState({
@@ -98,6 +100,32 @@ export default class PostView extends Component {
     `${this.props.pathUrl}/showcreatefeed/posts/`
     )
   }
+
+  getPostWithPreview=(id)=>{
+    // if the current list of posts does not include the post or preview get data from server
+    this.getPostBase(id, (postWithPreview)=>{
+      const [preview, post]=postWithPreview;
+      // create a postlist containing the post in App.js 
+      this.props.imageFeedFromPostView(this.props.targettarget, preview, ()=>{
+        // after creating a feed around the requested post get the preview
+        const [postArr, postIndex]=this.getPreviewFromPostArray()
+        const posts=this.props.posts;
+        this.setState({
+          post:post,
+          favorite: post.users_with_favorite,
+          vote:  post.vote,
+          rating: post.rating,
+          postId:this.props.match.params.postId,
+          postPreview: postArr,
+          prev: postIndex>=1?posts[postIndex-1] : posts[0],
+          next: postIndex===posts.length-1?null : posts[postIndex+1]
+        })
+      })
+      }, 
+    `${this.props.pathUrl}/showcreatefeed/posts/`
+    )
+  }
+
   getPost=(id)=>{
     // only get the post from the server get the preview from the already loaded list
     //const pathUrl=this.props.pathUrl;

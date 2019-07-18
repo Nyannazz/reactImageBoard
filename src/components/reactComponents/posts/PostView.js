@@ -6,6 +6,7 @@ import PostItem from './PostItem.js';
 import CommentForm from './postView/CommentFormTwo.js'
 import axios from 'axios';
 import {Link} from 'react-router-dom'
+import { callbackify } from 'util';
 const BASEURL=`${process.env.REACT_APP_BE_URL}`
 
 
@@ -43,29 +44,26 @@ export default class PostView extends Component {
     this.getPost(this.state.postId);
 
   }
-  getPost=(id)=>{
-    const path=this.props.token? "/logged/posts/" : "/posts/";
+  
+
+
+  getPostBase=(id, callback, url)=>{
+    const customUrl=url? url : `/logged/posts/`;
+    const path=this.props.token? customUrl : "/posts/";
     const headers=this.props.token?{headers:{"Authorization":`Bearer ${this.props.token}`}}:{};
     if(id){
       axios(`${BASEURL}${path}${id}`,headers)
       .then(res=>{
         const post=res.data
         if(post.id || post.length>0){
-          this.setState({
-            post:post,
-            favorite: post.users_with_favorite,
-            vote:  post.vote,
-            rating: post.rating,
-            postId:this.props.match.params.postId,
-            prev: post.prev,
-            next: post.next
-          })
-            this.serverRating=post.rating
-          }else{
-            this.props.history.push('/')
+          callback(post);
+          
+          this.serverRating=post.rating
+        }else{
+          this.props.history.push('/')
 
-          }
         }
+      }
         
       ).catch(error=>{
         if(error && error.response && error.response.status===403){
@@ -77,39 +75,33 @@ export default class PostView extends Component {
     }
   }
 
-
-  getPost=(id)=>{
-    const path=this.props.token? `/logged/${this.props.pathUrl}/posts/` : "/posts/";
-    const headers=this.props.token?{headers:{"Authorization":`Bearer ${this.props.token}`}}:{};
-    if(id){
-      axios(`${BASEURL}${path}${id}`,headers)
-      .then(res=>{
-        const post=res.data
-        if(post.id || post.length>0){
-          this.setState({
-            post:post,
-            favorite: post.users_with_favorite,
-            vote:  post.vote,
-            rating: post.rating,
-            postId:this.props.match.params.postId,
-            prev: post.prev,
-            next: post.next
-          })
-            this.serverRating=post.rating
-          }else{
-            this.props.history.push('/')
-
-          }
-        }
-        
-      ).catch(error=>{
-        if(error && error.response && error.response.status===403){
-          this.props.loggedOutByServer();
-        }
-        this.props.history.push('/') 
+  getPostWithPreview=(id)=>{
+    // if the current list of posts does not include the post or preview get data from server
+    this.getPostBase(id, (post)=>{
+      this.setState({
+        post:post,
+        favorite: post.users_with_favorite,
+        vote:  post.vote,
+        rating: post.rating,
+        postId:this.props.match.params.postId,
+        prev: post.prev,
+        next: post.next
       })
-
-    }
+      }, 
+    `/logged/${this.props.pathUrl}/posts/`
+    )
+  }
+  getPost=(id)=>{
+    // only get the post from the server get the preview from the already loaded list
+    this.getPostBase(id, (post)=>{
+      this.setState({
+        post:post,
+        favorite: post.users_with_favorite,
+        vote:  post.vote,
+        rating: post.rating,
+        postId:this.props.match.params.postId})
+      }
+    )
   }
 
   getNextPost=(next)=>{
@@ -184,9 +176,14 @@ export default class PostView extends Component {
       default: 
         postArr=[posts[index-2],posts[index-1],posts[index],posts[index+1],posts[index+2]]
     }
-       
+    return [postArr,index] 
   }
-    return [postArr,index]
+  else{
+    // if post is not inside the already loaded postlist hit the server for a preview
+    this.getPostWithPreview(this.state.postId)
+  }
+
+    //return [postArr,index]
   }
 
     
@@ -211,7 +208,8 @@ export default class PostView extends Component {
                 )
               }
           </section>
-          {this.state.post.id&&<div className={'imageWrapper'}>
+          {this.state.post.id&&
+          <div className={'imageWrapper'}>
             <img alt='no img' src={currentImage}/>
             <div onClick={()=>openFull(currentImage)} className={'fullScreenButton'}>
               <i className="material-icons">

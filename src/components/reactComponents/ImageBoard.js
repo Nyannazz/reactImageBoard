@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import PostItem from './posts/PostItem.js'
+import PostList from './posts/postList.js'
 import PostView from './posts/PostView.js'
 import {Route, Switch} from 'react-router-dom';
 
@@ -7,7 +7,7 @@ export default class ImageBoard extends Component {
     constructor(props) {
       super(props)
       // load posts before first render
-      this.getInitialPosts();
+      //this.getInitialPosts();
       this.lastSearch="";
       this.lastMode="";
       this.state = {
@@ -86,17 +86,13 @@ export default class ImageBoard extends Component {
           />
           <Route path='/' render={()=>
           /* TODO MAKE THIS INTO FUNCTIONAL COMPONENT AND USE EFFECT TO GET POSTS */
-            <div id='imageBoard' className={'imageGrid'}>
-              {(this.props.posts && this.props.posts.length>0)&&this.props.posts.map((post, index)=>
-                <PostItem 
-                  index={index} 
-                  key={"postItem"+index} 
-                  postOpen={this.state.postOpenId} 
-                  post={post}
-                  pathUrl={pathUrl || ""}
-                />)
-              }
-            </div>}
+              <PostList
+                posts={this.props.posts}
+                postOpen={this.state.postOpen}
+                pathUrl={pathUrl}
+                getPosts={this.getInitialPosts}
+              />
+            }
           />
         </Switch>
     )

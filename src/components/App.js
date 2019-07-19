@@ -235,6 +235,26 @@ export default class ComponentName extends Component {
           })
         }
       }
+
+      loadOlder=(saveTo)=>{
+        const target=saveTo || 'posts';
+        if(!this.loadingMore && this.state[target]){
+          this.getPosts(this.imageFeed.prev_page_url,this.props.token,(res)=>{
+            //callback to append the new post "page" to current post array
+            this.setState({[target]:[...res.data.data, ...this.state[target],]} ,()=>this.loadingMore=false)
+          })
+        }
+      }
+
+      // imageFeed from image ID
+
+      imageFeedFromPostView=(target, postArray, callback)=>{
+        const currentTarget=target? target : "posts";
+        this.imageFeed=postArray;
+        this.setState({
+          [currentTarget]:postArray.data
+        },callback)
+      }
   
       searchPosts=(url, search)=>{
         /* console.log(search) */
@@ -326,10 +346,11 @@ export default class ComponentName extends Component {
                   <Switch>
                     {this.state.loggedIn && 
                     <Route path='/profile' render={({history})=>
-                        <UserPage 
+                        <UserPage
                             token={this.state.token}
                             history={history}
                             openFull={this.fullScreenImage}
+                            imageFeedFromPostView={this.imageFeedFromPostView} 
                             loadMore={()=>this.loadMore('postsUserFavorite')} 
                             posts={this.state.postsUserFavorite} 
                             getUserPosts={this.getUserPosts}
@@ -340,6 +361,8 @@ export default class ComponentName extends Component {
     
                     <Route path={"/tag/:search"} render={({history, match})=>
                         <ImageBoard 
+                          target='postsSearch'
+                          imageFeedFromPostView={this.imageFeedFromPostView} 
                           loadMore={()=>this.loadMore('postsSearch')} 
                           key='boardTag' 
                           posts={this.state.postsSearch} 
@@ -355,6 +378,8 @@ export default class ComponentName extends Component {
 
                     <Route path={"/search/:search"} render={({history, match})=>
                         <ImageBoard 
+                          target='postsSearch'
+                          imageFeedFromPostView={this.imageFeedFromPostView} 
                           loadMore={()=>this.loadMore('postsSearch')} 
                           key='boardSearch' 
                           posts={this.state.postsSearch} 
@@ -369,10 +394,13 @@ export default class ComponentName extends Component {
 
                     <Route path={"/"} render={({history})=>
                         <ImageBoard 
-                          loadMore={()=>this.loadMore('posts')} 
+                          loadMore={()=>this.loadMore('posts')}
+                          loadOlder={()=>this.loadOlder('posts')} 
+                          imageFeedFromPostView={this.imageFeedFromPostView} 
                           key='boardNew' 
                           posts={this.state.posts} 
-                          getPosts={this.getNewPosts} pathUrl="" 
+                          getPosts={this.getNewPosts} 
+                          pathUrl="" 
                           history={history} 
                           token={this.state.token} 
                           openFull={this.fullScreenImage}

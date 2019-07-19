@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
-import PostItem from './posts/PostItem.js'
+import PostList from './posts/postList.js'
 import PostView from './posts/PostView.js'
 import {Route, Switch} from 'react-router-dom';
 
 export default class ImageBoard extends Component {
     constructor(props) {
       super(props)
-      this.getInitialPosts();
+      // load posts before first render
+      //this.getInitialPosts();
       this.lastSearch="";
       this.lastMode="";
       this.state = {
@@ -24,7 +25,7 @@ export default class ImageBoard extends Component {
         
       }
       else if(this.props.mode){
-        console.log(this.props.mode)
+        /* console.log(this.props.mode) */
         this.props.getPosts(this.props.mode);
         this.lastMode=this.props.mode;
       }else{
@@ -64,16 +65,21 @@ export default class ImageBoard extends Component {
     if(this.props.error){
       return <div className="innerContent">error!</div>
     }
-
     return (
         <Switch>
-          <Route path={['/post/:postId','/profile/post/:postId','/tag/:search/post/:postId','/search/:search/post/:postId']} render={(props)=>    
-            this.props.posts.length>0&&
-              <PostView 
+              
+
+          <Route path={['/post/:postId','/profile/post/:postId','/tag/:search/post/:postId','/search/:search/post/:postId']} render={(props)=> 
+           /* TODO CREATE FEED WHEN THIS IS RENDERED FIRST */
+            
+              <PostView
+                target={this.props.target}
+                imageFeedFromPostView={this.props.imageFeedFromPostView}  
                 token={this.props.token}
                 postId={this.state.postOpenId} 
                 posts={this.props.posts}
                 loadMore={this.props.loadMore}
+                loadOlder={this.props.loadOlder}
                 openFull={this.props.openFull}
                 pathUrl={pathUrl || ""}
                 loggedOutByServer={this.props.loggedOutByServer}
@@ -82,17 +88,14 @@ export default class ImageBoard extends Component {
               />}
           />
           <Route path='/' render={()=>
-            <div id='imageBoard' className={'imageGrid'}>
-              {(this.props.posts && this.props.posts.length>0)&&this.props.posts.map((post, index)=>
-                <PostItem 
-                  index={index} 
-                  key={"postItem"+index} 
-                  postOpen={this.state.postOpenId} 
-                  post={post}
-                  pathUrl={pathUrl || ""}
-                />)
-              }
-            </div>}
+          /* TODO MAKE THIS INTO FUNCTIONAL COMPONENT AND USE EFFECT TO GET POSTS */
+              <PostList
+                posts={this.props.posts}
+                postOpen={this.state.postOpen}
+                pathUrl={pathUrl}
+                getPosts={this.getInitialPosts}
+              />
+            }
           />
         </Switch>
     )

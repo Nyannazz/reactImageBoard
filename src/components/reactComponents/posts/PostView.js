@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import PostRating from './postView/PostRating.js'
 import PostComments from './postView/PostComments.js'
 import PostItem from './PostItem.js';
-import CommentForm from './postView/CommentForm.js'
+/* import CommentForm from './postView/CommentForm.js' */
+import CommentForm from './postView/CommentFormTwo.js'
 import axios from 'axios';
-import {Link} from 'react-router-dom'
+//import {Link} from 'react-router-dom'
 const BASEURL=`${process.env.REACT_APP_BE_URL}`
 
 
@@ -22,54 +23,143 @@ export default class PostView extends Component {
       postId: this.props.match.params.postId || 0,
       favorite: false,
       vote: 0,
-      rating: 0
+      rating: 0,
+      prev: null,
+      next: null,
+      postPreview: []
     }
   }
   
 
   componentDidUpdate=()=>{
     if(this.props.match.params.postId!==this.state.postId){
-      this.getPost(this.props.match.params.postId  || 0)
-
+      if(this.props.posts.findIndex(post=>Number(post.id)===Number(this.props.match.params.postId))!==-1){
+        this.getPost(this.props.match.params.postId  || 0)
+      }else{
+        this.getPostWithPreview(this.props.match.params.postId  || 0)
+      }
     }
-    if(this.props.match.params.postId==this.props.posts[this.props.posts.length-1].id){
+    if(this.props.match.params.postId>=this.props.posts[this.props.posts.length-1].id){
       this.props.loadMore()
+    }else if(this.props.match.params.postId<=this.props.posts[1].id){
+      //this.props.loadOlder();
     }
   }
   componentDidMount(){
-    this.getPost(this.state.postId);
+    if(this.props.posts.findIndex(post=>Number(post.id)===Number(this.state.postId))!==-1){
+      this.getPost(this.state.postId  || 0)
+    }else{
+      this.getPostWithPreview(this.state.postId  || 0)
+    }
 
   }
-  getPost=(id)=>{
-    const path=this.props.token? "/logged/posts/" : "/posts/";
+  
+
+
+  getPostBase=(id, callback, url)=>{
+    const customUrl=url? url : `${this.props.pathUrl}/posts/`;
+    const path=this.props.token? `/logged/${customUrl}` : customUrl;
     const headers=this.props.token?{headers:{"Authorization":`Bearer ${this.props.token}`}}:{};
     if(id){
       axios(`${BASEURL}${path}${id}`,headers)
       .then(res=>{
-        if(res.data.id || res.data.length>0){
-          this.setState({
-            post:res.data[0] || res.data,
-            favorite: res.data.users_with_favorite,
-            vote:  res.data.vote,
-            rating: res.data.rating,
-            postId:this.props.match.params.postId})
-            this.serverRating=res.data.rating
-          }else{
-            this.props.history.push('/')
+        const post=res.data
+        if(post.id || post.length>0 || post[1].id || true){
+          callback(post);
+          
+          this.serverRating=post.rating
+        }else{
+          //this.props.history.push('/')
 
-          }
         }
+      }
         
       ).catch(error=>{
         if(error && error.response && error.response.status===403){
           this.props.loggedOutByServer();
         }
-        this.props.history.push('/') 
+        //this.props.history.push('/') 
       })
 
     }
-    
   }
+
+  getPostWithPreviewBackEnd=(id)=>{
+    // if the current list of posts does not include the post or preview get data from server
+    this.getPostBase(id, (post)=>{
+      this.setState({
+        post:post,
+        favorite: post.users_with_favorite,
+        vote:  post.vote,
+        rating: post.rating,
+        postId:this.props.match.params.postId,
+        prev: post.prev[0],
+        next: post.next[0]
+      })
+      }, 
+    `${this.props.pathUrl}/showcreatefeed/posts/`
+    )
+  }
+
+  getPostWithPreview=(id)=>{
+    // if the current list of posts does not include the post or preview get data from server
+    this.getPostBase(id, (postWithPreview)=>{
+      const [preview, post]=postWithPreview;
+      // create a postlist containing the post in App.js 
+      this.props.imageFeedFromPostView(this.props.targettarget, preview, ()=>{
+        // after creating a feed around the requested post get the preview
+        const [postArr, postIndex]=this.getPreviewFromPostArray()
+        const posts=this.props.posts;
+        this.setState({
+          post:post,
+          favorite: post.users_with_favorite,
+          vote:  post.vote,
+          rating: post.rating,
+          postId:this.props.match.params.postId,
+          postPreview: postArr,
+          prev: postIndex>=1?posts[postIndex-1] : posts[0],
+          next: postIndex===posts.length-1?null : posts[postIndex+1]
+        })
+      })
+      }, 
+    `${this.props.pathUrl}/showcreatefeed/posts/`
+    )
+  }
+
+  getPost=(id)=>{
+    // only get the post from the server get the preview from the already loaded list
+    //const pathUrl=this.props.pathUrl;
+    const posts=this.props.posts;
+    this.getPostBase(id, (post)=>{
+      const [postArr, postIndex]=this.getPreviewFromPostArray()
+      console.log(postIndex)
+      this.setState({
+        post:post,
+        favorite: post.users_with_favorite,
+        vote:  post.vote,
+        rating: post.rating,
+        postId:this.props.match.params.postId,
+        postPreview: postArr,
+        prev: postIndex>=1?posts[postIndex-1] : posts[0],
+        next: postIndex===posts.length-1?null : posts[postIndex+1]
+      })
+    })
+  }
+
+  getNextPost=(next)=>{
+    if(next && next.id){
+      this.getPost(next.id)
+      this.props.history.push(`/post/${next.id}`) 
+    }  
+  }
+
+  getPrevPost=(prev)=>{
+    if(prev && prev.id){
+      this.getPost(prev.id)
+      this.props.history.push(`/post/${prev.id}`) 
+    }
+  }
+
   toggleFavorite=()=>{
     const id=this.state.postId;
     if(id && this.props.token){
@@ -107,10 +197,10 @@ export default class PostView extends Component {
     }
   }
 
-  getPreview=()=>{
+  getPreviewFromPostArray=()=>{
     let postArr=[]
     const posts=this.props.posts;
-    const index=posts.findIndex(post=>post.id==this.props.match.params.postId);
+    const index=posts.findIndex(post=>Number(post.id)===Number(this.props.match.params.postId));
     if(index>=0){
     switch(index){
       case 0: 
@@ -128,24 +218,22 @@ export default class PostView extends Component {
       default: 
         postArr=[posts[index-2],posts[index-1],posts[index],posts[index+1],posts[index+2]]
     }
-       
   }
-    return [postArr,index]
+  return [postArr,index] 
+  
+
   }
+
 
     
   render() {
-    const {posts,openFull,pathUrl,searchByTag, history,token}=this.props;
+    const {/* posts, */openFull,pathUrl,/* searchByTag, */ history,token}=this.props;
     const currentImage=this.state.post?this.state.post.resourceurl:"";
-    const postPreview=this.getPreview()
-    const postIndex=postPreview[1];
-    const nextPost=`${pathUrl}/post/${postIndex===posts.length-1?posts[postIndex].id:posts[postIndex+1].id}`;
-    const prevPost=`${pathUrl}/post/${postIndex>=1?posts[postIndex-1].id:posts[0].id}`
 
     return (
         <div ref={this.scrollRef} className={`postView`}>
           <section id='postFeedSmall'>
-              {postPreview[0].map((post, index)=>
+              {this.state.postPreview.map((post, index)=>
                 <PostItem 
                   index={index} 
                   key={`preview${post.id}${index}`} 
@@ -155,23 +243,30 @@ export default class PostView extends Component {
                 )
               }
           </section>
-          {this.state.post.id&&<div className={'imageWrapper'}>
+          {this.state.post.id&&
+          <div className={'imageWrapper'}>
             <img alt='no img' src={currentImage}/>
             <div onClick={()=>openFull(currentImage)} className={'fullScreenButton'}>
               <i className="material-icons">
                 crop_free
               </i>
             </div>
-            <Link to={nextPost} className={'undecoratedLink postNav navForward centerAll'}>
-              <i className="material-icons">
-                keyboard_arrow_right
-              </i>
-            </Link>
-            <Link to={prevPost} className={'undecoratedLink postNav navBack centerAll'}>
-              <i className="material-icons">
-                keyboard_arrow_left
-              </i>
-            </Link>
+
+
+            {this.state.next&&
+              <div onClick={()=>this.getNextPost(this.state.next)} className={'undecoratedLink postNav navForward centerAll'}>
+                <i className="material-icons">
+                  keyboard_arrow_right
+                </i>
+              </div>
+            }
+            {this.state.prev&&
+              <div onClick={()=>this.getNextPost(this.state.prev)} className={'undecoratedLink postNav navBack centerAll'}>
+                <i className="material-icons">
+                  keyboard_arrow_left
+                </i>
+              </div>
+            }
           </div>}
           
           <PostRating 
@@ -186,8 +281,7 @@ export default class PostView extends Component {
             /* searchByTag={searchByTag} */
             history={history}
           />
-          
-          
+
           <CommentForm 
             currentPost={this.state.post.id}
             refreshPost={()=>this.getPost(this.state.postId)}

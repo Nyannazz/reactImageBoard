@@ -7,7 +7,9 @@ const Comment = ({comment}) => {
     return (
         <div className={'commentCell'}>
             <div className='commentRow'>
-                <div className={'commentBy'}>{comment.user?comment.user.name:"Schwartzaa"}</div>
+                <div className={'commentBy'}>
+                    {comment.user?comment.user.name:"Anon"}
+                </div>
                 <div style={{wordBreak: "break-word"}}>{comment.body}</div>
             </div>
             {/* <div className={'answerCell'}>

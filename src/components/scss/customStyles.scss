@@ -779,7 +779,7 @@ html,body{
         padding: 2rem 0;
         grid-gap: 2rem;
         grid-auto-rows: repeat(5,1fr);
-        animation: navFromTop 1s ease-in-out;
+        animation: navFromTop 0.6s;
         border-bottom: 1px solid $primary-light;
         .searchComp{
             grid-row: 1/2;
@@ -787,7 +787,7 @@ html,body{
     }
     @keyframes navFromTop{
         from{
-            transform: translateY(-100vh)
+            transform: translateY(-60vh)
         }
         to{
             transform: translateY(0)

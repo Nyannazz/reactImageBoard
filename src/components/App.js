@@ -147,13 +147,18 @@ export default class ComponentName extends Component {
 
       const scrollPercent=scrollVal / maxScroll;
       if(scrollPercent>0.9 && !this.scrollWait){
-        console.log(scrollPercent)
+        //console.log(scrollPercent)
         this.loadMore('posts')
       }
       // after more content was loaded and scrollpercent is below 90% unlock again
       if(this.scrollWait && scrollPercent<=0.9){
         this.scrollWait=false;
       }
+    }
+
+    handleBigScreen=(scrollRef)=>{
+      /* if there was not enough content loaded to fill the entire screen load more */
+      return scrollRef.current.scrollHeight === scrollRef.current.clientHeight
     }
 
 
@@ -166,64 +171,69 @@ export default class ComponentName extends Component {
         this.setState({fullScreenImage:imageSource});
     }
 
-      getUserPosts=(type)=>{
-        const currentType=(type==='user' || type ==='favorites')?type : 'user';
-        const token=this.state.token;
-        if(token){
-            this.getPosts(`${BASEURL}/logged/${currentType}`,token,(res)=>{
-                //callback to create the first page of postarray
-                this.setState({postsUserFavorite: res.data.data,loading: false, error: false} ,()=>this.loadingMore=false)
-              })
-        }
-      }
-
-
-      getNewPosts=()=>{
-        if(!this.mainBoardLoaded){
-          const token=this.state.token;
-          this.getPosts(`${BASEURL}/posts`,token,(res)=>{
-            //callback to create the first page of postarray
-            this.setState({
-              posts: res.data.data, 
-              loading: false, error: false},()=>{
-                this.loadingMore=false
-                this.mainBoardLoaded=true
+    getUserPosts=(type)=>{
+      const currentType=(type==='user' || type ==='favorites')?type : 'user';
+      const token=this.state.token;
+      if(token){
+          this.getPosts(`${BASEURL}/logged/${currentType}`,token,(res)=>{
+              //callback to create the first page of postarray
+              this.setState({postsUserFavorite: res.data.data,loading: false, error: false} ,()=>this.loadingMore=false)
             })
+      }
+    }
+
+
+    getNewPosts=()=>{
+      if(!this.mainBoardLoaded){
+        const token=this.state.token;
+        this.getPosts(`${BASEURL}/posts`,token,(res)=>{
+          //callback to create the first page of postarray
+          this.setState({
+            posts: res.data.data, 
+            loading: false, error: false},()=>{
+              this.loadingMore=false
+              this.mainBoardLoaded=true
+              if(this.handleBigScreen(this.scrollRef)){
+                /* if screen is not filled load more content should rarly happen but maybe people have giant screens...
+                also wait 800ms to give dom some time to render */
+                setTimeout(()=>this.loadMore('posts'),800);
+              }
           })
-        }
-        
+        })
       }
+      
+    }
 
-      searchByTag=(tagName)=>{
-        this.searchPosts(`${BASEURL}/posts/search/`,tagName)
-      }
+    searchByTag=(tagName)=>{
+      this.searchPosts(`${BASEURL}/posts/search/`,tagName)
+    }
 
-      searchByString=(searchString)=>{
-        this.searchPosts(`${BASEURL}/posts/search/`,searchString)
-      }
+    searchByString=(searchString)=>{
+      this.searchPosts(`${BASEURL}/posts/search/`,searchString)
+    }
 
   
   
   
-      getPosts=(url,token, callback)=>{
-        const headers=token?{headers:{"Authorization":`Bearer ${token}`}}:{}
-        if(url){
-          this.loadingMore=true;
-          this.setState({loading: true})
-          axios.get(url, headers)
-            .then(res=>{
-            callback(res)
-            this.imageFeed=res.data;
-          }).catch(error=>{
-            if(error && error.response && error.response.status===403){
-              this.loggedOutByServer();
-            }
-            this.setState({error: true,loading: false})
-          })
-        }
-        if(this.imageFeed.current_page===this.imageFeed.last_page && this.state.endReached===false){
-          this.setState({endReached:true})
-        }
+    getPosts=(url,token, callback)=>{
+      const headers=token?{headers:{"Authorization":`Bearer ${token}`}}:{}
+      if(url){
+        this.loadingMore=true;
+        this.setState({loading: true})
+        axios.get(url, headers)
+          .then(res=>{
+          callback(res)
+          this.imageFeed=res.data;
+        }).catch(error=>{
+          if(error && error.response && error.response.status===403){
+            this.loggedOutByServer();
+          }
+          this.setState({error: true,loading: false})
+        })
+      }
+      if(this.imageFeed.current_page===this.imageFeed.last_page && this.state.endReached===false){
+        this.setState({endReached:true})
+      }
         
       }
       loadMore=(saveTo)=>{
@@ -240,8 +250,9 @@ export default class ComponentName extends Component {
         const target=saveTo || 'posts';
         if(!this.loadingMore && this.state[target]){
           this.getPosts(this.imageFeed.prev_page_url,this.props.token,(res)=>{
+            console.log(res.data[0])
             //callback to append the new post "page" to current post array
-            this.setState({[target]:[...res.data.data, ...this.state[target],]} ,()=>this.loadingMore=false)
+            this.setState({[target]:[...res.data[0].data, ...this.state[target]]} ,()=>this.loadingMore=false)
           })
         }
       }

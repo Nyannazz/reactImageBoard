@@ -1019,8 +1019,8 @@ html, body {
     padding: 2rem 0;
     grid-gap: 2rem;
     grid-auto-rows: repeat(5, 1fr);
-    -webkit-animation: navFromTop 1s ease-in-out;
-            animation: navFromTop 1s ease-in-out;
+    -webkit-animation: navFromTop 0.6s;
+            animation: navFromTop 0.6s;
     border-bottom: 1px solid #e7b9ff;
   }
   .mainNavBar .searchComp {
@@ -1030,8 +1030,8 @@ html, body {
   }
   @-webkit-keyframes navFromTop {
     from {
-      -webkit-transform: translateY(-100vh);
-              transform: translateY(-100vh);
+      -webkit-transform: translateY(-60vh);
+              transform: translateY(-60vh);
     }
     to {
       -webkit-transform: translateY(0);
@@ -1040,8 +1040,8 @@ html, body {
   }
   @keyframes navFromTop {
     from {
-      -webkit-transform: translateY(-100vh);
-              transform: translateY(-100vh);
+      -webkit-transform: translateY(-60vh);
+              transform: translateY(-60vh);
     }
     to {
       -webkit-transform: translateY(0);

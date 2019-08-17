@@ -41,8 +41,9 @@ export default class PostView extends Component {
     }
     if(this.props.match.params.postId>=this.props.posts[this.props.posts.length-1].id){
       this.props.loadMore()
-    }else if(this.props.match.params.postId<=this.props.posts[1].id){
-      //this.props.loadOlder();
+    }else if(this.props.match.params.postId<=this.props.posts[0].id){
+      console.log("asd called")
+      this.props.loadOlder();
     }
   }
   componentDidMount(){

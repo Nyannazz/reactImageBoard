@@ -59,7 +59,7 @@ export default class PostView extends Component {
 
   getPostBase=(id, callback, url)=>{
     const customUrl=url? url : `${this.props.pathUrl}/posts/`;
-    const path=this.props.token? `/logged/${customUrl}` : customUrl;
+    const path=this.props.token? `/logged${customUrl}` : customUrl;
     const headers=this.props.token?{headers:{"Authorization":`Bearer ${this.props.token}`}}:{};
     if(id){
       axios(`${BASEURL}${path}${id}`,headers)
